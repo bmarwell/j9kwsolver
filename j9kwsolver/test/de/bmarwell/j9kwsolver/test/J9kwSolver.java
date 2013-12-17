@@ -15,11 +15,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.bmarwell.j9kwsolver.J9kwServerAPI;
+import de.bmarwell.j9kwsolver.J9kwUserAPI;
 import de.bmarwell.j9kwsolver.request.CaptchaGet;
 import de.bmarwell.j9kwsolver.request.CaptchaNewOk;
 import de.bmarwell.j9kwsolver.request.CaptchaReturn;
@@ -28,7 +28,7 @@ import de.bmarwell.j9kwsolver.util.HttpConnectorFactory;
 import de.bmarwell.j9kwsolver.util.RequestToURI;
 
 /**
- * @author bmarwell
+ * @author Benjamin Marwell
  *
  */
 public class J9kwSolver {
@@ -120,6 +120,13 @@ public class J9kwSolver {
 		log.debug("ServerStatus: {}.", sa.getServerStatus());
 	}
 	
+	public static void getBalance() {
+		J9kwUserAPI ua = J9kwUserAPI.getInstance();
+		
+		int balance = ua.getBalance();
+		log.debug("Balance: {} credits.", balance);
+	}
+	
 	/**
 	 * @param args
 	 */
@@ -149,6 +156,7 @@ public class J9kwSolver {
 		}
 		
 		getServerStatus();
+		getBalance();
 	}
 	
 

@@ -23,6 +23,7 @@ import de.bmarwell.j9kwsolver.request.CaptchaNewOk;
 import de.bmarwell.j9kwsolver.request.CaptchaReturn;
 import de.bmarwell.j9kwsolver.request.CaptchaReturnExtended;
 import de.bmarwell.j9kwsolver.request.ServerCheck;
+import de.bmarwell.j9kwsolver.request.UserBalance;
 
 /**
  * @author Benjamin Marwell
@@ -171,6 +172,33 @@ public class RequestToURI {
 			log.error("Konnte keine URI bilden!", e);
 		}
 		
+		return uri;
+	}
+
+	/**
+	 * @param ub
+	 * @return
+	 */
+	public static URI UserBalanceToURI(UserBalance ub) {
+		URI uri = null;
+
+		if (ub == null) {
+			return null;
+		}
+
+		URI apiURI = StringToURI(ub.getUrl());
+
+		URIBuilder builder = new URIBuilder(apiURI)
+		.addParameter("action", ub.getAction())
+		.addParameter("apikey", ub.getApikey())
+		;
+
+		try {
+			uri = builder.build();
+		} catch (URISyntaxException e) {
+			log.error("Konnte URI nicht erstellen!", e);
+		}
+
 		return uri;
 	}
 }
