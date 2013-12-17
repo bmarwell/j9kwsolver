@@ -15,9 +15,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.bmarwell.j9kwsolver.J9kwServerAPI;
 import de.bmarwell.j9kwsolver.request.CaptchaGet;
 import de.bmarwell.j9kwsolver.request.CaptchaNewOk;
 import de.bmarwell.j9kwsolver.request.CaptchaReturn;
@@ -112,6 +114,12 @@ public class J9kwSolver {
 		}
 	}
 	
+	public static void getServerStatus() {
+		J9kwServerAPI sa = J9kwServerAPI.getInstance();
+		
+		log.debug("ServerStatus: {}.", sa.getServerStatus());
+	}
+	
 	/**
 	 * @param args
 	 */
@@ -139,6 +147,8 @@ public class J9kwSolver {
 			log.debug("Is my captcha: {}.", gathered);
 			
 		}
+		
+		getServerStatus();
 	}
 	
 

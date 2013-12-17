@@ -22,6 +22,7 @@ import de.bmarwell.j9kwsolver.request.CaptchaGet;
 import de.bmarwell.j9kwsolver.request.CaptchaNewOk;
 import de.bmarwell.j9kwsolver.request.CaptchaReturn;
 import de.bmarwell.j9kwsolver.request.CaptchaReturnExtended;
+import de.bmarwell.j9kwsolver.request.ServerCheck;
 
 /**
  * @author Benjamin Marwell
@@ -30,6 +31,23 @@ import de.bmarwell.j9kwsolver.request.CaptchaReturnExtended;
 public class RequestToURI {
 	private static final Logger log = LoggerFactory.getLogger(RequestToURI.class); 
 
+	public static URI ServerStatusToURI(ServerCheck sc) {
+		URI uri = null;
+		
+		URI apiURI = StringToURI(sc.getUrl());
+		URIBuilder builder = new URIBuilder(apiURI)
+			.addParameter("action", sc.getAction())
+			;
+		
+		try {
+			uri = builder.build();
+		} catch (URISyntaxException e) {
+			log.error("Konnte URI nicht erstellen!", e);
+		}
+		
+		return uri;
+	}
+	
 	/**
 	 * The CaptchaGet-Request URI Builder.
 	 * @param cg
