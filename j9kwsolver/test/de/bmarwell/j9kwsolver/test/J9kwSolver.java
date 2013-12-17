@@ -35,6 +35,7 @@ public class J9kwSolver {
 	private static final Logger log = LoggerFactory.getLogger(J9kwSolver.class);
 	
 	private static CaptchaReturn getRequest(String apikey) {
+		//TODO: Put this into ServerAPI.
 		CloseableHttpResponse response = null;
 		CaptchaReturn cr = null;
 		
@@ -64,6 +65,7 @@ public class J9kwSolver {
 	}
 	
 	private static boolean returnReceived(String apikey) {
+		//TODO: Put this into ServerAPI.
 		CloseableHttpResponse response = null;
 		String answer = null;
 		boolean success = false;
