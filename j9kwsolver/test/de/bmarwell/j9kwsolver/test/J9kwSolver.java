@@ -11,6 +11,7 @@ import java.net.URI;
 import java.util.Scanner;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -62,6 +63,7 @@ public class J9kwSolver {
 	
 	private static boolean returnReceived(String apikey) {
 		CloseableHttpResponse response = null;
+		String answer = null;
 		boolean success = false;
 		Scanner s = null;
 		
@@ -78,16 +80,12 @@ public class J9kwSolver {
 		
 		try {
 			response = httpclient.execute(httpGet);
+			log.debug("Request ausgeführt.");
 			StringWriter writer = new StringWriter();
 			IOUtils.copy(response.getEntity().getContent(), writer);
 			
-//			s = new Scanner(response.getEntity().getContent());
-//			StringBuilder answ = new StringBuilder();
-//			while (s.hasNext()) {
-//				answ.append(s.nextLine());
-//			}
-			
-			log.debug("Input: ", writer.toString());
+			answer = writer.toString();
+			log.debug("Input: {}.", writer.toString());
 		} catch (IOException e) {
 			log.error("Fehler beim HTTP Request!", e);
 		} finally {
@@ -95,7 +93,23 @@ public class J9kwSolver {
 			IOUtils.closeQuietly(s);
 		}
 		
+		/*
+		 * Check if OK came
+		 */
+		if (StringUtils.isEmpty(answer)) {
+			success = false;
+		} else if (StringUtils.containsIgnoreCase(answer, "ok")) {
+			success = true;
+		}
+		
 		return success;
+	}
+	
+	public static void dosleep() {
+		try {
+			Thread.sleep(2500);
+		} catch (InterruptedException e) {
+		}
 	}
 	
 	/**
@@ -112,18 +126,17 @@ public class J9kwSolver {
 		
 		while (cr == null) {
 			cr = getRequest(apiKey);
-			try {
-				Thread.sleep(2500);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if (cr == null) {
+				dosleep();
 			}
 		}
 		
 		
 		if (cr != null) {
 			log.debug("CR ungleich null!");
-			returnReceived(apiKey);
+			boolean gathered = returnReceived(apiKey);
+			
+			log.debug("Is my captcha: {}.", gathered);
 			
 		}
 	}

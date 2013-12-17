@@ -7,7 +7,16 @@ package de.bmarwell.j9kwsolver.util;
 
 import org.apache.commons.lang3.BooleanUtils;
 
+/**
+ * @author Benjamin Marwell
+ * Some Boolean Utils.
+ */
 public class BooleanUtils10 {
+	/**
+	 * Returns a textual representation of 1 for true or 0 for false.
+	 * @param bool - a boolean.
+	 * @return either 0 or 1.
+	 */
 	public static String toIntegerString(boolean bool) {
 		int boolint = BooleanUtils.toInteger(bool);
 		

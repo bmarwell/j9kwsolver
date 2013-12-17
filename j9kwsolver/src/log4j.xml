@@ -10,7 +10,7 @@
 	</appender>
 
 	<logger name="org.apache" additivity="false">
-		<level value="warn" />
+		<level value="debug" />
 		<appender-ref ref="console" />
 	</logger>
 

@@ -23,9 +23,18 @@ import de.bmarwell.j9kwsolver.request.CaptchaNewOk;
 import de.bmarwell.j9kwsolver.request.CaptchaReturn;
 import de.bmarwell.j9kwsolver.request.CaptchaReturnExtended;
 
+/**
+ * @author Benjamin Marwell
+ * This class will build URIs based on the request objects.
+ */
 public class RequestToURI {
 	private static final Logger log = LoggerFactory.getLogger(RequestToURI.class); 
 
+	/**
+	 * The CaptchaGet-Request URI Builder.
+	 * @param cg
+	 * @return
+	 */
 	public static URI captchaGetToURI(CaptchaGet cg) {
 		URI uri = null;
 		
@@ -50,6 +59,11 @@ public class RequestToURI {
 		return uri;
 	}
 	
+	/**
+	 * Sends Accept to the 9kw Captcha Service.
+	 * @param cno
+	 * @return
+	 */
 	public static URI captchaNewOkToURI(CaptchaNewOk cno) {
 		URI uri = null;
 		
@@ -125,6 +139,11 @@ public class RequestToURI {
 		return cr;
 	}
 	
+	/**
+	 * A generic String To URI-function, ignoring throwables.
+	 * @param uristring - a uri in String representation.
+	 * @return null or the String as URI.
+	 */
 	public static URI StringToURI(String uristring) {
 		URI uri = null;
 		
