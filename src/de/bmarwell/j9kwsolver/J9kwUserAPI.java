@@ -19,6 +19,7 @@ import de.bmarwell.j9kwsolver.util.HttpConnectorFactory;
 import de.bmarwell.j9kwsolver.util.RequestToURI;
 
 /**
+ * An API for retrieving user information.
  * @author Benjamin Marwell
  *
  */

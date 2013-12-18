@@ -61,6 +61,7 @@ public class PropertyService {
 			
 			props.put("apikey", apiKey);
 			props.put("toolname", "j9kwsolver");
+			props.put("debug", "true");
 			
 			return props;
 		}

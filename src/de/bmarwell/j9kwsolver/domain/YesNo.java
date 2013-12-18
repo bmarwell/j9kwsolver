@@ -5,6 +5,10 @@
  */
 package de.bmarwell.j9kwsolver.domain;
 
+/**
+ * @author bmarwell
+ *
+ */
 public enum YesNo {
 	YES("yes"),
 	NO("no");

@@ -18,6 +18,7 @@ import de.bmarwell.j9kwsolver.request.CaptchaGet;
 import de.bmarwell.j9kwsolver.request.CaptchaNewOk;
 import de.bmarwell.j9kwsolver.request.CaptchaReturn;
 import de.bmarwell.j9kwsolver.request.CaptchaReturnExtended;
+import de.bmarwell.j9kwsolver.request.CaptchaShow;
 import de.bmarwell.j9kwsolver.request.ServerCheck;
 import de.bmarwell.j9kwsolver.request.UserBalance;
 
@@ -205,6 +206,32 @@ public class RequestToURI {
 		.addParameter("action", ub.getAction())
 		.addParameter("apikey", ub.getApikey())
 		;
+
+		try {
+			uri = builder.build();
+		} catch (URISyntaxException e) {
+			log.error("Konnte URI nicht erstellen!", e);
+		}
+
+		return uri;
+	}
+
+	public static URI captchaShowToURI(CaptchaShow cs) {
+		URI uri = null;
+
+		if (cs == null) {
+			return null;
+		}
+		
+		URI apiURI = StringToURI(cs.getUrl());
+		
+		URIBuilder builder = new URIBuilder(apiURI)
+			.addParameter("action", cs.getAction())
+			.addParameter("apikey", cs.getApikey())
+			.addParameter("source", cs.getSource())
+			.addParameter("debug", BooleanUtils10.toIntegerString(cs.isDebug()))
+			.addParameter("base64", BooleanUtils10.toIntegerString(cs.isBase64()))
+			;
 
 		try {
 			uri = builder.build();

@@ -20,6 +20,11 @@ import de.bmarwell.j9kwsolver.util.HttpConnectorFactory;
 import de.bmarwell.j9kwsolver.util.RequestToURI;
 import de.bmarwell.j9kwsolver.util.ResponseUtils;
 
+/**
+ * An API for receiving server information.
+ * @author bmarwell
+ *
+ */
 public class J9kwServerAPI {
 	private static final Logger log = LoggerFactory.getLogger(J9kwServerAPI.class);
 	private static Lock httpLock = new ReentrantLock();

@@ -15,6 +15,11 @@ import org.slf4j.LoggerFactory;
 import de.bmarwell.j9kwsolver.action.CaptchaGetThread;
 import de.bmarwell.j9kwsolver.domain.Captcha;
 
+/**
+ * An API for sending and retrieving captchas.
+ * @author bmarwell
+ *
+ */
 public class J9kwCaptchaAPI {
 	private static final Logger log = LoggerFactory.getLogger(J9kwCaptchaAPI.class);
 	private ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();

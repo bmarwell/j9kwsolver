@@ -5,12 +5,28 @@
  */
 package de.bmarwell.j9kwsolver.domain;
 
+import java.awt.image.BufferedImage;
+
+/**
+ * Saves a captcha with its informations.
+ * @author bmarwell
+ *
+ */
 public class Captcha {
 
 	private String id;
 	private String source;
 	private boolean mouse;
 	private boolean confirm;
+	private BufferedImage image;
+	
+	
+	public BufferedImage getImage() {
+		return image;
+	}
+	public void setImage(BufferedImage image) {
+		this.image = image;
+	}
 	public String getId() {
 		return id;
 	}

@@ -117,8 +117,7 @@ public class J9kwSolver {
 		J9kwCaptchaAPI.getInstance().shutdownExecutor();
 		
 		Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
-		Thread[] threadArray = threadSet.toArray(new Thread[threadSet.size()]);
-		log.debug("Threads running: {}.", threadArray);
+		log.debug("Threads running: {}.", threadSet);
 	}
 	
 
