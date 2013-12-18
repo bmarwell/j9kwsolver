@@ -5,15 +5,11 @@
  */
 package de.bmarwell.j9kwsolver.util;
 
-import java.io.IOException;
-import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.http.client.utils.URIBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -109,51 +105,68 @@ public class RequestToURI {
 	 * @return
 	 */
 	public static CaptchaReturn captchaGetResponseToCaptchaReturn(
-			CloseableHttpResponse response) {
+			String response) {
 		CaptchaReturn cr = null;
 		
-		if (response == null) {
-			return cr;
-		}
-		
-		HttpEntity he = response.getEntity();
-		
-		if (he == null) {
-			log.debug("Entity ist leer!");
-			
-			return cr;
-		}
-		
-		String requestContent = null;
-		StringWriter writer = new StringWriter();
-
-		try {
-			IOUtils.copy(
-					he.getContent(), 
-					writer, 
-					"UTF-8");
-			he.getContent().close();
-			requestContent = writer.toString();
-		} catch (IllegalStateException | IOException e) {
-			log.error("Konnte Body nicht in String umwandeln.", e);
-			
-			return cr;
-		}
-		
-		if (StringUtils.isEmpty(requestContent)) {
+		if (StringUtils.isEmpty(response)) {
 			log.debug("Content ist leer!");
 			
 			return cr;
 		}
 		
-		/* Nun geht das umwandeln */
-		if (StringUtils.contains(requestContent, "phrase")) {
+		/* converting answer to object */
+		if (StringUtils.containsIgnoreCase(response, "NO CAPTCHA")) {
+			/* No captcha available */
+			cr = null;
+			log.debug("No captcha available atm: {}.", response);
+		} else if (StringUtils.contains(response, "phrase")) {
+			/* 
+			 * Extended response contains phrase keyword
+			 * ID|text|confirm|antwort|mouse=0|phrase=0|numeric=0|math=0|min_len=1|max_len=20|confirm=1|w|h|
+			 */
+			log.debug("Extended response: {}.", response);
+			String[] splitresponse = StringUtils.split(response, '|');
+			
+			/* Checke item count */
+			if (splitresponse.length < 11) {
+				log.warn("Extended response doesn't contain enough items");
+				return cr;
+			}
+			
+			/* check first item is digits */
+			if (!NumberUtils.isDigits(splitresponse[0])) {
+				log.error("Response's first item isn't a captcha id."
+						+ " Found {} instead.", splitresponse[0]);
+				return cr;
+			}
+			
+			/* Now create captcha extended item and fill it */
 			cr = new CaptchaReturnExtended();
+			cr.setCaptchaID(splitresponse[0]);
+			// TODO: Add items
 		} else {
+			/* 
+			 * simple response contains only digits or few extra information
+			 * INT or INT|mouse or INT|confirm
+			 */
+			log.debug("Simple response: {}.", response);
+			String[] splitresponse = StringUtils.split(response, '|');
+			
+			if (splitresponse.length < 1) {
+				log.warn("Simple response doesn't contain enough items");
+				return cr;
+			}
+			
+			if (!NumberUtils.isDigits(splitresponse[0])) {
+				log.error("Response's first item isn't a captcha id."
+						+ " Found {} instead.", splitresponse[0]);
+				return cr;
+			}
+			
 			cr = new CaptchaReturn();
+			cr.setCaptchaID(splitresponse[0]);
+			// TODO: add items
 		}
-		
-		log.debug("Body: {}.", requestContent);
 		
 		return cr;
 	}

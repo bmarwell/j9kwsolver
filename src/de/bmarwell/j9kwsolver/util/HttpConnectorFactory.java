@@ -15,7 +15,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,18 +25,34 @@ import org.slf4j.LoggerFactory;
  */
 public class HttpConnectorFactory {
 	private static final Logger log = LoggerFactory.getLogger(HttpConnectorFactory.class);
-	private static CloseableHttpClient httpClient = getHttpClient();
+	private static CloseableHttpClient httpClient;
 	
-	public static CloseableHttpClient getHttpClient() {
+	static {
+		PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
+		
 		RequestConfig rc = RequestConfig.copy(RequestConfig.DEFAULT)
 				.setSocketTimeout(30000)
 				.setConnectTimeout(30000)
 				.build();
-		CloseableHttpClient httpClient = HttpClients.custom()
-				.setDefaultRequestConfig(rc)
-				.build();
 		
+		httpClient = HttpClients.custom()
+				.setDefaultRequestConfig(rc)
+				.setConnectionManager(cm)
+				.build();
+	}
+	
+	/**
+	 * Returns the single httpClient for this application to use.
+	 * @return
+	 */
+	public static CloseableHttpClient getHttpClient() {
 		return httpClient;
+	}
+	
+	public static boolean shutdownConnector() {
+		IOUtils.closeQuietly(httpClient);
+		
+		return true;
 	}
 	
 	public static String getBodyFromRequest(URI uri) {

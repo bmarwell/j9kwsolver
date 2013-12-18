@@ -5,27 +5,20 @@
  */
 package de.bmarwell.j9kwsolver.test;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.net.URI;
-import java.util.Scanner;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.bmarwell.j9kwsolver.J9kwCaptchaAPI;
 import de.bmarwell.j9kwsolver.J9kwServerAPI;
 import de.bmarwell.j9kwsolver.J9kwUserAPI;
-import de.bmarwell.j9kwsolver.request.CaptchaGet;
-import de.bmarwell.j9kwsolver.request.CaptchaNewOk;
-import de.bmarwell.j9kwsolver.request.CaptchaReturn;
+import de.bmarwell.j9kwsolver.domain.Captcha;
+import de.bmarwell.j9kwsolver.response.ServerStatus;
 import de.bmarwell.j9kwsolver.service.PropertyService;
 import de.bmarwell.j9kwsolver.util.HttpConnectorFactory;
-import de.bmarwell.j9kwsolver.util.RequestToURI;
 
 /**
  * @author Benjamin Marwell
@@ -34,81 +27,29 @@ import de.bmarwell.j9kwsolver.util.RequestToURI;
 public class J9kwSolver {
 	private static final Logger log = LoggerFactory.getLogger(J9kwSolver.class);
 	
-	private static CaptchaReturn getRequest(String apikey) {
-		//TODO: Put this into ServerAPI.
-		CloseableHttpResponse response = null;
-		CaptchaReturn cr = null;
-		
-		CaptchaGet cg = new CaptchaGet();
-		cg.setDebug(true);
-		cg.setApikey(apikey);
-		cg.setExtended(true);
-		cg.setSource(PropertyService.getProperty("toolname"));
-		
-		URI uri = RequestToURI.captchaGetToURI(cg);
-		
-		CloseableHttpClient httpclient = HttpConnectorFactory.getHttpClient();
-		HttpGet httpGet = new HttpGet(uri);
-		
-		log.debug("Requesting URI: {}.", httpGet.getURI());
+	/**
+	 * API call to J9kwCaptchaAPI.getNewCaptcha()
+	 * @return
+	 */
+	private static Captcha getCaptcha() {
+		Captcha captcha = null;
+		J9kwCaptchaAPI jca = J9kwCaptchaAPI.getInstance();
+		Future<Captcha> maybeResult = jca.getNewCaptcha(true);
 		
 		try {
-			response = httpclient.execute(httpGet);
-			cr = RequestToURI.captchaGetResponseToCaptchaReturn(response);
-		} catch (IOException e) {
-			log.error("Fehler beim HTTP Request!", e);
-		} finally {
-			IOUtils.closeQuietly(httpclient);
+			captcha = maybeResult.get();
+		} catch (InterruptedException e) {
+			log.error("Interrupted?!", e);
+		} catch (ExecutionException e) {
+			log.error("Could not execute?!", e);
 		}
 		
-		return cr;
+		return captcha;
 	}
 	
-	private static boolean returnReceived(String apikey) {
-		//TODO: Put this into ServerAPI.
-		CloseableHttpResponse response = null;
-		String answer = null;
-		boolean success = false;
-		Scanner s = null;
-		
-		CaptchaNewOk cno = new CaptchaNewOk();
-		cno.setApikey(apikey);
-		cno.setSource(PropertyService.getProperty("toolname"));
-		
-		URI uri = RequestToURI.captchaNewOkToURI(cno);
-		
-		CloseableHttpClient httpclient = HttpConnectorFactory.getHttpClient();
-		HttpGet httpGet = new HttpGet(uri);
-		
-		log.debug("Requesting URI: {}.", httpGet.getURI());
-		
-		try {
-			response = httpclient.execute(httpGet);
-			log.debug("Request ausgeführt.");
-			StringWriter writer = new StringWriter();
-			IOUtils.copy(response.getEntity().getContent(), writer);
-			
-			answer = writer.toString();
-			log.debug("Input: {}.", writer.toString());
-		} catch (IOException e) {
-			log.error("Fehler beim HTTP Request!", e);
-		} finally {
-			IOUtils.closeQuietly(httpclient);
-			IOUtils.closeQuietly(s);
-		}
-		
-		/*
-		 * Check if OK came
-		 */
-		if (StringUtils.isEmpty(answer)) {
-			success = false;
-		} else if (StringUtils.containsIgnoreCase(answer, "ok")) {
-			success = true;
-		}
-		
-		return success;
-	}
-	
+	/**
+	 * Easy pause for testing.
+	 */
 	public static void dosleep() {
 		try {
 			Thread.sleep(2500);
@@ -116,24 +57,42 @@ public class J9kwSolver {
 		}
 	}
 	
-	public static void getServerStatus() {
+	/**
+	 * Call to J9kwServerAPI.getServerStatus().
+	 * @see {@link J9kwServerAPI#getServerStatus()}
+	 */
+	public static ServerStatus getServerStatus() {
 		J9kwServerAPI sa = J9kwServerAPI.getInstance();
+		ServerStatus ss = sa.getServerStatus();
 		
-		log.debug("ServerStatus: {}.", sa.getServerStatus());
+		log.debug("ServerStatus: {}.", ss);
+		
+		assert ss != null : "ServerStatus could not be retrieved.";
+		
+		return ss;
 	}
 	
-	public static void getBalance() {
+	/**
+	 * Call to J9kwUserAPI.getBalance().
+	 * @See {@link J9kwUserAPI#getBalance()}
+	 */
+	public static int getBalance() {
 		J9kwUserAPI ua = J9kwUserAPI.getInstance();
 		
 		int balance = ua.getBalance();
 		log.debug("Balance: {} credits.", balance);
+		
+		assert balance != 0 : "FIXME: Balance probably not detected.";
+		
+		return balance;
 	}
+	
 	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		CaptchaReturn cr = null;
+		Captcha captcha = null;
 		String apiKey = null;
 		apiKey = PropertyService.getProperty("apikey");
 
@@ -141,24 +100,25 @@ public class J9kwSolver {
 		assert apiKey != "" : "apiKey konnte nicht gelesen werden.";
 		assert apiKey.length() > 8 : "apiKey ist zu kurz.";
 		
-		while (cr == null) {
-			cr = getRequest(apiKey);
-			if (cr == null) {
-				dosleep();
-			}
-		}
-		
-		
-		if (cr != null) {
-			log.debug("CR ungleich null!");
-			boolean gathered = returnReceived(apiKey);
-			
-			log.debug("Is my captcha: {}.", gathered);
-			
+//		while (captcha == null) {
+			captcha = getCaptcha();
+//		}
+		if (captcha != null) {
+			log.debug("Captcha received!");
+		} else {
+			log.debug("No captcha received.");
 		}
 		
 		getServerStatus();
 		getBalance();
+		
+		// XXX: Services should shutdown automatically. 
+		HttpConnectorFactory.shutdownConnector();
+		J9kwCaptchaAPI.getInstance().shutdownExecutor();
+		
+		Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+		Thread[] threadArray = threadSet.toArray(new Thread[threadSet.size()]);
+		log.debug("Threads running: {}.", threadArray);
 	}
 	
 

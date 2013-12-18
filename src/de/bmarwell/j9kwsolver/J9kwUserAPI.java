@@ -47,6 +47,10 @@ public class J9kwUserAPI {
 		httpLock.unlock();
 	}
 	
+	/**
+	 * Gets the apikey users's balance.
+	 * @return - the balance in credits.
+	 */
 	public int getBalance() {
 		int balance = 0;
 		
@@ -66,7 +70,8 @@ public class J9kwUserAPI {
 	}
 	
 	/**
-	 * @return
+	 * Returns the only instance of this api.
+	 * @return instance of this API.
 	 */
 	public static J9kwUserAPI getInstance() {
 		return SingletonHolder.instance;

@@ -5,31 +5,45 @@
  */
 package de.bmarwell.j9kwsolver;
 
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import de.bmarwell.j9kwsolver.action.CaptchaGetThread;
+import de.bmarwell.j9kwsolver.domain.Captcha;
 
 public class J9kwCaptchaAPI {
-	private static Lock httpLock = new ReentrantLock();
+	private static final Logger log = LoggerFactory.getLogger(J9kwCaptchaAPI.class);
+	private ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
 	
 	/**
 	 * Empty hidden default constructor
 	 */
 	private J9kwCaptchaAPI() {}
 	
-	
-	
-	/**
-	 * Locks the instance.
-	 */
-	private void lock() {
-		httpLock.lock();
+	public boolean shutdownExecutor() {
+		singleThreadExecutor.shutdown();
+		
+		return true;
 	}
 	
+	
+	
 	/**
-	 * unlocks the instance.
+	 * Requests and accepts a captcha from the server.
+	 * @param tryLoop - set yes to loop until captcha is received.
+	 * @return a captcha or null if none received (only possible with <code>tryLoop=false</code>.
 	 */
-	private void unlock() {
-		httpLock.unlock();
+	public Future<Captcha> getNewCaptcha(boolean tryLoop) {
+		CaptchaGetThread gt = new CaptchaGetThread();
+		
+		log.trace("starting get-Task");
+		Future<Captcha> result = singleThreadExecutor.submit(gt);
+		
+		return result;
 	}
 	
 	/**

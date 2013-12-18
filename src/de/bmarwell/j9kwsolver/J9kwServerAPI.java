@@ -61,7 +61,6 @@ public class J9kwServerAPI {
 		serverstate = HttpConnectorFactory.getBodyFromRequest(scuri);
 		unlock();
 		
-		// TODO: Parse;
 		if (StringUtils.isEmpty(serverstate)) {
 			return null;
 		}
