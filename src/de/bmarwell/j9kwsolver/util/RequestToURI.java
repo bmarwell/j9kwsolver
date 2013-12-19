@@ -204,8 +204,8 @@ public class RequestToURI {
 		}
 		
 		/* Has solved text */
-		if (StringUtils.isNotEmpty(splitresponse[CaptchaReturn.Field.TEXTANSWER.getPosition()])) {
-			cre.setAnswerText(splitresponse[CaptchaReturn.Field.TEXTANSWER.getPosition()]);
+		if (StringUtils.isNotEmpty(splitresponse[CaptchaReturn.Field.CONFIRMTEXT.getPosition()])) {
+			cre.setConfirmText(splitresponse[CaptchaReturn.Field.CONFIRMTEXT.getPosition()]);
 		}
 		
 		/* Mouse event? */

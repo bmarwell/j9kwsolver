@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class CaptchaReturnExtended extends CaptchaReturn {
-	private String answerText = null;
+	private String confirmText = null;
 	
 	private boolean phrase = false;
 	private boolean numeric = false;
@@ -22,12 +22,12 @@ public class CaptchaReturnExtended extends CaptchaReturn {
 	private int width = 0;
 	private int height = 0;
 	
-	public String getAnswerText() {
-		return answerText;
+	public String getConfirmText() {
+		return confirmText;
 	}
 
-	public void setAnswerText(String answerText) {
-		this.answerText = answerText;
+	public void setConfirmText(String confirmText) {
+		this.confirmText = confirmText;
 	}
 
 	public boolean isPhrase() {

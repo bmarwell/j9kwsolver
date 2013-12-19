@@ -7,6 +7,8 @@ package de.bmarwell.j9kwsolver.domain;
 
 import java.awt.image.BufferedImage;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 /**
  * Saves a captcha with its informations.
  * @author bmarwell
@@ -15,12 +17,19 @@ import java.awt.image.BufferedImage;
 public class Captcha {
 
 	private String id;
-	private String source;
+	private String confirmtext = null;
 	private boolean mouse;
 	private boolean confirm;
 	private BufferedImage image;
 	
 	
+	
+	public String getConfirmtext() {
+		return confirmtext;
+	}
+	public void setConfirmtext(String confirmtext) {
+		this.confirmtext = confirmtext;
+	}
 	public BufferedImage getImage() {
 		return image;
 	}
@@ -32,12 +41,6 @@ public class Captcha {
 	}
 	public void setId(String id) {
 		this.id = id;
-	}
-	public String getSource() {
-		return source;
-	}
-	public void setSource(String source) {
-		this.source = source;
 	}
 	public boolean isMouse() {
 		return mouse;
@@ -52,5 +55,9 @@ public class Captcha {
 		this.confirm = confirm;
 	}
 	
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this);
+	}
 	
 }

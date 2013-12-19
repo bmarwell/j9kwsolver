@@ -38,6 +38,7 @@ public class J9kwSolver {
 		
 		try {
 			captcha = maybeResult.get();
+			log.debug("Captcha: {}.", captcha);
 		} catch (InterruptedException e) {
 			log.error("Interrupted?!", e);
 		} catch (ExecutionException e) {

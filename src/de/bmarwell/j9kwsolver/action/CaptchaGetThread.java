@@ -22,6 +22,7 @@ import de.bmarwell.j9kwsolver.domain.Captcha;
 import de.bmarwell.j9kwsolver.request.CaptchaGet;
 import de.bmarwell.j9kwsolver.request.CaptchaNewOk;
 import de.bmarwell.j9kwsolver.request.CaptchaReturn;
+import de.bmarwell.j9kwsolver.request.CaptchaReturnExtended;
 import de.bmarwell.j9kwsolver.request.CaptchaShow;
 import de.bmarwell.j9kwsolver.service.PropertyService;
 import de.bmarwell.j9kwsolver.util.HttpConnectorFactory;
@@ -101,7 +102,8 @@ public class CaptchaGetThread implements Callable<Captcha> {
 	 * @param captchaId
 	 * @return
 	 */
-	private Captcha getCaptcha(String captchaId) {
+	private Captcha getCaptcha(CaptchaReturn cr) {
+		CaptchaReturnExtended cre = null;
 		Captcha captcha = null;
 		String responseBody = null;
 		
@@ -109,7 +111,7 @@ public class CaptchaGetThread implements Callable<Captcha> {
 		cs.setApikey(PropertyService.getProperty("apikey"));
 		cs.setSource(PropertyService.getProperty("toolname"));
 		cs.setBase64(true);
-		cs.setId(captchaId);
+		cs.setId(cr.getCaptchaID());
 		if (PropertyService.getProperty("debug").equals("true")) {
 			cs.setDebug(true);
 		}
@@ -126,7 +128,16 @@ public class CaptchaGetThread implements Callable<Captcha> {
 		
 		/* OK, captcha gotten. */
 		captcha = new Captcha();
-		captcha.setId(captchaId);
+		captcha.setId(cr.getCaptchaID());
+		captcha.setConfirm(cr.isConfirm());
+		captcha.setMouse(cr.isMouse());
+		
+		if (cr instanceof CaptchaReturnExtended) {
+			cre = (CaptchaReturnExtended)cr;
+			captcha.setConfirmtext(cre.getConfirmText());
+		}
+		
+		// captcha.setConfirmtext();
 		
 		try {
 			byte[] imgdata = Base64.decodeBase64(responseBody);
@@ -143,7 +154,7 @@ public class CaptchaGetThread implements Callable<Captcha> {
 			/* Check if we actually saved the image */
 			log.warn("Image found, but could not be saved to object!");
 			
-			captcha = null;
+			return null;
 		}
 		
 		return captcha;
@@ -194,7 +205,7 @@ public class CaptchaGetThread implements Callable<Captcha> {
 		 * Step 3:
 		 * Get Captcha Data.
 		 */
-		captcha = getCaptcha(cr.getCaptchaID());
+		captcha = getCaptcha(cr);
 		
 		return captcha;
 	}

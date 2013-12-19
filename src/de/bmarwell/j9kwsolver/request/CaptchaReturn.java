@@ -45,7 +45,7 @@ public class CaptchaReturn {
 		ID(0),
 		TEXT(1),
 		CONFIRM(2),
-		TEXTANSWER(3),
+		CONFIRMTEXT(3),
 		MOUSE(4),
 		PHRASE(5),
 		NUMERIC(6),
