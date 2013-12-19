@@ -17,15 +17,15 @@ public class CaptchaGet implements CaptchaRequestInterface {
 	
 	private String apikey;
 	private String source = "jk9solver"; // toolname
-	private boolean nocaptcha = true;
+	private boolean nocaptcha = false; // 1 = no response, 0 = "NO CAPTCHA".
 	private YesNo text = YesNo.YES;
 	private boolean mouse = true;
 	private boolean confirm = true;
 	private boolean selfsolve = true;
 	private boolean selfonly = false;
 	private boolean withok = true; // bitte usercaptchanewok nutzen 
-	private boolean extended = true; // mehr infos
-	private boolean debug = true;
+	private boolean extended = true; // more information
+	private boolean debug = false;
 	
 	public String getAction() {
 		return action;

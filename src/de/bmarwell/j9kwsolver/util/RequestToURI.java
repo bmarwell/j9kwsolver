@@ -9,6 +9,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.http.client.utils.URIBuilder;
 import org.slf4j.Logger;
@@ -61,6 +63,7 @@ public class RequestToURI {
 			.addParameter("action", cg.getAction())
 			.addParameter("apikey", cg.getApikey())
 			.addParameter("source", cg.getSource())
+			.addParameter("withok", BooleanUtils10.toIntegerString(cg.isWithok()))
 			.addParameter("nocaptcha", BooleanUtils10.toIntegerString(cg.isNocaptcha()))
 			.addParameter("extended", BooleanUtils10.toIntegerString(cg.isExtended()))
 			.addParameter("text", cg.getText().getYesNoString())
@@ -121,30 +124,10 @@ public class RequestToURI {
 			cr = null;
 			log.debug("No captcha available atm: {}.", response);
 		} else if (StringUtils.contains(response, "phrase")) {
-			/* 
-			 * Extended response contains phrase keyword
-			 * ID|text|confirm|antwort|mouse=0|phrase=0|numeric=0|math=0|min_len=1|max_len=20|confirm=1|w|h|
-			 */
-			log.debug("Extended response: {}.", response);
-			String[] splitresponse = StringUtils.split(response, '|');
-			
-			/* Checke item count */
-			if (splitresponse.length < 11) {
-				log.warn("Extended response doesn't contain enough items");
-				return cr;
-			}
-			
-			/* check first item is digits */
-			if (!NumberUtils.isDigits(splitresponse[0])) {
-				log.error("Response's first item isn't a captcha id."
-						+ " Found {} instead.", splitresponse[0]);
-				return cr;
-			}
-			
-			/* Now create captcha extended item and fill it */
-			cr = new CaptchaReturnExtended();
-			cr.setCaptchaID(splitresponse[0]);
-			// TODO: Add items
+			/* Extended Answer */
+			CaptchaReturnExtended cre = getExtendedFromResponse(response);
+			log.debug("CRE: {}.", cre);
+			cr = cre;
 		} else {
 			/* 
 			 * simple response contains only digits or few extra information
@@ -172,6 +155,69 @@ public class RequestToURI {
 		return cr;
 	}
 	
+	/**
+	 * Parses the response for fields to set.
+	 * @param response
+	 * @return
+	 */
+	private static CaptchaReturnExtended getExtendedFromResponse(String response) {
+		/* 
+		 * Extended response contains phrase keyword
+		 * ID|text|confirm|antwort|mouse=0|phrase=0|numeric=0|math=0|min_len=1|max_len=20|confirm=1|w|h|
+		 * 11837102|text|||mouse=0|phrase=1|numeric=0|math=0|min_len=5|max_len=0|confirm=0|300|57|userstart=1387447122|startdate=1387447119|serverdate=1387447122|maxtimeout=35
+		 */
+		log.debug("Extended response: {}.", response);
+		String[] splitresponse = StringUtils.splitPreserveAllTokens(response, '|');
+		
+		log.debug("Splitresponse: {}.", 
+				ToStringBuilder.reflectionToString(
+						splitresponse, 
+						ToStringStyle.MULTI_LINE_STYLE)
+		);
+		
+		/* Checke item count */
+		if (splitresponse.length < 11) {
+			log.warn("Extended response doesn't contain enough items");
+			return null;
+		}
+		
+		/* check first item is digits */
+		if (!NumberUtils.isDigits(splitresponse[0])) {
+			log.error("Response's first item isn't a captcha id."
+					+ " Found {} instead.", splitresponse[0]);
+			return null;
+		}
+		
+		/* Now create captcha extended item and fill it */
+		CaptchaReturnExtended cre = new CaptchaReturnExtended();
+		cre.setCaptchaID(splitresponse[CaptchaReturn.Field.ID.getPosition()]);
+		
+		/* if text returned, set text */
+		if (StringUtils.equals(splitresponse[CaptchaReturn.Field.TEXT.getPosition()], "text")) {
+			log.debug("Setting text captcha.");
+			cre.setText(true);
+		}
+		
+		/* Just confirm? */
+		if (StringUtils.equals(splitresponse[CaptchaReturn.Field.CONFIRM.getPosition()], "text")) {
+			cre.setConfirm(true);
+		}
+		
+		/* Has solved text */
+		if (StringUtils.isNotEmpty(splitresponse[CaptchaReturn.Field.TEXTANSWER.getPosition()])) {
+			cre.setAnswerText(splitresponse[CaptchaReturn.Field.TEXTANSWER.getPosition()]);
+		}
+		
+		/* Mouse event? */
+		if (StringUtils.equals(splitresponse[CaptchaReturn.Field.MOUSE.getPosition()], "mouse=1")) {
+			cre.setMouse(true);
+		}
+		
+		// TODO: Add items
+		
+		return cre;
+	}
+
 	/**
 	 * A generic String To URI-function, ignoring throwables.
 	 * @param uristring - a uri in String representation.
@@ -226,6 +272,7 @@ public class RequestToURI {
 		URI apiURI = StringToURI(cs.getUrl());
 		
 		URIBuilder builder = new URIBuilder(apiURI)
+			.addParameter("id", cs.getId())
 			.addParameter("action", cs.getAction())
 			.addParameter("apikey", cs.getApikey())
 			.addParameter("source", cs.getSource())

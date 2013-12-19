@@ -59,9 +59,11 @@ public class PropertyService {
 				IOUtils.closeQuietly(in);
 			}
 			
+			String debug = System.getProperty("debug", "false");
+			
 			props.put("apikey", apiKey);
 			props.put("toolname", "j9kwsolver");
-			props.put("debug", "true");
+			props.put("debug", debug);
 			
 			return props;
 		}

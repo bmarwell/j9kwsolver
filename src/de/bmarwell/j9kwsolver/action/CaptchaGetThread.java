@@ -109,6 +109,7 @@ public class CaptchaGetThread implements Callable<Captcha> {
 		cs.setApikey(PropertyService.getProperty("apikey"));
 		cs.setSource(PropertyService.getProperty("toolname"));
 		cs.setBase64(true);
+		cs.setId(captchaId);
 		if (PropertyService.getProperty("debug").equals("true")) {
 			cs.setDebug(true);
 		}

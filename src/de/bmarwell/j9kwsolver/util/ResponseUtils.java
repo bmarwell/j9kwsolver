@@ -35,12 +35,15 @@ public class ResponseUtils {
 			int value = 0;
 			
 			if (keyValue.length != 2) {
-				log.warn("Key-Value bei Split auf '=' nicht 2: {}.", item);
+				log.warn("Key-Value splitting on '=' doesn't return 2 items: {}.", item);
 				continue;
 			}
+			String key = keyValue[0];
+			String textvalue = keyValue[1];
+			textvalue = StringUtils.removeEnd(textvalue, "s");
 			
-			if (!NumberUtils.isDigits(keyValue[1])) {
-				log.warn("Key-Value hat nicht-nummerischen Wert: {}", item);
+			if (!NumberUtils.isDigits(textvalue)) {
+				log.warn("Key-Value where value is non-numeric: {}", item);
 				continue;
 			} else {
 				value = NumberUtils.toInt(keyValue[1]);
