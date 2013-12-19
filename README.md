@@ -4,7 +4,7 @@ j9kwsolver
 An Open Source solver tool for 9kw.eu captcha service.
 
 ## Goal
-Providing a stable, open source, Java API for 9kw captcha service.
+Providing a stable, open source, Java API for 9kw captcha service.  
 A GUI might be added some time later (v2.0 or so).
 
 ## Features
@@ -14,6 +14,12 @@ A GUI might be added some time later (v2.0 or so).
 * Source code is maintainable and uses well-tested third-party libraries.
 
 ## Usage
+
+### APIKEY
+To use your `apikey`, use this command:  
+`$ echo "apikey" > ~/.config/j9kwsolver/apikey`  
+
+### Startup
 None at the moment, really. You can compile this in eclipse
 and execute `java de.bmarwell.j9kwsolver.test.J9kwSolver.class -Ddebug=true`
 to see if it works for you. It's command line only at the moment.
