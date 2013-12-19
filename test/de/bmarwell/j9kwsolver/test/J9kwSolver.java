@@ -89,20 +89,26 @@ public class J9kwSolver {
 	
 	
 	/**
+	 * Retrieves the API Key.
+	 */
+	private static void testApiKey() {
+		String apiKey = PropertyService.getProperty("apikey");
+	
+		assert apiKey != null : "apiKey konnte nicht gelesen werden.";
+		assert apiKey != "" : "apiKey konnte nicht gelesen werden.";
+		assert apiKey.length() > 8 : "apiKey ist zu kurz.";
+	}
+
+	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		Captcha captcha = null;
-		String apiKey = null;
-		apiKey = PropertyService.getProperty("apikey");
-
-		assert apiKey != null : "apiKey konnte nicht gelesen werden.";
-		assert apiKey != "" : "apiKey konnte nicht gelesen werden.";
-		assert apiKey.length() > 8 : "apiKey ist zu kurz.";
 		
-//		while (captcha == null) {
-			captcha = getCaptcha();
-//		}
+		testApiKey();
+		
+		captcha = getCaptcha();
+
 		if (captcha != null) {
 			log.debug("Captcha received!");
 		} else {
@@ -112,7 +118,7 @@ public class J9kwSolver {
 		getServerStatus();
 		getBalance();
 		
-		// XXX: Services should shutdown automatically. 
+		// FIXME: Services should shutdown automatically. 
 		HttpConnectorFactory.shutdownConnector();
 		J9kwCaptchaAPI.getInstance().shutdownExecutor();
 		
