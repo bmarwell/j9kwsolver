@@ -31,7 +31,7 @@ import de.bmarwell.j9kwsolver.util.RequestToURI;
 /**
  * With this thread, the API will call for an image, auto-accept it and retrieves
  * its contents.
- * @author bmarwell
+ * @author Benjamin Marwell
  */
 public class CaptchaGetThread implements Callable<Captcha> {
 	private static final Logger log = LoggerFactory.getLogger(CaptchaGetThread.class);

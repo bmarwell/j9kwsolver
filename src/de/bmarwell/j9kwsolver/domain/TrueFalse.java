@@ -7,7 +7,7 @@ package de.bmarwell.j9kwsolver.domain;
 
 /**
  * Boolean for true/false with 1/0 output.
- * @author bmarwell
+ * @author Benjamin Marwell
  *
  */
 public enum TrueFalse {

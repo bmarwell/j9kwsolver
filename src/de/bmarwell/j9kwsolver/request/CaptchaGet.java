@@ -8,7 +8,7 @@ package de.bmarwell.j9kwsolver.request;
 import de.bmarwell.j9kwsolver.domain.YesNo;
 
 /**
- * @author bmarwell
+ * @author Benjamin Marwell
  *
  */
 public class CaptchaGet implements CaptchaRequestInterface {

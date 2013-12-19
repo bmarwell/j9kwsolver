@@ -11,7 +11,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * Saves a captcha with its informations.
- * @author bmarwell
+ * @author Benjamin Marwell
  *
  */
 public class Captcha {

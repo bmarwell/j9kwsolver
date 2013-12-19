@@ -22,7 +22,7 @@ import de.bmarwell.j9kwsolver.util.ResponseUtils;
 
 /**
  * An API for receiving server information.
- * @author bmarwell
+ * @author Benjamin Marwell
  *
  */
 public class J9kwServerAPI {

@@ -7,7 +7,7 @@ package de.bmarwell.j9kwsolver.request;
 
 /**
  * Request object for users balance.
- * @author bmarwell
+ * @author Benjamin Marwell
  *
  */
 public class UserBalance implements CaptchaRequestInterface {

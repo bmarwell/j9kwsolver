@@ -10,7 +10,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * Server response object for server status.
- * @author bmarwell
+ * @author Benjamin Marwell
  *
  */
 public class ServerStatus {

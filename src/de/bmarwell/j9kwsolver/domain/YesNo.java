@@ -6,7 +6,7 @@
 package de.bmarwell.j9kwsolver.domain;
 
 /**
- * @author bmarwell
+ * @author Benjamin Marwell
  *
  */
 public enum YesNo {

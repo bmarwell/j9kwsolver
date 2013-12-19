@@ -13,11 +13,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.bmarwell.j9kwsolver.action.CaptchaGetThread;
+import de.bmarwell.j9kwsolver.action.CaptchaSolveThread;
 import de.bmarwell.j9kwsolver.domain.Captcha;
+import de.bmarwell.j9kwsolver.domain.CaptchaSolution;
+import de.bmarwell.j9kwsolver.response.CaptchaSolutionResponse;
 
 /**
  * An API for sending and retrieving captchas.
- * @author bmarwell
+ * @author Benjamin Marwell
  *
  */
 public class J9kwCaptchaAPI {
@@ -47,6 +50,20 @@ public class J9kwCaptchaAPI {
 		
 		log.trace("starting get-Task");
 		Future<Captcha> result = singleThreadExecutor.submit(gt);
+		
+		return result;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public Future<CaptchaSolutionResponse> solveCaptcha(CaptchaSolution solution) {
+		CaptchaSolveThread cst = new CaptchaSolveThread();
+		cst.setSolution(solution);
+		
+		log.trace("starting solve thread");
+		Future<CaptchaSolutionResponse> result = singleThreadExecutor.submit(cst);
 		
 		return result;
 	}

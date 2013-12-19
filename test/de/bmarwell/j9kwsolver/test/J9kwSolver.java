@@ -16,6 +16,8 @@ import de.bmarwell.j9kwsolver.J9kwCaptchaAPI;
 import de.bmarwell.j9kwsolver.J9kwServerAPI;
 import de.bmarwell.j9kwsolver.J9kwUserAPI;
 import de.bmarwell.j9kwsolver.domain.Captcha;
+import de.bmarwell.j9kwsolver.domain.CaptchaSolution;
+import de.bmarwell.j9kwsolver.response.CaptchaSolutionResponse;
 import de.bmarwell.j9kwsolver.response.ServerStatus;
 import de.bmarwell.j9kwsolver.service.PropertyService;
 import de.bmarwell.j9kwsolver.util.HttpConnectorFactory;
@@ -48,6 +50,32 @@ public class J9kwSolver {
 		return captcha;
 	}
 	
+	/**
+	 * Solves a captcha.
+	 * @param captcha
+	 */
+	private static boolean solveCaptcha(Captcha captcha) {
+		CaptchaSolution solution = new CaptchaSolution();
+		boolean accepted = false;
+		solution.setCaptcha(captcha);
+		solution.setCaptchaText("20888V");
+		
+		J9kwCaptchaAPI jca = J9kwCaptchaAPI.getInstance();
+		Future<CaptchaSolutionResponse> solveCaptcha = jca.solveCaptcha(solution);
+		
+		try {
+			CaptchaSolutionResponse acceptedSolution = solveCaptcha.get();
+			log.debug(": {}.", acceptedSolution);
+			accepted = acceptedSolution.isAccepted();
+		} catch (InterruptedException e) {
+			log.error("Interrupted?!", e);
+		} catch (ExecutionException e) {
+			log.error("Could not execute?!", e);
+		}
+		
+		return accepted;
+	}
+
 	/**
 	 * Easy pause for testing.
 	 */
@@ -116,8 +144,12 @@ public class J9kwSolver {
 			log.debug("No captcha received.");
 		}
 		
-		getServerStatus();
-		getBalance();
+		if (captcha != null) {
+			solveCaptcha(captcha);
+		}
+		
+//		getServerStatus();
+//		getBalance();
 		
 		// FIXME: Services should shutdown automatically. 
 		HttpConnectorFactory.shutdownConnector();

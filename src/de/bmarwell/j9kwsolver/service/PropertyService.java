@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Property Singleton Service. 
- * @author bmarwell
+ * @author Benjamin Marwell
  *
  */
 public class PropertyService {
@@ -30,7 +30,7 @@ public class PropertyService {
 	/**
 	 * Inner singleton class.
 	 * Easy, threadsafe, fast.
-	 * @author bmarwell
+	 * @author Benjamin Marwell
 	 *
 	 */
 	private static class PropertySingleton {
