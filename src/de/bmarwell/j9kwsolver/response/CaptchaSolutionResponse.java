@@ -12,15 +12,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  *
  */
 public class CaptchaSolutionResponse {
-	private String captchaId;
 	private boolean accepted = false;
+	private int credits;
 	
-	public String getCaptchaId() {
-		return captchaId;
-	}
-	public void setCaptchaId(String captchaId) {
-		this.captchaId = captchaId;
-	}
 	public boolean isAccepted() {
 		return accepted;
 	}
@@ -28,6 +22,12 @@ public class CaptchaSolutionResponse {
 		this.accepted = accepted;
 	}
 	
+	public int getCredits() {
+		return credits;
+	}
+	public void setCredits(int credits) {
+		this.credits = credits;
+	}
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);

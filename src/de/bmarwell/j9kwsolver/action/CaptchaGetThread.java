@@ -27,6 +27,7 @@ import de.bmarwell.j9kwsolver.request.CaptchaShow;
 import de.bmarwell.j9kwsolver.service.PropertyService;
 import de.bmarwell.j9kwsolver.util.HttpConnectorFactory;
 import de.bmarwell.j9kwsolver.util.RequestToURI;
+import de.bmarwell.j9kwsolver.util.ResponseUtils;
 
 /**
  * With this thread, the API will call for an image, auto-accept it and retrieves
@@ -58,7 +59,7 @@ public class CaptchaGetThread implements Callable<Captcha> {
 		responseBody = HttpConnectorFactory.getBodyFromRequest(uri);
 		log.debug("Response: {}.", responseBody);
 		
-		cr = RequestToURI.captchaGetResponseToCaptchaReturn(responseBody);
+		cr = ResponseUtils.captchaGetResponseToCaptchaReturn(responseBody);
 		
 		return cr;
 	}

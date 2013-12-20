@@ -18,6 +18,7 @@ import de.bmarwell.j9kwsolver.response.CaptchaSolutionResponse;
 import de.bmarwell.j9kwsolver.service.PropertyService;
 import de.bmarwell.j9kwsolver.util.HttpConnectorFactory;
 import de.bmarwell.j9kwsolver.util.RequestToURI;
+import de.bmarwell.j9kwsolver.util.ResponseUtils;
 
 /**
  * @author Benjamin Marwell
@@ -63,8 +64,9 @@ public class CaptchaSolveThread implements Callable<CaptchaSolutionResponse> {
 		responseBody = HttpConnectorFactory.getBodyFromRequest(uri);
 		log.debug("Response: {}.", responseBody);
 		
-		// TODO: RequestToURI.captchaSolutionResponseToCaptchaReturn(responseBody)
-		CaptchaSolutionResponse solutionResponse = new CaptchaSolutionResponse();
+		CaptchaSolutionResponse solutionResponse = null;
+		solutionResponse = ResponseUtils.captchaSolveToCaptchaSolutionResponse(responseBody);
+//		 = new CaptchaSolutionResponse();
 		
 		return solutionResponse;
 	}
