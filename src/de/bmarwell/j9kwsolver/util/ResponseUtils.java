@@ -17,6 +17,10 @@ import de.bmarwell.j9kwsolver.request.CaptchaReturnExtended;
 import de.bmarwell.j9kwsolver.response.CaptchaSolutionResponse;
 
 public class ResponseUtils {
+	/**
+	 * 
+	 */
+	private static final int EXTENDED_ANSWER_MINLENGTH = 11;
 	private static Logger log = LoggerFactory.getLogger(ResponseUtils.class);
 	/**
 	 * @param response
@@ -205,8 +209,8 @@ public class ResponseUtils {
 						ToStringStyle.MULTI_LINE_STYLE)
 		);
 		
-		/* Checke item count */
-		if (splitresponse.length < 11) {
+		/* Check item count */
+		if (splitresponse.length < EXTENDED_ANSWER_MINLENGTH) {
 			RequestToURI.log.warn("Extended response doesn't contain enough items");
 			return null;
 		}

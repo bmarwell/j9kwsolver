@@ -148,9 +148,7 @@ public class CaptchaGetThread implements Callable<Captcha> {
 		} catch (IOException e) {
 			log.error("Could not read image Stream!");
 		}
-		
-		log.debug("Response - Bild: {}.", StringUtils.substring(responseBody, 0, 15));
-		
+
 		if (captcha.getImage() == null) {
 			/* Check if we actually saved the image */
 			log.warn("Image found, but could not be saved to object!");
@@ -202,6 +200,8 @@ public class CaptchaGetThread implements Callable<Captcha> {
 		
 		if (!accepted) {
 			log.warn("Server didn't leave us Captcha {}.", cr.getCaptchaID());
+			
+			return null;
 		} else {
 			log.debug("Server assigned Captcha {} to us.", cr.getCaptchaID());
 		}

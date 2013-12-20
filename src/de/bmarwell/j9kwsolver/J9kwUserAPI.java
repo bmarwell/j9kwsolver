@@ -61,10 +61,12 @@ public class J9kwUserAPI {
 		lock();
 		URI scuri = RequestToURI.UserBalanceToURI(ub);
 		String userbalanceresponse = HttpConnectorFactory.getBodyFromRequest(scuri);
+		log.debug("User credits as String: {}.", userbalanceresponse);
 		unlock();
 		
 		if (NumberUtils.isDigits(userbalanceresponse)) {
 			balance = NumberUtils.toInt(userbalanceresponse);
+			log.debug("User credits as int: {}.", balance);
 		}
 		
 		return balance;

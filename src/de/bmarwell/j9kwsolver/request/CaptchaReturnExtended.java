@@ -64,8 +64,8 @@ public class CaptchaReturnExtended extends CaptchaReturn {
 	public boolean isConfirmedCaptcha() {
 		return confirmedCaptcha;
 	}
-	public void setConfirmedCaptcha(boolean confirmedCaptcha) {
-		this.confirmedCaptcha = confirmedCaptcha;
+	public void setConfirmedCaptcha(boolean pConfirmedCaptcha) {
+		this.confirmedCaptcha = pConfirmedCaptcha;
 	}
 	public int getWidth() {
 		return width;

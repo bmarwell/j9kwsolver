@@ -6,7 +6,6 @@
 package de.bmarwell.j9kwsolver.response;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * Server response object for server status.

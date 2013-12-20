@@ -18,8 +18,8 @@ public class CaptchaSolutionResponse {
 	public boolean isAccepted() {
 		return accepted;
 	}
-	public void setAccepted(boolean accepted) {
-		this.accepted = accepted;
+	public void setAccepted(boolean pAccepted) {
+		this.accepted = pAccepted;
 	}
 	
 	public int getCredits() {

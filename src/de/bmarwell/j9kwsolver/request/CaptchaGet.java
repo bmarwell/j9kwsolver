@@ -12,8 +12,8 @@ import de.bmarwell.j9kwsolver.domain.YesNo;
  *
  */
 public class CaptchaGet implements CaptchaRequestInterface {
-	private static final String url = "http://www.9kw.eu/index.cgi";
-	private static final String action = "usercaptchanew";
+	private static final String URL = "http://www.9kw.eu/index.cgi";
+	private static final String ACTION = "usercaptchanew";
 	
 	private String apikey;
 	private String source = "jk9solver"; // toolname
@@ -28,14 +28,14 @@ public class CaptchaGet implements CaptchaRequestInterface {
 	private boolean debug = false;
 	
 	public String getAction() {
-		return action;
+		return ACTION;
 	}
 	
 	public String getApikey() {
 		return apikey;
 	}
-	public void setApikey(String apikey) {
-		this.apikey = apikey;
+	public void setApikey(String pApikey) {
+		this.apikey = pApikey;
 	}
 	public String getSource() {
 		return source;
@@ -71,8 +71,8 @@ public class CaptchaGet implements CaptchaRequestInterface {
 		return confirm;
 	}
 
-	public void setConfirm(boolean confirm) {
-		this.confirm = confirm;
+	public void setConfirm(boolean pConfirm) {
+		this.confirm = pConfirm;
 	}
 
 	public boolean isSelfsolve() {
@@ -116,7 +116,7 @@ public class CaptchaGet implements CaptchaRequestInterface {
 	}
 
 	public String getUrl() {
-		return url;
+		return URL;
 	} 
 	
 }

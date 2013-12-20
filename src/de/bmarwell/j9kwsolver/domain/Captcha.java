@@ -51,8 +51,8 @@ public class Captcha {
 	public boolean isConfirm() {
 		return confirm;
 	}
-	public void setConfirm(boolean confirm) {
-		this.confirm = confirm;
+	public void setConfirm(boolean pConfirm) {
+		this.confirm = pConfirm;
 	}
 	
 	@Override

@@ -24,6 +24,14 @@ import org.slf4j.LoggerFactory;
  * This class will return various connectors, which might prove useful.
  */
 public class HttpConnectorFactory {
+	/**
+	 * Default connect timeout.
+	 */
+	private static final int CONNECT_TIMEOUT_MS = 30000;
+	/**
+	 * Default socket timeout.
+	 */
+	private static final int SOCKET_TIMEOUT_MS = 30000;
 	private static final Logger log = LoggerFactory.getLogger(HttpConnectorFactory.class);
 	private static CloseableHttpClient httpClient;
 	
@@ -31,8 +39,8 @@ public class HttpConnectorFactory {
 		PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
 		
 		RequestConfig rc = RequestConfig.copy(RequestConfig.DEFAULT)
-				.setSocketTimeout(30000)
-				.setConnectTimeout(30000)
+				.setSocketTimeout(SOCKET_TIMEOUT_MS)
+				.setConnectTimeout(CONNECT_TIMEOUT_MS)
 				.build();
 		
 		httpClient = HttpClients.custom()

@@ -6,8 +6,8 @@
 package de.bmarwell.j9kwsolver.request;
 
 public class CaptchaNewOk implements CaptchaRequestInterface {
-	private static final String url = "http://www.9kw.eu/index.cgi"; 
-	private static final String action = "usercaptchanewok";
+	private static final String URL = "http://www.9kw.eu/index.cgi"; 
+	private static final String ACTION = "usercaptchanewok";
 	
 	private String apikey;
 	private String source;
@@ -15,8 +15,8 @@ public class CaptchaNewOk implements CaptchaRequestInterface {
 	public String getApikey() {
 		return apikey;
 	}
-	public void setApikey(String apikey) {
-		this.apikey = apikey;
+	public void setApikey(String pApikey) {
+		this.apikey = pApikey;
 	}
 	public String getSource() {
 		return source;
@@ -25,10 +25,10 @@ public class CaptchaNewOk implements CaptchaRequestInterface {
 		this.source = source;
 	}
 	public String getUrl() {
-		return url;
+		return URL;
 	}
 	public String getAction() {
-		return action;
+		return ACTION;
 	}
 	
 	

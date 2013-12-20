@@ -11,26 +11,26 @@ package de.bmarwell.j9kwsolver.request;
  *
  */
 public class UserBalance implements CaptchaRequestInterface {
-	private static final String url = "http://www.9kw.eu/index.cgi";
-	private static final String action = "usercaptchaguthaben";
+	private static final String URL = "http://www.9kw.eu/index.cgi";
+	private static final String ACTION = "usercaptchaguthaben";
 	private String apikey = null;
 	
 	public String getApikey() {
 		return apikey;
 	}
 
-	public void setApikey(String apikey) {
-		this.apikey = apikey;
+	public void setApikey(String pApikey) {
+		this.apikey = pApikey;
 	}
 
 	@Override
 	public String getUrl() {
-		return url;
+		return URL;
 	}
 
 	@Override
 	public String getAction() {
-		return action;
+		return ACTION;
 	}
 
 }

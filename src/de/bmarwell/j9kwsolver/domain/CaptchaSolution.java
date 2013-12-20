@@ -25,20 +25,20 @@ public class CaptchaSolution {
 	public Captcha getCaptcha() {
 		return captcha;
 	}
-	public void setCaptcha(Captcha captcha) {
-		this.captcha = captcha;
+	public void setCaptcha(Captcha pCaptcha) {
+		this.captcha = pCaptcha;
 	}
 	public String getCaptchaText() {
 		return captchaText;
 	}
-	public void setCaptchaText(String captchaText) {
-		this.captchaText = captchaText;
+	public void setCaptchaText(String pCaptchaText) {
+		this.captchaText = pCaptchaText;
 	}
 	public YesNo getConfirmCaptchaCorrect() {
 		return confirmCaptchaCorrect;
 	}
-	public void setConfirmCaptchaCorrect(YesNo confirmCaptchaCorrect) {
-		this.confirmCaptchaCorrect = confirmCaptchaCorrect;
+	public void setConfirmCaptchaCorrect(YesNo pConfirmCaptchaCorrect) {
+		this.confirmCaptchaCorrect = pConfirmCaptchaCorrect;
 	}
 	public String getCoordinates() {
 		return coordinates;

@@ -27,6 +27,14 @@ import de.bmarwell.j9kwsolver.util.HttpConnectorFactory;
  *
  */
 public class J9kwSolver {
+	/**
+	 * Minimal length for API key.
+	 */
+	private static final int APIKEY_MIN_LENGTH = 8;
+	/**
+	 * Thread sleep time for testing purposes.
+	 */
+	private static final int THEAD_SLEEP_TIME_MS = 2500;
 	private static final Logger log = LoggerFactory.getLogger(J9kwSolver.class);
 	
 	/**
@@ -92,7 +100,7 @@ public class J9kwSolver {
 	 */
 	public static void dosleep() {
 		try {
-			Thread.sleep(2500);
+			Thread.sleep(THEAD_SLEEP_TIME_MS);
 		} catch (InterruptedException e) {
 		}
 	}
@@ -136,7 +144,7 @@ public class J9kwSolver {
 	
 		assert apiKey != null : "apiKey konnte nicht gelesen werden.";
 		assert apiKey != "" : "apiKey konnte nicht gelesen werden.";
-		assert apiKey.length() > 8 : "apiKey ist zu kurz.";
+		assert apiKey.length() > APIKEY_MIN_LENGTH : "apiKey ist zu kurz.";
 	}
 
 	/**

@@ -15,8 +15,8 @@ public class CaptchaReturn {
 	public String getCaptchaID() {
 		return captchaID;
 	}
-	public void setCaptchaID(String captchaID) {
-		this.captchaID = captchaID;
+	public void setCaptchaID(String pCaptchaID) {
+		this.captchaID = pCaptchaID;
 	}
 	
 	
@@ -35,8 +35,8 @@ public class CaptchaReturn {
 	public boolean isConfirm() {
 		return confirm;
 	}
-	public void setConfirm(boolean confirm) {
-		this.confirm = confirm;
+	public void setConfirm(boolean pConfirm) {
+		this.confirm = pConfirm;
 	}
 	
 	public enum Field {

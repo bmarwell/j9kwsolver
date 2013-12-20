@@ -34,11 +34,11 @@ public class PropertyService {
 	 *
 	 */
 	private static class PropertySingleton {
-		private static final Properties props = initializeProperties();
-		private static final String apikeyfilepath = "/.config/j9kwsolver/apikey";
+		private static final Properties PROPS = initializeProperties();
+		private static final String APIKEY_FILE_PATH = "/.config/j9kwsolver/apikey";
 		
 		public static Properties getProperties() {
-			return props;
+			return PROPS;
 		}
 		
 		private static Properties initializeProperties() {
@@ -47,10 +47,10 @@ public class PropertyService {
 			Scanner in = null;
 			
 			String userHome = System.getProperty( "user.home" );
-			log.debug("ApiKeyFile = {}.", userHome + apikeyfilepath);
+			log.debug("ApiKeyFile = {}.", userHome + APIKEY_FILE_PATH);
 			
 			try {
-				File apikeyFile = new File(userHome, apikeyfilepath);
+				File apikeyFile = new File(userHome, APIKEY_FILE_PATH);
 				in = new Scanner(apikeyFile);
 				apiKey = in.nextLine();
 			} catch (FileNotFoundException e) {

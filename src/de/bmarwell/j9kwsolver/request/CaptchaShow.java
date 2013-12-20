@@ -6,8 +6,8 @@
 package de.bmarwell.j9kwsolver.request;
 
 public class CaptchaShow implements CaptchaRequestInterface {
-	private static final String url = "http://www.9kw.eu/index.cgi";
-	private static final String action = "usercaptchashow";
+	private static final String URL = "http://www.9kw.eu/index.cgi";
+	private static final String ACTION = "usercaptchashow";
 	
 	private String id;
 	private String apikey;
@@ -29,8 +29,8 @@ public class CaptchaShow implements CaptchaRequestInterface {
 		return apikey;
 	}
 
-	public void setApikey(String apikey) {
-		this.apikey = apikey;
+	public void setApikey(String pApikey) {
+		this.apikey = pApikey;
 	}
 
 	public String getSource() {
@@ -45,8 +45,8 @@ public class CaptchaShow implements CaptchaRequestInterface {
 		return base64;
 	}
 
-	public void setBase64(boolean base64) {
-		this.base64 = base64;
+	public void setBase64(boolean pBase64) {
+		this.base64 = pBase64;
 	}
 
 	public boolean isSpeed() {
@@ -75,12 +75,12 @@ public class CaptchaShow implements CaptchaRequestInterface {
 
 	@Override
 	public String getUrl() {
-		return url;
+		return URL;
 	}
 
 	@Override
 	public String getAction() {
-		return action;
+		return ACTION;
 	}
 
 }

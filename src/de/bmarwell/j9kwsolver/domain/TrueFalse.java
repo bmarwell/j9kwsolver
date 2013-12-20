@@ -16,8 +16,8 @@ public enum TrueFalse {
 	
 	private int code;
 	
-	private TrueFalse(int code) {
-		this.code = code;
+	private TrueFalse(int pCode) {
+		this.code = pCode;
 	}
 	
 	public int getCode() {

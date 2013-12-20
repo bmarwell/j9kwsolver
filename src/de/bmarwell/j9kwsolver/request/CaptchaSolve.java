@@ -71,8 +71,8 @@ public class CaptchaSolve implements CaptchaRequestInterface {
 		return apikey;
 	}
 
-	public void setApikey(String apikey) {
-		this.apikey = apikey;
+	public void setApikey(String pApikey) {
+		this.apikey = pApikey;
 	}
 
 	public String getId() {
@@ -87,16 +87,16 @@ public class CaptchaSolve implements CaptchaRequestInterface {
 		return captcha;
 	}
 
-	public void setCaptcha(String captcha) {
-		this.captcha = captcha;
+	public void setCaptcha(String pCaptcha) {
+		this.captcha = pCaptcha;
 	}
 
 	public static void setUrl(String url) {
 		CaptchaSolve.url = url;
 	}
 
-	public static void setAction(String action) {
-		CaptchaSolve.action = action;
+	public static void setAction(String pAction) {
+		CaptchaSolve.action = pAction;
 	}
 	
 }
