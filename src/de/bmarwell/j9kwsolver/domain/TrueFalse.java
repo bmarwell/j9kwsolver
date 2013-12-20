@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2012, Benjamin Marwell.  This file is
+ * Copyright (c) 2013, Benjamin Marwell.  This file is
  * licensed under the Affero General Public License version 3 or later.  See
  * the COPYRIGHT file.
  */
@@ -16,7 +16,7 @@ public enum TrueFalse {
 	
 	private int code;
 	
-	private TrueFalse(int pCode) {
+	private TrueFalse(final int pCode) {
 		this.code = pCode;
 	}
 	

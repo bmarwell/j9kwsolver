@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2012, Benjamin Marwell.  This file is
+ * Copyright (c) 2013, Benjamin Marwell.  This file is
  * licensed under the Affero General Public License version 3 or later.  See
  * the COPYRIGHT file.
  */
@@ -55,8 +55,8 @@ public final class J9kwCaptchaAPI {
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * @param solution the solution object provided by user input.
+	 * @return the Future object which holds the request.
 	 */
 	public Future<CaptchaSolutionResponse> solveCaptcha(
 			final CaptchaSolution solution) {
@@ -64,13 +64,14 @@ public final class J9kwCaptchaAPI {
 		cst.setSolution(solution);
 		
 		LOG.trace("starting solve thread");
-		Future<CaptchaSolutionResponse> result = singleThreadExecutor.submit(cst);
+		Future<CaptchaSolutionResponse> result = 
+				singleThreadExecutor.submit(cst);
 		
 		return result;
 	}
 	
 	/**
-	 * @return
+	 * @return gets the Instance for this API.
 	 */
 	public static J9kwCaptchaAPI getInstance() {
 		return SingletonHolder.instance;

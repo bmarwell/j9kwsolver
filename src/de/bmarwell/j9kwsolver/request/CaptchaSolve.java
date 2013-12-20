@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2012, Benjamin Marwell.  This file is
+ * Copyright (c) 2013, Benjamin Marwell.  This file is
  * licensed under the Affero General Public License version 3 or later.  See
  * the COPYRIGHT file.
  */
@@ -11,7 +11,7 @@ import de.bmarwell.j9kwsolver.service.PropertyService;
  * @author Benjamin Marwell
  *
  */
-public class CaptchaSolve implements CaptchaRequestInterface {
+public class CaptchaSolve implements CaptchaRequestInterface, ApiKeyRequest {
 	private static String url = "http://www.9kw.eu/index.cgi";
 	private static String action = "usercaptchacorrect";
 	

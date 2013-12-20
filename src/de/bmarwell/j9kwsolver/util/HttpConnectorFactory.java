@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2012, Benjamin Marwell.  This file is
+ * Copyright (c) 2013, Benjamin Marwell.  This file is
  * licensed under the Affero General Public License version 3 or later.  See
  * the COPYRIGHT file.
  */
@@ -51,7 +51,7 @@ public class HttpConnectorFactory {
 	
 	/**
 	 * Returns the single httpClient for this application to use.
-	 * @return
+	 * @return the httpClient to be used for requests.
 	 */
 	public static CloseableHttpClient getHttpClient() {
 		return httpClient;

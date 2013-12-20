@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2012, Benjamin Marwell.  This file is
+ * Copyright (c) 2013, Benjamin Marwell.  This file is
  * licensed under the Affero General Public License version 3 or later.  See
  * the COPYRIGHT file.
  */
@@ -45,7 +45,7 @@ public class RequestToURI {
 	
 	/**
 	 * The CaptchaGet-Request URI Builder.
-	 * @param cg
+	 * @param cg The Get request for the new captcha.
 	 * @return the URI for the API request.
 	 */
 	public static URI captchaGetToURI(final CaptchaGet cg) {
@@ -176,8 +176,9 @@ public class RequestToURI {
 	}
 
 	/**
-	 * @param solve
-	 * @return
+	 * @param solve the solve request which should be send to the server.
+	 * @return URI object to call for solving, or null if URI could 
+	 * not be built.
 	 */
 	public static URI captchaSolveToURI(final CaptchaSolve solve) {
 		URI uri = null;

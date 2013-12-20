@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2012, Benjamin Marwell.  This file is
+ * Copyright (c) 2013, Benjamin Marwell.  This file is
  * licensed under the Affero General Public License version 3 or later.  See
  * the COPYRIGHT file.
  */
@@ -11,20 +11,61 @@ import de.bmarwell.j9kwsolver.domain.YesNo;
  * @author Benjamin Marwell
  *
  */
-public class CaptchaGet implements CaptchaRequestInterface {
+public class CaptchaGet implements CaptchaRequestInterface, ApiKeyRequest {
+	/**
+	 * The API base url for this request. 
+	 */
 	private static final String URL = "http://www.9kw.eu/index.cgi";
+	/**
+	 * The API action name for this request.
+	 */
 	private static final String ACTION = "usercaptchanew";
 	
+	/**
+	 * The API key for this request.
+	 */
 	private String apikey;
+	/**
+	 * The tool name of this request.
+	 */
 	private String source = "jk9solver"; // toolname
+	/**
+	 * true if response should be supressed. false for "NO CAPTCHA".
+	 */
 	private boolean nocaptcha = false; // 1 = no response, 0 = "NO CAPTCHA".
+	/**
+	 * Set to YES if text captchas are allowed.
+	 */
 	private YesNo text = YesNo.YES;
+	/**
+	 * Set to true if mouse captchas are allowed.
+	 */
 	private boolean mouse = true;
+	/**
+	 * Set to true if confirm captchas are allowed.
+	 */
 	private boolean confirm = true;
+	/**
+	 * Set to true if solving your own captchas is allowed.
+	 */
 	private boolean selfsolve = true;
+	/**
+	 * Set to true if you are only solving your own captchas.
+	 */
 	private boolean selfonly = false;
+	/**
+	 * API description: bitte usercaptchanewok nutzen
+	 * Whatever this means.
+	 */
 	private boolean withok = true; // bitte usercaptchanewok nutzen 
+	/**
+	 * Set to true for extended answer.
+	 */
 	private boolean extended = true; // more information
+	/**
+	 * Set to true for mock request - server will deliver a static image.
+	 * Hint: Extended will not work with this. :-(
+	 */
 	private boolean debug = false;
 	
 	public String getAction() {

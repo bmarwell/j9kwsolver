@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2012, Benjamin Marwell.  This file is
+ * Copyright (c) 2013, Benjamin Marwell.  This file is
  * licensed under the Affero General Public License version 3 or later.  See
  * the COPYRIGHT file.
  */
@@ -15,7 +15,7 @@ public class CaptchaReturn {
 	public String getCaptchaID() {
 		return captchaID;
 	}
-	public void setCaptchaID(String pCaptchaID) {
+	public void setCaptchaID(final String pCaptchaID) {
 		this.captchaID = pCaptchaID;
 	}
 	
@@ -40,8 +40,14 @@ public class CaptchaReturn {
 	}
 	
 	public enum Field {
-		// ID|text|confirm|antwort|mouse=0|phrase=0|numeric=0|math=0|min_len=1|max_len=20|confirm=1|w|h|
-		// 11837102|text|||mouse=0|phrase=1|numeric=0|math=0|min_len=5|max_len=0|confirm=0|300|57|userstart=1387447122|startdate=1387447119|serverdate=1387447122|maxtimeout=35
+		/*
+		 * ID|text|confirm|antwort|mouse=0|phrase=0|numeric=0|
+		 *    math=0|min_len=1|max_len=20|confirm=1|w|h|
+		 * e.g.
+		 * 11837102|text|||mouse=0|phrase=1|numeric=0|math=0|min_len=5|
+		 *     max_len=0|confirm=0|300|57|userstart=1387447122|
+		 *     startdate=1387447119|serverdate=1387447122|maxtimeout=35
+		 */
 		ID(0),
 		TEXT(1),
 		CONFIRM(2),
