@@ -35,10 +35,10 @@ public class J9kwSolver {
 	 * Thread sleep time for testing purposes.
 	 */
 	private static final int THEAD_SLEEP_TIME_MS = 2500;
-	private static final Logger log = LoggerFactory.getLogger(J9kwSolver.class);
+	private static final Logger LOG = LoggerFactory.getLogger(J9kwSolver.class);
 	
 	/**
-	 * API call to J9kwCaptchaAPI.getNewCaptcha()
+	 * API call to J9kwCaptchaAPI.getNewCaptcha().
 	 * @return
 	 */
 	private static Captcha getCaptcha() {
@@ -48,11 +48,11 @@ public class J9kwSolver {
 		
 		try {
 			captcha = maybeResult.get();
-			log.debug("Captcha: {}.", captcha);
+			LOG.debug("Captcha: {}.", captcha);
 		} catch (InterruptedException e) {
-			log.error("Interrupted?!", e);
+			LOG.error("Interrupted?!", e);
 		} catch (ExecutionException e) {
-			log.error("Could not execute?!", e);
+			LOG.error("Could not execute?!", e);
 		}
 		
 		return captcha;
@@ -62,36 +62,39 @@ public class J9kwSolver {
 	 * Solves a captcha, i.e. sending a solution to the server.
 	 * @param captcha
 	 */
-	private static boolean solveCaptcha(Captcha captcha, String solutionText) {
+	private static boolean solveCaptcha(
+			final Captcha captcha,
+			final String solutionText) {
 		CaptchaSolution solution = new CaptchaSolution();
 		boolean accepted = false;
 		solution.setCaptcha(captcha);
 		solution.setCaptchaText(solutionText);
-		
+
 		J9kwCaptchaAPI jca = J9kwCaptchaAPI.getInstance();
 		Future<CaptchaSolutionResponse> solveCaptcha = jca.solveCaptcha(solution);
 		
 		try {
 			CaptchaSolutionResponse acceptedSolution = solveCaptcha.get();
-			log.debug(": {}.", acceptedSolution);
+			LOG.debug(": {}.", acceptedSolution);
 			accepted = acceptedSolution.isAccepted();
 		} catch (InterruptedException e) {
-			log.error("Interrupted?!", e);
+			LOG.error("Interrupted?!", e);
 		} catch (ExecutionException e) {
-			log.error("Could not execute?!", e);
+			LOG.error("Could not execute?!", e);
 		}
-		
+
 		return accepted;
 	}
 
 	/**
-	 * @return
+	 * @param captcha the Captcha object to be solved.
+	 * @return the user entered solution as String object.
 	 */
-	private static String getCaptchaSolution(Captcha captcha) {
+	private static String getCaptchaSolution(final Captcha captcha) {
 		/* Show image */
 		J9kwShowImage display = new J9kwShowImage();
 		String solution = display.show(captcha);
-		
+
 		return solution;
 	}
 
@@ -113,7 +116,7 @@ public class J9kwSolver {
 		J9kwServerAPI sa = J9kwServerAPI.getInstance();
 		ServerStatus ss = sa.getServerStatus();
 		
-		log.debug("ServerStatus: {}.", ss);
+		LOG.debug("ServerStatus: {}.", ss);
 		
 		assert ss != null : "ServerStatus could not be retrieved.";
 		
@@ -128,7 +131,7 @@ public class J9kwSolver {
 		J9kwUserAPI ua = J9kwUserAPI.getInstance();
 		
 		int balance = ua.getBalance();
-		log.debug("Balance: {} credits.", balance);
+		LOG.debug("Balance: {} credits.", balance);
 		
 		assert balance != 0 : "FIXME: Balance probably not detected.";
 		
@@ -150,7 +153,7 @@ public class J9kwSolver {
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		Captcha captcha = null;
 		
 		testApiKey();
@@ -158,9 +161,9 @@ public class J9kwSolver {
 		captcha = getCaptcha();
 
 		if (captcha != null) {
-			log.debug("Captcha received!");
+			LOG.debug("Captcha received!");
 		} else {
-			log.debug("No captcha received.");
+			LOG.debug("No captcha received.");
 		}
 		
 		String solution = getCaptchaSolution(captcha);
@@ -177,7 +180,7 @@ public class J9kwSolver {
 		J9kwCaptchaAPI.getInstance().shutdownExecutor();
 		
 		Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
-		log.debug("Threads running: {}.", threadSet);
+		LOG.debug("Threads running: {}.", threadSet);
 	}
 	
 

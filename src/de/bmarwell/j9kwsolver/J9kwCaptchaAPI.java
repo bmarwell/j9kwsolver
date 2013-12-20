@@ -23,12 +23,12 @@ import de.bmarwell.j9kwsolver.response.CaptchaSolutionResponse;
  * @author Benjamin Marwell
  *
  */
-public class J9kwCaptchaAPI {
-	private static final Logger log = LoggerFactory.getLogger(J9kwCaptchaAPI.class);
+public final class J9kwCaptchaAPI {
+	private static final Logger LOG = LoggerFactory.getLogger(J9kwCaptchaAPI.class);
 	private ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
 	
 	/**
-	 * Empty hidden default constructor
+	 * Empty hidden default constructor.
 	 */
 	private J9kwCaptchaAPI() {}
 	
@@ -45,10 +45,10 @@ public class J9kwCaptchaAPI {
 	 * @param tryLoop - set yes to loop until captcha is received.
 	 * @return a captcha or null if none received (only possible with <code>tryLoop=false</code>.
 	 */
-	public Future<Captcha> getNewCaptcha(boolean tryLoop) {
+	public Future<Captcha> getNewCaptcha(final boolean tryLoop) {
 		CaptchaGetThread gt = new CaptchaGetThread();
 		
-		log.trace("starting get-Task");
+		LOG.trace("starting get-Task");
 		Future<Captcha> result = singleThreadExecutor.submit(gt);
 		
 		return result;
@@ -58,11 +58,12 @@ public class J9kwCaptchaAPI {
 	 * 
 	 * @return
 	 */
-	public Future<CaptchaSolutionResponse> solveCaptcha(CaptchaSolution solution) {
+	public Future<CaptchaSolutionResponse> solveCaptcha(
+			final CaptchaSolution solution) {
 		CaptchaSolveThread cst = new CaptchaSolveThread();
 		cst.setSolution(solution);
 		
-		log.trace("starting solve thread");
+		LOG.trace("starting solve thread");
 		Future<CaptchaSolutionResponse> result = singleThreadExecutor.submit(cst);
 		
 		return result;

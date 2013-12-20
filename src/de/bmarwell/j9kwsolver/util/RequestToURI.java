@@ -20,16 +20,16 @@ import de.bmarwell.j9kwsolver.request.ServerCheck;
 import de.bmarwell.j9kwsolver.request.UserBalance;
 
 /**
- * @author Benjamin Marwell
  * This class will build URIs based on the request objects.
+ * @author Benjamin Marwell
  */
 public class RequestToURI {
-	static final Logger log = LoggerFactory.getLogger(RequestToURI.class); 
+	static final Logger LOG = LoggerFactory.getLogger(RequestToURI.class); 
 
-	public static URI ServerStatusToURI(ServerCheck sc) {
+	public static URI serverStatusToURI(final ServerCheck sc) {
 		URI uri = null;
 		
-		URI apiURI = StringToURI(sc.getUrl());
+		URI apiURI = stringToURI(sc.getUrl());
 		URIBuilder builder = new URIBuilder(apiURI)
 			.addParameter("action", sc.getAction())
 			;
@@ -37,7 +37,7 @@ public class RequestToURI {
 		try {
 			uri = builder.build();
 		} catch (URISyntaxException e) {
-			log.error("Konnte URI nicht erstellen!", e);
+			LOG.error("Konnte URI nicht erstellen!", e);
 		}
 		
 		return uri;
@@ -46,12 +46,12 @@ public class RequestToURI {
 	/**
 	 * The CaptchaGet-Request URI Builder.
 	 * @param cg
-	 * @return
+	 * @return the URI for the API request.
 	 */
-	public static URI captchaGetToURI(CaptchaGet cg) {
+	public static URI captchaGetToURI(final CaptchaGet cg) {
 		URI uri = null;
 		
-		URI apiURI = StringToURI(cg.getUrl());
+		URI apiURI = stringToURI(cg.getUrl());
 		
 		URIBuilder builder = new URIBuilder(apiURI)
 			.addParameter("debug", BooleanUtils10.toIntegerString(cg.isDebug()))
@@ -67,7 +67,7 @@ public class RequestToURI {
 		try {
 			uri = builder.build();
 		} catch (URISyntaxException e) {
-			log.error("Konnte URI nicht erstellen!", e);
+			LOG.error("Konnte URI nicht erstellen!", e);
 		}
 		
 		return uri;
@@ -75,13 +75,13 @@ public class RequestToURI {
 	
 	/**
 	 * Sends Accept to the 9kw Captcha Service.
-	 * @param cno
-	 * @return
+	 * @param cno the CaptchaNewOk Object for API request.
+	 * @return the URI for the API request.
 	 */
-	public static URI captchaNewOkToURI(CaptchaNewOk cno) {
+	public static URI captchaNewOkToURI(final CaptchaNewOk cno) {
 		URI uri = null;
 		
-		URI apiURI = StringToURI(cno.getUrl());
+		URI apiURI = stringToURI(cno.getUrl());
 		
 		URIBuilder builder = new URIBuilder(apiURI)
 			.addParameter("action", cno.getAction())
@@ -92,7 +92,7 @@ public class RequestToURI {
 		try {
 			uri = builder.build();
 		} catch (URISyntaxException e) {
-			log.error("Konnte URI nicht erstellen!", e);
+			LOG.error("Konnte URI nicht erstellen!", e);
 		}
 		
 		return uri;
@@ -103,30 +103,30 @@ public class RequestToURI {
 	 * @param uristring - a uri in String representation.
 	 * @return null or the String as URI.
 	 */
-	public static URI StringToURI(String uristring) {
+	public static URI stringToURI(final String uristring) {
 		URI uri = null;
 		
 		try {
 			uri = new URI(uristring);
 		} catch (URISyntaxException e) {
-			log.error("Konnte keine URI bilden!", e);
+			LOG.error("Konnte keine URI bilden!", e);
 		}
 		
 		return uri;
 	}
 
 	/**
-	 * @param ub
-	 * @return
+	 * @param ub - User Balance object.
+	 * @return API-URIor null if ub-object is invalid.
 	 */
-	public static URI UserBalanceToURI(UserBalance ub) {
+	public static URI userBalanceToURI(final UserBalance ub) {
 		URI uri = null;
 
 		if (ub == null) {
 			return null;
 		}
 
-		URI apiURI = StringToURI(ub.getUrl());
+		URI apiURI = stringToURI(ub.getUrl());
 
 		URIBuilder builder = new URIBuilder(apiURI)
 		.addParameter("action", ub.getAction())
@@ -136,21 +136,27 @@ public class RequestToURI {
 		try {
 			uri = builder.build();
 		} catch (URISyntaxException e) {
-			log.error("Konnte URI nicht erstellen!", e);
+			LOG.error("Konnte URI nicht erstellen!", e);
 		}
 
 		return uri;
 	}
 
-	public static URI captchaShowToURI(CaptchaShow cs) {
+	/**
+	 * Converts a request object for retrieving the captcha image
+	 * to an URI for 9kw API.
+	 * @param cs the CaptchaShow request.
+	 * @return the URI for the API request.
+	 */
+	public static URI captchaShowToURI(final CaptchaShow cs) {
 		URI uri = null;
 
 		if (cs == null) {
 			return null;
 		}
-		
-		URI apiURI = StringToURI(cs.getUrl());
-		
+
+		URI apiURI = stringToURI(cs.getUrl());
+
 		URIBuilder builder = new URIBuilder(apiURI)
 			.addParameter("id", cs.getId())
 			.addParameter("action", cs.getAction())
@@ -163,7 +169,7 @@ public class RequestToURI {
 		try {
 			uri = builder.build();
 		} catch (URISyntaxException e) {
-			log.error("Konnte URI nicht erstellen!", e);
+			LOG.error("Konnte URI nicht erstellen!", e);
 		}
 
 		return uri;
@@ -173,14 +179,14 @@ public class RequestToURI {
 	 * @param solve
 	 * @return
 	 */
-	public static URI captchaSolveToURI(CaptchaSolve solve) {
+	public static URI captchaSolveToURI(final CaptchaSolve solve) {
 		URI uri = null;
 
 		if (solve == null) {
 			return null;
 		}
 		
-		URI apiURI = StringToURI(solve.getUrl());
+		URI apiURI = stringToURI(solve.getUrl());
 		
 		URIBuilder builder = new URIBuilder(apiURI)
 			.addParameter("id", solve.getId())
@@ -195,7 +201,7 @@ public class RequestToURI {
 		try {
 			uri = builder.build();
 		} catch (URISyntaxException e) {
-			log.error("Konnte URI nicht erstellen!", e);
+			LOG.error("Konnte URI nicht erstellen!", e);
 		}
 
 		return uri;

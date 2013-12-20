@@ -15,14 +15,14 @@ public class CaptchaNewOk implements CaptchaRequestInterface {
 	public String getApikey() {
 		return apikey;
 	}
-	public void setApikey(String pApikey) {
+	public void setApikey(final String pApikey) {
 		this.apikey = pApikey;
 	}
 	public String getSource() {
 		return source;
 	}
-	public void setSource(String source) {
-		this.source = source;
+	public void setSource(final String pSource) {
+		this.source = pSource;
 	}
 	public String getUrl() {
 		return URL;

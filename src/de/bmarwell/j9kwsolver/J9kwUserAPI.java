@@ -23,12 +23,12 @@ import de.bmarwell.j9kwsolver.util.RequestToURI;
  * @author Benjamin Marwell
  *
  */
-public class J9kwUserAPI {
-	private static final Logger log = LoggerFactory.getLogger(J9kwUserAPI.class);
+public final class J9kwUserAPI {
+	private static final Logger LOG = LoggerFactory.getLogger(J9kwUserAPI.class);
 	private static Lock httpLock = new ReentrantLock();
 	
 	/**
-	 * Empty hidden default constructor
+	 * Empty hidden default constructor.
 	 */
 	private J9kwUserAPI() {}
 	
@@ -59,14 +59,14 @@ public class J9kwUserAPI {
 		ub.setApikey(PropertyService.getProperty("apikey"));
 		
 		lock();
-		URI scuri = RequestToURI.UserBalanceToURI(ub);
+		URI scuri = RequestToURI.userBalanceToURI(ub);
 		String userbalanceresponse = HttpConnectorFactory.getBodyFromRequest(scuri);
-		log.debug("User credits as String: {}.", userbalanceresponse);
+		LOG.debug("User credits as String: {}.", userbalanceresponse);
 		unlock();
 		
 		if (NumberUtils.isDigits(userbalanceresponse)) {
 			balance = NumberUtils.toInt(userbalanceresponse);
-			log.debug("User credits as int: {}.", balance);
+			LOG.debug("User credits as int: {}.", balance);
 		}
 		
 		return balance;

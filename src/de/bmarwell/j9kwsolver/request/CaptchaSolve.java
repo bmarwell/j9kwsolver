@@ -31,24 +31,24 @@ public class CaptchaSolve implements CaptchaRequestInterface {
 		return debug;
 	}
 
-	public void setDebug(boolean debug) {
-		this.debug = debug;
+	public void setDebug(final boolean pDebug) {
+		this.debug = pDebug;
 	}
 
 	public String getSource() {
 		return source;
 	}
 
-	public void setSource(String source) {
-		this.source = source;
+	public void setSource(final String pSource) {
+		this.source = pSource;
 	}
 
 	public boolean isExtended() {
 		return extended;
 	}
 
-	public void setExtended(boolean extended) {
-		this.extended = extended;
+	public void setExtended(final boolean pExtended) {
+		this.extended = pExtended;
 	}
 
 	/* (non-Javadoc)
@@ -71,7 +71,7 @@ public class CaptchaSolve implements CaptchaRequestInterface {
 		return apikey;
 	}
 
-	public void setApikey(String pApikey) {
+	public void setApikey(final String pApikey) {
 		this.apikey = pApikey;
 	}
 
@@ -79,23 +79,23 @@ public class CaptchaSolve implements CaptchaRequestInterface {
 		return id;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setId(final String pId) {
+		this.id = pId;
 	}
 
 	public String getCaptcha() {
 		return captcha;
 	}
 
-	public void setCaptcha(String pCaptcha) {
+	public void setCaptcha(final String pCaptcha) {
 		this.captcha = pCaptcha;
 	}
 
-	public static void setUrl(String url) {
-		CaptchaSolve.url = url;
+	public static void setUrl(final String pUrl) {
+		CaptchaSolve.url = pUrl;
 	}
 
-	public static void setAction(String pAction) {
+	public static void setAction(final String pAction) {
 		CaptchaSolve.action = pAction;
 	}
 	

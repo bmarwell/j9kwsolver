@@ -21,15 +21,15 @@ public class CaptchaShow implements CaptchaRequestInterface {
 		return id;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setId(final String pId) {
+		this.id = pId;
 	}
 
 	public String getApikey() {
 		return apikey;
 	}
 
-	public void setApikey(String pApikey) {
+	public void setApikey(final String pApikey) {
 		this.apikey = pApikey;
 	}
 
@@ -37,15 +37,15 @@ public class CaptchaShow implements CaptchaRequestInterface {
 		return source;
 	}
 
-	public void setSource(String source) {
-		this.source = source;
+	public void setSource(final String pSource) {
+		this.source = pSource;
 	}
 
 	public boolean isBase64() {
 		return base64;
 	}
 
-	public void setBase64(boolean pBase64) {
+	public void setBase64(final boolean pBase64) {
 		this.base64 = pBase64;
 	}
 
@@ -53,24 +53,24 @@ public class CaptchaShow implements CaptchaRequestInterface {
 		return speed;
 	}
 
-	public void setSpeed(boolean speed) {
-		this.speed = speed;
+	public void setSpeed(final boolean pSpeed) {
+		this.speed = pSpeed;
 	}
 
 	public boolean isNodraw() {
 		return nodraw;
 	}
 
-	public void setNodraw(boolean nodraw) {
-		this.nodraw = nodraw;
+	public void setNodraw(final boolean pNodraw) {
+		this.nodraw = pNodraw;
 	}
 
 	public boolean isDebug() {
 		return debug;
 	}
 
-	public void setDebug(boolean debug) {
-		this.debug = debug;
+	public void setDebug(final boolean pDebug) {
+		this.debug = pDebug;
 	}
 
 	@Override

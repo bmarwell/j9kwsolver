@@ -32,7 +32,7 @@ public class HttpConnectorFactory {
 	 * Default socket timeout.
 	 */
 	private static final int SOCKET_TIMEOUT_MS = 30000;
-	private static final Logger log = LoggerFactory.getLogger(HttpConnectorFactory.class);
+	private static final Logger LOG = LoggerFactory.getLogger(HttpConnectorFactory.class);
 	private static CloseableHttpClient httpClient;
 	
 	static {
@@ -63,12 +63,12 @@ public class HttpConnectorFactory {
 		return true;
 	}
 	
-	public static String getBodyFromRequest(URI uri) {
+	public static String getBodyFromRequest(final URI uri) {
 		CloseableHttpResponse response = null;
 		String responseBody = null;
 		HttpGet httpGet = new HttpGet(uri);
 		
-		log.debug("Requesting URI: {}.", httpGet.getURI());
+		LOG.debug("Requesting URI: {}.", httpGet.getURI());
 		
 		try {
 			response = httpClient.execute(httpGet);
@@ -76,7 +76,7 @@ public class HttpConnectorFactory {
 			IOUtils.copy(response.getEntity().getContent(), writer);
 			responseBody = writer.toString();
 		} catch (IOException e) {
-			log.error("Fehler beim HTTP Request!", e);
+			LOG.error("Fehler beim HTTP Request!", e);
 		} finally {
 //			IOUtils.closeQuietly(httpclient);
 		}

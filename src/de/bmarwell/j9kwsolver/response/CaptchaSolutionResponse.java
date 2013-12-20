@@ -18,15 +18,15 @@ public class CaptchaSolutionResponse {
 	public boolean isAccepted() {
 		return accepted;
 	}
-	public void setAccepted(boolean pAccepted) {
+	public void setAccepted(final boolean pAccepted) {
 		this.accepted = pAccepted;
 	}
 	
 	public int getCredits() {
 		return credits;
 	}
-	public void setCredits(int credits) {
-		this.credits = credits;
+	public void setCredits(final int pCredits) {
+		this.credits = pCredits;
 	}
 	@Override
 	public String toString() {

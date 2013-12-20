@@ -25,16 +25,16 @@ import de.bmarwell.j9kwsolver.util.ResponseUtils;
  *
  */
 public class CaptchaSolveThread implements Callable<CaptchaSolutionResponse> {
-	private static final Logger log = LoggerFactory.getLogger(CaptchaSolveThread.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CaptchaSolveThread.class);
 
 	private CaptchaSolution solution = null;
-	
+
 	public CaptchaSolution getSolution() {
 		return solution;
 	}
 
-	public void setSolution(CaptchaSolution solution) {
-		this.solution = solution;
+	public void setSolution(final CaptchaSolution pSolution) {
+		this.solution = pSolution;
 	}
 	
 	private CaptchaSolutionResponse solveCaptcha() {
@@ -60,9 +60,9 @@ public class CaptchaSolveThread implements Callable<CaptchaSolutionResponse> {
 		}
 
 		URI uri = RequestToURI.captchaSolveToURI(solveRequest);
-		log.debug("Requesting URI: {}.", uri);
+		LOG.debug("Requesting URI: {}.", uri);
 		responseBody = HttpConnectorFactory.getBodyFromRequest(uri);
-		log.debug("Response: {}.", responseBody);
+		LOG.debug("Response: {}.", responseBody);
 		
 		CaptchaSolutionResponse solutionResponse = null;
 		solutionResponse = ResponseUtils.captchaSolveToCaptchaSolutionResponse(responseBody);
@@ -90,7 +90,7 @@ public class CaptchaSolveThread implements Callable<CaptchaSolutionResponse> {
 			/* cannot submit without ID */
 			return false;
 		}
-		
+
 		/* all okay */
 		return true;
 	}
@@ -99,20 +99,20 @@ public class CaptchaSolveThread implements Callable<CaptchaSolutionResponse> {
 	 * @see java.util.concurrent.Callable#call()
 	 */
 	@Override
-	public CaptchaSolutionResponse call() throws Exception {
+	public final CaptchaSolutionResponse call() throws Exception {
 		CaptchaSolutionResponse solveCaptcha = null;
-		
+
 		if (!isValidSolution()) {
-			log.debug("Solution cannot be valid at all!");
+			LOG.debug("Solution cannot be valid at all!");
 			return null;
 		}
-		
+
 		if (Thread.currentThread().isInterrupted()) {
 			throw new InterruptedException(); 
 		}
-		
+
 		solveCaptcha = solveCaptcha();
-		
+
 		return solveCaptcha;
 	}
 

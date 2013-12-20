@@ -17,7 +17,7 @@ import de.bmarwell.j9kwsolver.domain.Captcha;
  */
 public class J9kwShowImage {
 
-	public String show(Captcha captcha) {
+	public String show(final Captcha captcha) {
 		String solution = null;
 		
 		if (captcha == null) {

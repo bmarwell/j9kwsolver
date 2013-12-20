@@ -20,20 +20,20 @@ public class ServerStatus {
 	public int getWorker() {
 		return worker;
 	}
-	public void setWorker(int worker) {
-		this.worker = worker;
+	public void setWorker(final int pWorker) {
+		this.worker = pWorker;
 	}
 	public int getInwork() {
 		return inwork;
 	}
-	public void setInwork(int inwork) {
-		this.inwork = inwork;
+	public void setInwork(final int pInwork) {
+		this.inwork = pInwork;
 	}
 	public int getQueue() {
 		return queue;
 	}
-	public void setQueue(int queue) {
-		this.queue = queue;
+	public void setQueue(final int pQueue) {
+		this.queue = pQueue;
 	}
 	
 	public String toString() {

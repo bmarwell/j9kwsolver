@@ -27,31 +27,31 @@ public class Captcha {
 	public String getConfirmtext() {
 		return confirmtext;
 	}
-	public void setConfirmtext(String confirmtext) {
-		this.confirmtext = confirmtext;
+	public void setConfirmtext(final String pConfirmtext) {
+		this.confirmtext = pConfirmtext;
 	}
 	public BufferedImage getImage() {
 		return image;
 	}
-	public void setImage(BufferedImage image) {
-		this.image = image;
+	public void setImage(final BufferedImage pImage) {
+		this.image = pImage;
 	}
 	public String getId() {
 		return id;
 	}
-	public void setId(String id) {
-		this.id = id;
+	public void setId(final String pId) {
+		this.id = pId;
 	}
 	public boolean isMouse() {
 		return mouse;
 	}
-	public void setMouse(boolean mouse) {
-		this.mouse = mouse;
+	public void setMouse(final boolean pMouse) {
+		this.mouse = pMouse;
 	}
 	public boolean isConfirm() {
 		return confirm;
 	}
-	public void setConfirm(boolean pConfirm) {
+	public void setConfirm(final boolean pConfirm) {
 		this.confirm = pConfirm;
 	}
 	

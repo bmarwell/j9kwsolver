@@ -26,7 +26,7 @@ public class ResponseUtils {
 	 * @param response
 	 * @return null if response is null or empty, else a HashMap.
 	 */
-	public static Map<String, Integer> StringResponseToIntMap(String response) {
+	public static Map<String, Integer> stringResponseToIntMap(final String response) {
 		Map<String, Integer> result = new HashMap<String, Integer>();
 		
 		if (StringUtils.isEmpty(response)) {
@@ -66,7 +66,7 @@ public class ResponseUtils {
 		return result;
 	}
 	
-	public static Map<String, String> StringResponseToStringMap(String response) {
+	public static Map<String, String> stringResponseToStringMap(final String response) {
 		// TODO: mock
 		return null;
 	}
@@ -76,13 +76,13 @@ public class ResponseUtils {
 	 * @return
 	 */
 	public static CaptchaSolutionResponse captchaSolveToCaptchaSolutionResponse(
-			String response) {
+			final String response) {
 		CaptchaSolutionResponse csr = new CaptchaSolutionResponse();
 		csr.setAccepted(false);
 		csr.setCredits(0);
 		
 		if (StringUtils.isEmpty(response)) {
-			RequestToURI.log.debug("Content ist leer!");
+			RequestToURI.LOG.debug("Content ist leer!");
 			
 			return csr;
 		}
@@ -99,7 +99,7 @@ public class ResponseUtils {
 			csr.setAccepted(true);
 			csr.setCredits(parseCredits(response));
 		} else {
-			RequestToURI.log.error("Unknown response for solve request! {}.", response);
+			RequestToURI.LOG.error("Unknown response for solve request! {}.", response);
 			csr.setAccepted(false);
 			csr.setCredits(0);
 		}
@@ -111,7 +111,7 @@ public class ResponseUtils {
 	 * @param response
 	 * @return
 	 */
-	private static int parseCredits(String response) {
+	private static int parseCredits(final String response) {
 		int credits = 0;
 		
 		if (StringUtils.isEmpty(response)) {
@@ -143,11 +143,11 @@ public class ResponseUtils {
 	 * @return
 	 */
 	public static CaptchaReturn captchaGetResponseToCaptchaReturn(
-			String response) {
+			final String response) {
 		CaptchaReturn cr = null;
 		
 		if (StringUtils.isEmpty(response)) {
-			RequestToURI.log.debug("Content ist leer!");
+			RequestToURI.LOG.debug("Content ist leer!");
 			
 			return cr;
 		}
@@ -156,27 +156,27 @@ public class ResponseUtils {
 		if (StringUtils.containsIgnoreCase(response, "NO CAPTCHA")) {
 			/* No captcha available */
 			cr = null;
-			RequestToURI.log.debug("No captcha available atm: {}.", response);
+			RequestToURI.LOG.debug("No captcha available atm: {}.", response);
 		} else if (StringUtils.contains(response, "phrase")) {
 			/* Extended Answer */
 			CaptchaReturnExtended cre = ResponseUtils.getExtendedFromResponse(response);
-			RequestToURI.log.debug("CRE: {}.", cre);
+			RequestToURI.LOG.debug("CRE: {}.", cre);
 			cr = cre;
 		} else {
 			/* 
 			 * simple response contains only digits or few extra information
 			 * INT or INT|mouse or INT|confirm
 			 */
-			RequestToURI.log.debug("Simple response: {}.", response);
+			RequestToURI.LOG.debug("Simple response: {}.", response);
 			String[] splitresponse = StringUtils.split(response, '|');
 			
 			if (splitresponse.length < 1) {
-				RequestToURI.log.warn("Simple response doesn't contain enough items");
+				RequestToURI.LOG.warn("Simple response doesn't contain enough items");
 				return cr;
 			}
 			
 			if (!NumberUtils.isDigits(splitresponse[0])) {
-				RequestToURI.log.error("Response's first item isn't a captcha id."
+				RequestToURI.LOG.error("Response's first item isn't a captcha id."
 						+ " Found {} instead.", splitresponse[0]);
 				return cr;
 			}
@@ -192,18 +192,20 @@ public class ResponseUtils {
 	/**
 	 * Parses the response for fields to set.
 	 * @param response
-	 * @return
+	 * @return the CaptchaReturn Object with
+	 * information about the captcha assigned.
 	 */
-	private static CaptchaReturnExtended getExtendedFromResponse(String response) {
+	private static CaptchaReturnExtended getExtendedFromResponse(
+			final String response) {
 		/* 
 		 * Extended response contains phrase keyword
 		 * ID|text|confirm|antwort|mouse=0|phrase=0|numeric=0|math=0|min_len=1|max_len=20|confirm=1|w|h|
 		 * 11837102|text|||mouse=0|phrase=1|numeric=0|math=0|min_len=5|max_len=0|confirm=0|300|57|userstart=1387447122|startdate=1387447119|serverdate=1387447122|maxtimeout=35
 		 */
-		RequestToURI.log.debug("Extended response: {}.", response);
+		RequestToURI.LOG.debug("Extended response: {}.", response);
 		String[] splitresponse = StringUtils.splitPreserveAllTokens(response, '|');
 		
-		RequestToURI.log.debug("Splitresponse: {}.", 
+		RequestToURI.LOG.debug("Splitresponse: {}.", 
 				ToStringBuilder.reflectionToString(
 						splitresponse, 
 						ToStringStyle.MULTI_LINE_STYLE)
@@ -211,13 +213,13 @@ public class ResponseUtils {
 		
 		/* Check item count */
 		if (splitresponse.length < EXTENDED_ANSWER_MINLENGTH) {
-			RequestToURI.log.warn("Extended response doesn't contain enough items");
+			RequestToURI.LOG.warn("Extended response doesn't contain enough items");
 			return null;
 		}
 		
 		/* check first item is digits */
 		if (!NumberUtils.isDigits(splitresponse[0])) {
-			RequestToURI.log.error("Response's first item isn't a captcha id."
+			RequestToURI.LOG.error("Response's first item isn't a captcha id."
 					+ " Found {} instead.", splitresponse[0]);
 			return null;
 		}
@@ -228,7 +230,7 @@ public class ResponseUtils {
 		
 		/* if text returned, set text */
 		if (StringUtils.equals(splitresponse[CaptchaReturn.Field.TEXT.getPosition()], "text")) {
-			RequestToURI.log.debug("Setting text captcha.");
+			RequestToURI.LOG.debug("Setting text captcha.");
 			cre.setText(true);
 		}
 		

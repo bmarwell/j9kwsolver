@@ -23,19 +23,19 @@ public class CaptchaReturn {
 	public boolean isText() {
 		return text;
 	}
-	public void setText(boolean text) {
-		this.text = text;
+	public void setText(final boolean pText) {
+		this.text = pText;
 	}
 	public boolean isMouse() {
 		return mouse;
 	}
-	public void setMouse(boolean mouse) {
-		this.mouse = mouse;
+	public void setMouse(final boolean pMouse) {
+		this.mouse = pMouse;
 	}
 	public boolean isConfirm() {
 		return confirm;
 	}
-	public void setConfirm(boolean pConfirm) {
+	public void setConfirm(final boolean pConfirm) {
 		this.confirm = pConfirm;
 	}
 	
@@ -63,8 +63,8 @@ public class CaptchaReturn {
 		
 		private int position;
 		
-		private Field(int position) {
-			this.position = position;
+		private Field(final int pPosition) {
+			this.position = pPosition;
 		}
 		
 		public int getPosition() {

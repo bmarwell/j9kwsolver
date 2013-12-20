@@ -15,8 +15,8 @@ public enum YesNo {
 	
 	private String yesNoString;
 	
-	private YesNo(String yesNoString) {
-		this.yesNoString = yesNoString;
+	private YesNo(final String pYesNoString) {
+		this.yesNoString = pYesNoString;
 	}
 	
 	public String getYesNoString() {

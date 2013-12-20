@@ -34,20 +34,20 @@ public class CaptchaGet implements CaptchaRequestInterface {
 	public String getApikey() {
 		return apikey;
 	}
-	public void setApikey(String pApikey) {
+	public void setApikey(final String pApikey) {
 		this.apikey = pApikey;
 	}
 	public String getSource() {
 		return source;
 	}
-	public void setSource(String source) {
-		this.source = source;
+	public void setSource(final String pSource) {
+		this.source = pSource;
 	}
 	public YesNo getText() {
 		return text;
 	}
-	public void setText(YesNo text) {
-		this.text = text;
+	public void setText(final YesNo pText) {
+		this.text = pText;
 	}
 	
 	
@@ -55,23 +55,23 @@ public class CaptchaGet implements CaptchaRequestInterface {
 		return nocaptcha;
 	}
 
-	public void setNocaptcha(boolean nocaptcha) {
-		this.nocaptcha = nocaptcha;
+	public void setNocaptcha(final boolean pNocaptcha) {
+		this.nocaptcha = pNocaptcha;
 	}
 
 	public boolean isMouse() {
 		return mouse;
 	}
 
-	public void setMouse(boolean mouse) {
-		this.mouse = mouse;
+	public void setMouse(final boolean pMouse) {
+		this.mouse = pMouse;
 	}
 
 	public boolean isConfirm() {
 		return confirm;
 	}
 
-	public void setConfirm(boolean pConfirm) {
+	public void setConfirm(final boolean pConfirm) {
 		this.confirm = pConfirm;
 	}
 
@@ -79,44 +79,44 @@ public class CaptchaGet implements CaptchaRequestInterface {
 		return selfsolve;
 	}
 
-	public void setSelfsolve(boolean selfsolve) {
-		this.selfsolve = selfsolve;
+	public void setSelfsolve(final boolean pSelfsolve) {
+		this.selfsolve = pSelfsolve;
 	}
 
 	public boolean isSelfonly() {
 		return selfonly;
 	}
 
-	public void setSelfonly(boolean selfonly) {
-		this.selfonly = selfonly;
+	public void setSelfonly(final boolean pSelfonly) {
+		this.selfonly = pSelfonly;
 	}
 
 	public boolean isWithok() {
 		return withok;
 	}
 
-	public void setWithok(boolean withok) {
-		this.withok = withok;
+	public void setWithok(final boolean pWithok) {
+		this.withok = pWithok;
 	}
 
 	public boolean isExtended() {
 		return extended;
 	}
 
-	public void setExtended(boolean extended) {
-		this.extended = extended;
+	public void setExtended(final boolean pExtended) {
+		this.extended = pExtended;
 	}
 
 	public boolean isDebug() {
 		return debug;
 	}
 
-	public void setDebug(boolean debug) {
-		this.debug = debug;
+	public void setDebug(final boolean pDebug) {
+		this.debug = pDebug;
 	}
 
 	public String getUrl() {
 		return URL;
-	} 
-	
+	}
+
 }

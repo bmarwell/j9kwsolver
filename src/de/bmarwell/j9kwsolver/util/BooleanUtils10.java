@@ -17,7 +17,7 @@ public class BooleanUtils10 {
 	 * @param bool - a boolean.
 	 * @return either 0 or 1.
 	 */
-	public static String toIntegerString(boolean bool) {
+	public static String toIntegerString(final boolean bool) {
 		int boolint = BooleanUtils.toInteger(bool);
 		
 		return Integer.toString(boolint);

@@ -20,9 +20,9 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class PropertyService {
-	private static final Logger log = LoggerFactory.getLogger(PropertyService.class); 
+	private static final Logger LOG = LoggerFactory.getLogger(PropertyService.class); 
 
-	public static String getProperty(String propName) {
+	public static String getProperty(final String propName) {
 		return PropertySingleton.getProperties().getProperty(propName);
 	}
 	
@@ -47,14 +47,14 @@ public class PropertyService {
 			Scanner in = null;
 			
 			String userHome = System.getProperty( "user.home" );
-			log.debug("ApiKeyFile = {}.", userHome + APIKEY_FILE_PATH);
+			LOG.debug("ApiKeyFile = {}.", userHome + APIKEY_FILE_PATH);
 			
 			try {
 				File apikeyFile = new File(userHome, APIKEY_FILE_PATH);
 				in = new Scanner(apikeyFile);
 				apiKey = in.nextLine();
 			} catch (FileNotFoundException e) {
-				log.warn("Konnte apikey-File nicht lesen!", e);
+				LOG.warn("Konnte apikey-File nicht lesen!", e);
 			} finally {
 				IOUtils.closeQuietly(in);
 			}

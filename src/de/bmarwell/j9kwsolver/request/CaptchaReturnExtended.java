@@ -26,58 +26,58 @@ public class CaptchaReturnExtended extends CaptchaReturn {
 		return confirmText;
 	}
 
-	public void setConfirmText(String confirmText) {
-		this.confirmText = confirmText;
+	public void setConfirmText(final String pConfirmText) {
+		this.confirmText = pConfirmText;
 	}
 
 	public boolean isPhrase() {
 		return phrase;
 	}
 	
-	public void setPhrase(boolean phrase) {
-		this.phrase = phrase;
+	public void setPhrase(final boolean pPhrase) {
+		this.phrase = pPhrase;
 	}
 	public boolean isNumeric() {
 		return numeric;
 	}
-	public void setNumeric(boolean numeric) {
-		this.numeric = numeric;
+	public void setNumeric(final boolean pNumeric) {
+		this.numeric = pNumeric;
 	}
 	public boolean isMath() {
 		return math;
 	}
-	public void setMath(boolean math) {
-		this.math = math;
+	public void setMath(final boolean pMath) {
+		this.math = pMath;
 	}
 	public int getMinLength() {
 		return minLength;
 	}
-	public void setMinLength(int minLength) {
-		this.minLength = minLength;
+	public void setMinLength(final int pMinLength) {
+		this.minLength = pMinLength;
 	}
 	public int getMaxLength() {
 		return maxLength;
 	}
-	public void setMaxLength(int maxLength) {
-		this.maxLength = maxLength;
+	public void setMaxLength(final int pMaxLength) {
+		this.maxLength = pMaxLength;
 	}
 	public boolean isConfirmedCaptcha() {
 		return confirmedCaptcha;
 	}
-	public void setConfirmedCaptcha(boolean pConfirmedCaptcha) {
+	public void setConfirmedCaptcha(final boolean pConfirmedCaptcha) {
 		this.confirmedCaptcha = pConfirmedCaptcha;
 	}
 	public int getWidth() {
 		return width;
 	}
-	public void setWidth(int width) {
-		this.width = width;
+	public void setWidth(final int pWidth) {
+		this.width = pWidth;
 	}
 	public int getHeight() {
 		return height;
 	}
-	public void setHeight(int height) {
-		this.height = height;
+	public void setHeight(final int pHeight) {
+		this.height = pHeight;
 	}
 	
 	public String toString() {
