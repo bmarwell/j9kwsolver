@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2012, Benjamin Marwell.  This file is
+ * Copyright (c) 2013, Benjamin Marwell.  This file is
  * licensed under the Affero General Public License version 3 or later.  See
  * the COPYRIGHT file.
  */
@@ -30,16 +30,21 @@ import de.bmarwell.j9kwsolver.util.RequestToURI;
 import de.bmarwell.j9kwsolver.util.ResponseUtils;
 
 /**
- * With this thread, the API will call for an image, auto-accept it and retrieves
- * its contents.
+ * With this thread, the API will call for an image, 
+ * auto-accept it and retrieves its contents.
  * @author Benjamin Marwell
  */
 public class CaptchaGetThread implements Callable<Captcha> {
-	private static final Logger LOG = LoggerFactory.getLogger(CaptchaGetThread.class);
+	/**
+	 * Logger for this class.
+	 */
+	private static final Logger LOG = 
+			LoggerFactory.getLogger(CaptchaGetThread.class);
 
 	/**
 	 * Asks server for new captcha.
-	 * @return
+	 * @return CaptchaReturn or CaptchaReturnExtended if server assigned 
+	 * a captcha. Otherwise null.
 	 */
 	private CaptchaReturn getRequest() {
 		String responseBody = null;
@@ -66,7 +71,7 @@ public class CaptchaGetThread implements Callable<Captcha> {
 	
 	/**
 	 * Sends an accept request to server.
-	 * @return
+	 * @return true, if server recognized accept request. False otherwise.
 	 */
 	private boolean doAccept() {
 		String responseBody = null;

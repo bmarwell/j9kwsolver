@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2012, Benjamin Marwell.  This file is
+ * Copyright (c) 2013, Benjamin Marwell.  This file is
  * licensed under the Affero General Public License version 3 or later.  See
  * the COPYRIGHT file.
  */
@@ -53,7 +53,7 @@ public final class J9kwUserAPI {
 	 * @return - the balance in credits.
 	 */
 	public int getBalance() {
-		int balance = 0;
+		int balance = -1;
 		
 		UserBalance ub = new UserBalance();
 		ub.setApikey(PropertyService.getProperty("apikey"));

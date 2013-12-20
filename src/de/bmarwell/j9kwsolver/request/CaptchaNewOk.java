@@ -1,11 +1,19 @@
 /**
- * Copyright (c) 2010-2012, Benjamin Marwell.  This file is
+ * Copyright (c) 2013, Benjamin Marwell.  This file is
  * licensed under the Affero General Public License version 3 or later.  See
  * the COPYRIGHT file.
  */
 package de.bmarwell.j9kwsolver.request;
 
-public class CaptchaNewOk implements CaptchaRequestInterface {
+/**
+ * Confirms that the offered captcha will be taken.
+ * @author Benjamin Marwell
+ *
+ */
+public class CaptchaNewOk implements CaptchaRequestInterface, ApiKeyRequest {
+	/**
+	 * The API URL for this request.
+	 */
 	private static final String URL = "http://www.9kw.eu/index.cgi"; 
 	private static final String ACTION = "usercaptchanewok";
 	

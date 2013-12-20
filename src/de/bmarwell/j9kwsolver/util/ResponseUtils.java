@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2013, Benjamin Marwell.  This file is
+ * licensed under the Affero General Public License version 3 or later.  See
+ * the COPYRIGHT file.
+ */
 package de.bmarwell.j9kwsolver.util;
 
 import java.util.Arrays;
@@ -16,23 +21,40 @@ import de.bmarwell.j9kwsolver.request.CaptchaReturn;
 import de.bmarwell.j9kwsolver.request.CaptchaReturnExtended;
 import de.bmarwell.j9kwsolver.response.CaptchaSolutionResponse;
 
-public class ResponseUtils {
+/**
+ * Utility methods for parsing responses from the server.
+ * @author Benjamin Marwell
+ *
+ */
+public final class ResponseUtils {
 	/**
-	 * 
+	 * The minimum length for the extended answer (for validating).
 	 */
 	private static final int EXTENDED_ANSWER_MINLENGTH = 11;
-	private static Logger log = LoggerFactory.getLogger(ResponseUtils.class);
 	/**
-	 * @param response
+	 * The logger for this class.
+	 */
+	private static final Logger LOG = LoggerFactory.getLogger(ResponseUtils.class);
+	
+	/**
+	 * Empty private constructor for utility class.
+	 */
+	private ResponseUtils() { }
+	
+	/**
+	 * @param response The response sent by the server.
 	 * @return null if response is null or empty, else a HashMap.
 	 */
-	public static Map<String, Integer> stringResponseToIntMap(final String response) {
+	public static Map<String, Integer> stringResponseToIntMap(
+			final String response) {
 		Map<String, Integer> result = new HashMap<String, Integer>();
 		
 		if (StringUtils.isEmpty(response)) {
 			/* 
 			 * Response should be like so:
-			 * worker=15|avg24h=12s|avg1h=12s|avg15m=13s|avg5m=13s|inwork=8|queue=0|queue1=0|queue2=0|workermouse=13|workerconfirm=14|workertext=13
+			 * worker=15|avg24h=12s|avg1h=12s|avg15m=13s|avg5m=13s|inwork=8|
+			 *     queue=0|queue1=0|queue2=0|workermouse=13|
+			 *     workerconfirm=14|workertext=13
 			 */
 			return null;
 		}
@@ -45,7 +67,7 @@ public class ResponseUtils {
 			int value = 0;
 			
 			if (keyValue.length != 2) {
-				log.warn("Key-Value splitting on '=' doesn't return 2 items: {}.", item);
+				LOG.warn("Key-Value splitting on '=' doesn't return 2 items: {}.", item);
 				continue;
 			}
 			
@@ -54,7 +76,7 @@ public class ResponseUtils {
 			textvalue = StringUtils.removeEnd(textvalue, "s");
 			
 			if (!NumberUtils.isDigits(textvalue)) {
-				log.warn("Key-Value where value is non-numeric: {}", item);
+				LOG.warn("Key-Value where value is non-numeric: {}", item);
 				continue;
 			} else {
 				value = NumberUtils.toInt(textvalue);
@@ -72,8 +94,8 @@ public class ResponseUtils {
 	}
 
 	/**
-	 * @param responseBody
-	 * @return
+	 * @param response the response sent by the server.
+	 * @return the response of the server for solving a captcha.
 	 */
 	public static CaptchaSolutionResponse captchaSolveToCaptchaSolutionResponse(
 			final String response) {
@@ -108,8 +130,8 @@ public class ResponseUtils {
 	}
 
 	/**
-	 * @param response
-	 * @return
+	 * @param response the response sent by the server.
+	 * @return the number of credits assigned by the server for solving.
 	 */
 	private static int parseCredits(final String response) {
 		int credits = 0;
@@ -121,7 +143,7 @@ public class ResponseUtils {
 		String[] splitresponse = StringUtils.splitPreserveAllTokens(response, '|');
 		
 		if (splitresponse.length != 2) {
-			log.error("Response doesn't contain two items: {}.", 
+			LOG.error("Response doesn't contain two items: {}.", 
 					ToStringBuilder.reflectionToString(splitresponse));
 			return credits;
 		}
@@ -131,7 +153,7 @@ public class ResponseUtils {
 		
 		if (NumberUtils.isDigits(stringCredits)) {
 			credits = NumberUtils.toInt(stringCredits, 0);
-			log.debug("Found reward: {} credits.", credits);
+			LOG.debug("Found reward: {} credits.", credits);
 		}
 		
 		return credits;
@@ -139,8 +161,8 @@ public class ResponseUtils {
 
 	/**
 	 * Parses the content from the response, if any.
-	 * @param response
-	 * @return
+	 * @param response the response sent by the server.
+	 * @return a CaptchaReturn object if captcha was offered, otherwise null.
 	 */
 	public static CaptchaReturn captchaGetResponseToCaptchaReturn(
 			final String response) {
@@ -191,7 +213,7 @@ public class ResponseUtils {
 
 	/**
 	 * Parses the response for fields to set.
-	 * @param response
+	 * @param response the response sent by the server.
 	 * @return the CaptchaReturn Object with
 	 * information about the captcha assigned.
 	 */
@@ -199,8 +221,12 @@ public class ResponseUtils {
 			final String response) {
 		/* 
 		 * Extended response contains phrase keyword
-		 * ID|text|confirm|antwort|mouse=0|phrase=0|numeric=0|math=0|min_len=1|max_len=20|confirm=1|w|h|
-		 * 11837102|text|||mouse=0|phrase=1|numeric=0|math=0|min_len=5|max_len=0|confirm=0|300|57|userstart=1387447122|startdate=1387447119|serverdate=1387447122|maxtimeout=35
+		 * ID|text|confirm|antwort|mouse=0|phrase=0|
+		 *     numeric=0|math=0|min_len=1|max_len=20|confirm=1|w|h|
+		 * e.g.
+		 * 11837102|text|||mouse=0|phrase=1|numeric=0|math=0|min_len=5|
+		 *     max_len=0|confirm=0|300|57|userstart=1387447122|
+		 *     startdate=1387447119|serverdate=1387447122|maxtimeout=35
 		 */
 		RequestToURI.LOG.debug("Extended response: {}.", response);
 		String[] splitresponse = StringUtils.splitPreserveAllTokens(response, '|');

@@ -1,20 +1,46 @@
 /**
- * Copyright (c) 2010-2012, Benjamin Marwell.  This file is
+ * Copyright (c) 2013, Benjamin Marwell.  This file is
  * licensed under the Affero General Public License version 3 or later.  See
  * the COPYRIGHT file.
  */
 package de.bmarwell.j9kwsolver.request;
 
-public class CaptchaShow implements CaptchaRequestInterface {
+/**
+ * Requests the captcha image.
+ * @author Benjamin Marwell
+ *
+ */
+public class CaptchaShow implements CaptchaRequestInterface, ApiKeyRequest {
+	/**
+	 * The API URL for this request.
+	 */
 	private static final String URL = "http://www.9kw.eu/index.cgi";
+	/**
+	 * The API action for this request.
+	 */
 	private static final String ACTION = "usercaptchashow";
 	
+	/**
+	 * The ID of the captcha to be shown.
+	 */
 	private String id;
+	/**
+	 * The api key of the user.
+	 */
 	private String apikey;
+	/**
+	 * The name of this tool.
+	 */
 	private String source;
+	/**
+	 * Set to true if ansewer should be base64 encoded.
+	 */
 	private boolean base64 = true;
 	private boolean speed = false;
 	private boolean nodraw = false;
+	/**
+	 * Set to true to receive a debug captcha image.
+	 */
 	private boolean debug = false;
 
 	public String getId() {

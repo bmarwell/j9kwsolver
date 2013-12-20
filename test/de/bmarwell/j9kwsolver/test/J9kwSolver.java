@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2012, Benjamin Marwell.  This file is
+ * Copyright (c) 2013, Benjamin Marwell.  This file is
  * licensed under the Affero General Public License version 3 or later.  See
  * the COPYRIGHT file.
  */
@@ -39,7 +39,7 @@ public class J9kwSolver {
 	
 	/**
 	 * API call to J9kwCaptchaAPI.getNewCaptcha().
-	 * @return
+	 * @return the Captcha provided by 9kw.
 	 */
 	private static Captcha getCaptcha() {
 		Captcha captcha = null;
@@ -59,8 +59,12 @@ public class J9kwSolver {
 	}
 	
 	/**
-	 * Solves a captcha, i.e. sending a solution to the server.
-	 * @param captcha
+	 * Solves a Captcha, i.e. sending a solution to the server.
+	 * @param captcha the Captcha which has been solved.
+	 * @param solutionText the Text solution of this Captcha. Should be text
+	 * for text captchas, Yes/No for Confirm captchas or coordinates for
+	 * mouse/click captchas.
+	 * @return true if server accepted the solution, otherwise false.
 	 */
 	private static boolean solveCaptcha(
 			final Captcha captcha,
@@ -71,7 +75,8 @@ public class J9kwSolver {
 		solution.setCaptchaText(solutionText);
 
 		J9kwCaptchaAPI jca = J9kwCaptchaAPI.getInstance();
-		Future<CaptchaSolutionResponse> solveCaptcha = jca.solveCaptcha(solution);
+		Future<CaptchaSolutionResponse> solveCaptcha = 
+				jca.solveCaptcha(solution);
 		
 		try {
 			CaptchaSolutionResponse acceptedSolution = solveCaptcha.get();
@@ -111,6 +116,7 @@ public class J9kwSolver {
 	/**
 	 * Call to J9kwServerAPI.getServerStatus().
 	 * @see {@link J9kwServerAPI#getServerStatus()}
+	 * @return the Server status object or null, if unretrievable.
 	 */
 	public static ServerStatus getServerStatus() {
 		J9kwServerAPI sa = J9kwServerAPI.getInstance();
@@ -126,6 +132,7 @@ public class J9kwSolver {
 	/**
 	 * Call to J9kwUserAPI.getBalance().
 	 * @See {@link J9kwUserAPI#getBalance()}
+	 * @return balance as int or -1 if unretrievable.
 	 */
 	public static int getBalance() {
 		J9kwUserAPI ua = J9kwUserAPI.getInstance();
@@ -133,7 +140,7 @@ public class J9kwSolver {
 		int balance = ua.getBalance();
 		LOG.debug("Balance: {} credits.", balance);
 		
-		assert balance != 0 : "FIXME: Balance probably not detected.";
+		assert balance != -1 : "FIXME: Balance probably not detected.";
 		
 		return balance;
 	}
@@ -151,7 +158,7 @@ public class J9kwSolver {
 	}
 
 	/**
-	 * @param args
+	 * @param args command line arguments.
 	 */
 	public static void main(final String[] args) {
 		Captcha captcha = null;

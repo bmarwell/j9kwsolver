@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2012, Benjamin Marwell.  This file is
+ * Copyright (c) 2013, Benjamin Marwell.  This file is
  * licensed under the Affero General Public License version 3 or later.  See
  * the COPYRIGHT file.
  */
@@ -8,18 +8,47 @@ package de.bmarwell.j9kwsolver.request;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+/**
+ * The offered captcha with extended information.
+ * @author Benjamin Marwell
+ *
+ */
 public class CaptchaReturnExtended extends CaptchaReturn {
+	/**
+	 * The text to be confirmed, if this is a confirm captcha.
+	 */
 	private String confirmText = null;
 	
 	private boolean phrase = false;
+	/**
+	 * A numeric captcha.
+	 */
 	private boolean numeric = false;
+	/**
+	 * A mathematic captcha.
+	 */
 	private boolean math = false;
 	
+	/**
+	 * The minimum text input length.
+	 */
 	private int minLength = 0;
+	/**
+	 * The maximum text input length.
+	 */
 	private int maxLength = 0;
+	/**
+	 * True if this captcha needs to be confirmed.
+	 */
 	private boolean confirmedCaptcha = false;
 	
+	/**
+	 * The height of the image.
+	 */
 	private int width = 0;
+	/**
+	 * The width of the image.
+	 */
 	private int height = 0;
 	
 	public String getConfirmText() {

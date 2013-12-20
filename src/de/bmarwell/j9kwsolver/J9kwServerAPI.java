@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2012, Benjamin Marwell.  This file is
+ * Copyright (c) 2013, Benjamin Marwell.  This file is
  * licensed under the Affero General Public License version 3 or later.  See
  * the COPYRIGHT file.
  */
@@ -87,7 +87,7 @@ public final class J9kwServerAPI {
 	}
 	
 	/**
-	 * @return
+	 * @return the Instance for this server API.
 	 */
 	public static J9kwServerAPI getInstance() {
 		return SingletonHolder.instance;
