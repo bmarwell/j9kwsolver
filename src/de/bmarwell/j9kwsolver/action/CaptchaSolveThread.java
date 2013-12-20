@@ -5,16 +5,26 @@
  */
 package de.bmarwell.j9kwsolver.action;
 
+import java.net.URI;
 import java.util.concurrent.Callable;
 
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.bmarwell.j9kwsolver.domain.CaptchaSolution;
+import de.bmarwell.j9kwsolver.request.CaptchaSolve;
 import de.bmarwell.j9kwsolver.response.CaptchaSolutionResponse;
+import de.bmarwell.j9kwsolver.service.PropertyService;
+import de.bmarwell.j9kwsolver.util.HttpConnectorFactory;
+import de.bmarwell.j9kwsolver.util.RequestToURI;
 
 /**
  * @author Benjamin Marwell
  *
  */
 public class CaptchaSolveThread implements Callable<CaptchaSolutionResponse> {
+	private static final Logger log = LoggerFactory.getLogger(CaptchaSolveThread.class);
 
 	private CaptchaSolution solution = null;
 	
@@ -25,15 +35,83 @@ public class CaptchaSolveThread implements Callable<CaptchaSolutionResponse> {
 	public void setSolution(CaptchaSolution solution) {
 		this.solution = solution;
 	}
+	
+	private CaptchaSolutionResponse solveCaptcha() {
+		String responseBody = null;
+
+		CaptchaSolve solveRequest = new CaptchaSolve();
+		solveRequest.setApikey(PropertyService.getProperty("apikey"));
+		solveRequest.setExtended(true);
+		solveRequest.setId(solution.getCaptcha().getId());
+		
+		/* set correct solution text */
+		if (solution.getCaptcha().isConfirm()) {
+			solveRequest.setCaptcha(solution.getConfirmCaptchaCorrect().getYesNoString());
+		} else if (solution.getCaptcha().isMouse()) {
+			solveRequest.setCaptcha(solution.getCoordinates());
+		} else {
+			solveRequest.setCaptcha(solution.getCaptchaText());
+		}
+		
+		/* set debug if set */
+		if (PropertyService.getProperty("debug").equals("true")) {
+			solveRequest.setDebug(true);
+		}
+
+		URI uri = RequestToURI.captchaSolveToURI(solveRequest);
+		log.debug("Requesting URI: {}.", uri);
+		responseBody = HttpConnectorFactory.getBodyFromRequest(uri);
+		log.debug("Response: {}.", responseBody);
+		
+		// TODO: RequestToURI.captchaSolutionResponseToCaptchaReturn(responseBody)
+		CaptchaSolutionResponse solutionResponse = new CaptchaSolutionResponse();
+		
+		return solutionResponse;
+	}
+
+	/**
+	 * Check if provided solution can be valid.
+	 * @return
+	 */
+	private boolean isValidSolution() {
+		if (solution == null) {
+			/* cannot submit without ID */
+			return false;
+		}
+		
+		if (solution.getCaptcha() == null) {
+			/* cannot submit without ID */
+			return false;
+		}
+		
+		if (StringUtils.isEmpty(solution.getCaptcha().getId())) {
+			/* cannot submit without ID */
+			return false;
+		}
+		
+		/* all okay */
+		return true;
+	}
 
 	/* (non-Javadoc)
 	 * @see java.util.concurrent.Callable#call()
 	 */
 	@Override
 	public CaptchaSolutionResponse call() throws Exception {
-		CaptchaSolutionResponse solutionResponse = new CaptchaSolutionResponse();
+		CaptchaSolutionResponse solveCaptcha = null;
 		
-		return solutionResponse;
+		if (!isValidSolution()) {
+			log.debug("Solution cannot be valid at all!");
+			return null;
+		}
+		
+		if (Thread.currentThread().isInterrupted()) {
+			throw new InterruptedException(); 
+		}
+		
+		solveCaptcha = solveCaptcha();
+		
+		return solveCaptcha;
 	}
 
 }

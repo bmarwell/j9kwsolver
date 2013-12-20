@@ -51,14 +51,14 @@ public class J9kwSolver {
 	}
 	
 	/**
-	 * Solves a captcha.
+	 * Solves a captcha, i.e. sending a solution to the server.
 	 * @param captcha
 	 */
-	private static boolean solveCaptcha(Captcha captcha) {
+	private static boolean solveCaptcha(Captcha captcha, String solutionText) {
 		CaptchaSolution solution = new CaptchaSolution();
 		boolean accepted = false;
 		solution.setCaptcha(captcha);
-		solution.setCaptchaText("20888V");
+		solution.setCaptchaText(solutionText);
 		
 		J9kwCaptchaAPI jca = J9kwCaptchaAPI.getInstance();
 		Future<CaptchaSolutionResponse> solveCaptcha = jca.solveCaptcha(solution);
@@ -74,6 +74,17 @@ public class J9kwSolver {
 		}
 		
 		return accepted;
+	}
+
+	/**
+	 * @return
+	 */
+	private static String getCaptchaSolution(Captcha captcha) {
+		/* Show image */
+		J9kwShowImage display = new J9kwShowImage();
+		String solution = display.show(captcha);
+		
+		return solution;
 	}
 
 	/**
@@ -144,12 +155,14 @@ public class J9kwSolver {
 			log.debug("No captcha received.");
 		}
 		
+		String solution = getCaptchaSolution(captcha);
+		
 		if (captcha != null) {
-			solveCaptcha(captcha);
+			solveCaptcha(captcha, solution);
 		}
 		
-//		getServerStatus();
-//		getBalance();
+		getServerStatus();
+		getBalance();
 		
 		// FIXME: Services should shutdown automatically. 
 		HttpConnectorFactory.shutdownConnector();

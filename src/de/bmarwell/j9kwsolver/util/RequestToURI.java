@@ -21,6 +21,7 @@ import de.bmarwell.j9kwsolver.request.CaptchaNewOk;
 import de.bmarwell.j9kwsolver.request.CaptchaReturn;
 import de.bmarwell.j9kwsolver.request.CaptchaReturnExtended;
 import de.bmarwell.j9kwsolver.request.CaptchaShow;
+import de.bmarwell.j9kwsolver.request.CaptchaSolve;
 import de.bmarwell.j9kwsolver.request.ServerCheck;
 import de.bmarwell.j9kwsolver.request.UserBalance;
 
@@ -278,6 +279,38 @@ public class RequestToURI {
 			.addParameter("source", cs.getSource())
 			.addParameter("debug", BooleanUtils10.toIntegerString(cs.isDebug()))
 			.addParameter("base64", BooleanUtils10.toIntegerString(cs.isBase64()))
+			;
+
+		try {
+			uri = builder.build();
+		} catch (URISyntaxException e) {
+			log.error("Konnte URI nicht erstellen!", e);
+		}
+
+		return uri;
+	}
+
+	/**
+	 * @param solve
+	 * @return
+	 */
+	public static URI captchaSolveToURI(CaptchaSolve solve) {
+		URI uri = null;
+
+		if (solve == null) {
+			return null;
+		}
+		
+		URI apiURI = StringToURI(solve.getUrl());
+		
+		URIBuilder builder = new URIBuilder(apiURI)
+			.addParameter("id", solve.getId())
+			.addParameter("action", solve.getAction())
+			.addParameter("apikey", solve.getApikey())
+			.addParameter("source", solve.getSource())
+			.addParameter("debug", BooleanUtils10.toIntegerString(solve.isDebug()))
+			.addParameter("captcha", solve.getCaptcha())
+			.addParameter("extended", BooleanUtils10.toIntegerString(solve.isExtended()))
 			;
 
 		try {

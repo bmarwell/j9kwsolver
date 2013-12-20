@@ -5,6 +5,8 @@
  */
 package de.bmarwell.j9kwsolver.request;
 
+import de.bmarwell.j9kwsolver.service.PropertyService;
+
 /**
  * @author Benjamin Marwell
  *
@@ -15,12 +17,40 @@ public class CaptchaSolve implements CaptchaRequestInterface {
 	
 	private String apikey = null;
 	private String id = null;
+	private boolean extended = true;
+	private String source = PropertyService.getProperty("toolname");
+	private boolean debug = false;
+	
 	/**
 	 * Contains the answer. Possible values: <br />
 	 * "yes|no", "nnnxmmm" (coordinates) or "text".
 	 */
 	private String captcha = null;
 	
+	public boolean isDebug() {
+		return debug;
+	}
+
+	public void setDebug(boolean debug) {
+		this.debug = debug;
+	}
+
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
+	public boolean isExtended() {
+		return extended;
+	}
+
+	public void setExtended(boolean extended) {
+		this.extended = extended;
+	}
+
 	/* (non-Javadoc)
 	 * @see de.bmarwell.j9kwsolver.request.CaptchaRequestInterface#getUrl()
 	 */

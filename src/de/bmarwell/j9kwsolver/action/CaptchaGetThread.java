@@ -191,6 +191,10 @@ public class CaptchaGetThread implements Callable<Captcha> {
 		 * Step 2:
 		 * Send "Accepting Captcha". 
 		 */
+		if (Thread.currentThread().isInterrupted()) {
+			throw new InterruptedException(); 
+		}
+		
 		log.debug("CaptchaID {} gotten! Now accepting.", cr.getCaptchaID());
 		
 		accepted = doAccept();
@@ -205,6 +209,10 @@ public class CaptchaGetThread implements Callable<Captcha> {
 		 * Step 3:
 		 * Get Captcha Data.
 		 */
+		if (Thread.currentThread().isInterrupted()) {
+			throw new InterruptedException(); 
+		}
+		
 		captcha = getCaptcha(cr);
 		
 		return captcha;
