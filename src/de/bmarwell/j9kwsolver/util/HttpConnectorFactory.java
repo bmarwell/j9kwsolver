@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2012, Benjamin Marwell.  This file is
+ * Copyright (c) 2013, Benjamin Marwell.  This file is
  * licensed under the Affero General Public License version 3 or later.  See
  * the COPYRIGHT file.
  */
@@ -24,15 +24,23 @@ import org.slf4j.LoggerFactory;
  * This class will return various connectors, which might prove useful.
  */
 public class HttpConnectorFactory {
-	private static final Logger log = LoggerFactory.getLogger(HttpConnectorFactory.class);
+	/**
+	 * Default connect timeout.
+	 */
+	private static final int CONNECT_TIMEOUT_MS = 30000;
+	/**
+	 * Default socket timeout.
+	 */
+	private static final int SOCKET_TIMEOUT_MS = 30000;
+	private static final Logger LOG = LoggerFactory.getLogger(HttpConnectorFactory.class);
 	private static CloseableHttpClient httpClient;
 	
 	static {
 		PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
 		
 		RequestConfig rc = RequestConfig.copy(RequestConfig.DEFAULT)
-				.setSocketTimeout(30000)
-				.setConnectTimeout(30000)
+				.setSocketTimeout(SOCKET_TIMEOUT_MS)
+				.setConnectTimeout(CONNECT_TIMEOUT_MS)
 				.build();
 		
 		httpClient = HttpClients.custom()
@@ -43,7 +51,7 @@ public class HttpConnectorFactory {
 	
 	/**
 	 * Returns the single httpClient for this application to use.
-	 * @return
+	 * @return the httpClient to be used for requests.
 	 */
 	public static CloseableHttpClient getHttpClient() {
 		return httpClient;
@@ -55,12 +63,12 @@ public class HttpConnectorFactory {
 		return true;
 	}
 	
-	public static String getBodyFromRequest(URI uri) {
+	public static String getBodyFromRequest(final URI uri) {
 		CloseableHttpResponse response = null;
 		String responseBody = null;
 		HttpGet httpGet = new HttpGet(uri);
 		
-		log.debug("Requesting URI: {}.", httpGet.getURI());
+		LOG.debug("Requesting URI: {}.", httpGet.getURI());
 		
 		try {
 			response = httpClient.execute(httpGet);
@@ -68,7 +76,7 @@ public class HttpConnectorFactory {
 			IOUtils.copy(response.getEntity().getContent(), writer);
 			responseBody = writer.toString();
 		} catch (IOException e) {
-			log.error("Fehler beim HTTP Request!", e);
+			LOG.error("Fehler beim HTTP Request!", e);
 		} finally {
 //			IOUtils.closeQuietly(httpclient);
 		}

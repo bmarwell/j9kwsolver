@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2012, Benjamin Marwell.  This file is
+ * Copyright (c) 2013, Benjamin Marwell.  This file is
  * licensed under the Affero General Public License version 3 or later.  See
  * the COPYRIGHT file.
  */
@@ -22,15 +22,15 @@ import de.bmarwell.j9kwsolver.util.ResponseUtils;
 
 /**
  * An API for receiving server information.
- * @author bmarwell
+ * @author Benjamin Marwell
  *
  */
-public class J9kwServerAPI {
-	private static final Logger log = LoggerFactory.getLogger(J9kwServerAPI.class);
+public final class J9kwServerAPI {
+	private static final Logger LOG = LoggerFactory.getLogger(J9kwServerAPI.class);
 	private static Lock httpLock = new ReentrantLock();
 	
 	/**
-	 * Empty hidden default constructor
+	 * Empty hidden default constructor.
 	 */
 	private J9kwServerAPI() {}
 	
@@ -62,7 +62,7 @@ public class J9kwServerAPI {
 
 		lock();
 		
-		URI scuri = RequestToURI.ServerStatusToURI(sc);
+		URI scuri = RequestToURI.serverStatusToURI(sc);
 		serverstate = HttpConnectorFactory.getBodyFromRequest(scuri);
 		unlock();
 		
@@ -70,8 +70,8 @@ public class J9kwServerAPI {
 			return null;
 		}
 		
-		statepairs = ResponseUtils.StringResponseToIntMap(serverstate);
-		log.debug("State des Servers: {}", statepairs);
+		statepairs = ResponseUtils.stringResponseToIntMap(serverstate);
+		LOG.debug("State des Servers: {}", statepairs);
 		
 		if (statepairs.containsKey("worker")) {
 			ss.setWorker(statepairs.get("worker"));
@@ -87,7 +87,7 @@ public class J9kwServerAPI {
 	}
 	
 	/**
-	 * @return
+	 * @return the Instance for this server API.
 	 */
 	public static J9kwServerAPI getInstance() {
 		return SingletonHolder.instance;

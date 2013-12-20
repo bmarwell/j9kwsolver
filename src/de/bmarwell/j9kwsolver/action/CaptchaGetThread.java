@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2012, Benjamin Marwell.  This file is
+ * Copyright (c) 2013, Benjamin Marwell.  This file is
  * licensed under the Affero General Public License version 3 or later.  See
  * the COPYRIGHT file.
  */
@@ -27,18 +27,24 @@ import de.bmarwell.j9kwsolver.request.CaptchaShow;
 import de.bmarwell.j9kwsolver.service.PropertyService;
 import de.bmarwell.j9kwsolver.util.HttpConnectorFactory;
 import de.bmarwell.j9kwsolver.util.RequestToURI;
+import de.bmarwell.j9kwsolver.util.ResponseUtils;
 
 /**
- * With this thread, the API will call for an image, auto-accept it and retrieves
- * its contents.
- * @author bmarwell
+ * With this thread, the API will call for an image, 
+ * auto-accept it and retrieves its contents.
+ * @author Benjamin Marwell
  */
 public class CaptchaGetThread implements Callable<Captcha> {
-	private static final Logger log = LoggerFactory.getLogger(CaptchaGetThread.class);
+	/**
+	 * Logger for this class.
+	 */
+	private static final Logger LOG = 
+			LoggerFactory.getLogger(CaptchaGetThread.class);
 
 	/**
 	 * Asks server for new captcha.
-	 * @return
+	 * @return CaptchaReturn or CaptchaReturnExtended if server assigned 
+	 * a captcha. Otherwise null.
 	 */
 	private CaptchaReturn getRequest() {
 		String responseBody = null;
@@ -54,18 +60,18 @@ public class CaptchaGetThread implements Callable<Captcha> {
 		}
 		
 		URI uri = RequestToURI.captchaGetToURI(cg);
-		log.debug("Requesting URI: {}.", uri);
+		LOG.debug("Requesting URI: {}.", uri);
 		responseBody = HttpConnectorFactory.getBodyFromRequest(uri);
-		log.debug("Response: {}.", responseBody);
+		LOG.debug("Response: {}.", responseBody);
 		
-		cr = RequestToURI.captchaGetResponseToCaptchaReturn(responseBody);
+		cr = ResponseUtils.captchaGetResponseToCaptchaReturn(responseBody);
 		
 		return cr;
 	}
 	
 	/**
 	 * Sends an accept request to server.
-	 * @return
+	 * @return true, if server recognized accept request. False otherwise.
 	 */
 	private boolean doAccept() {
 		String responseBody = null;
@@ -76,13 +82,13 @@ public class CaptchaGetThread implements Callable<Captcha> {
 		cno.setSource(PropertyService.getProperty("toolname"));
 		
 		URI uri = RequestToURI.captchaNewOkToURI(cno);
-		log.debug("Requesting URI: {}.", uri);
+		LOG.debug("Requesting URI: {}.", uri);
 		responseBody = HttpConnectorFactory.getBodyFromRequest(uri);
 		
 		/*
 		 * Check if OK came
 		 */
-		log.debug("Server accept response: {}.", responseBody);
+		LOG.debug("Server accept response: {}.", responseBody);
 		if(StringUtils.isEmpty(responseBody)) {
 			/* Empty answer: probably server error */
 			accepted = false;
@@ -99,14 +105,14 @@ public class CaptchaGetThread implements Callable<Captcha> {
 
 	/**
 	 * Gets the Captcha object containing the image.
-	 * @param captchaId
-	 * @return
+	 * @param cr the captcha return object.
+	 * @return the Captcha received.
 	 */
-	private Captcha getCaptcha(CaptchaReturn cr) {
+	private Captcha getCaptcha(final CaptchaReturn cr) {
 		CaptchaReturnExtended cre = null;
 		Captcha captcha = null;
 		String responseBody = null;
-		
+
 		CaptchaShow cs = new CaptchaShow();
 		cs.setApikey(PropertyService.getProperty("apikey"));
 		cs.setSource(PropertyService.getProperty("toolname"));
@@ -117,42 +123,40 @@ public class CaptchaGetThread implements Callable<Captcha> {
 		}
 
 		URI uri = RequestToURI.captchaShowToURI(cs);
-		log.debug("Requesting URI: {}.", uri);
+		LOG.debug("Requesting URI: {}.", uri);
 		responseBody = HttpConnectorFactory.getBodyFromRequest(uri);
-		
+
 		if (StringUtils.isEmpty(responseBody)) {
-			log.debug("No return for captchaShow.");
-			
+			LOG.debug("No return for captchaShow.");
+
 			return captcha;
 		}
-		
+
 		/* OK, captcha gotten. */
 		captcha = new Captcha();
 		captcha.setId(cr.getCaptchaID());
 		captcha.setConfirm(cr.isConfirm());
 		captcha.setMouse(cr.isMouse());
-		
+
 		if (cr instanceof CaptchaReturnExtended) {
-			cre = (CaptchaReturnExtended)cr;
+			cre = (CaptchaReturnExtended) cr;
 			captcha.setConfirmtext(cre.getConfirmText());
 		}
-		
+
 		// captcha.setConfirmtext();
-		
+
 		try {
 			byte[] imgdata = Base64.decodeBase64(responseBody);
 			ByteArrayInputStream stream = new ByteArrayInputStream(imgdata);
 			BufferedImage bi = ImageIO.read(stream);
 			captcha.setImage(bi);
 		} catch (IOException e) {
-			log.error("Could not read image Stream!");
+			LOG.error("Could not read image Stream!");
 		}
-		
-		log.debug("Response - Bild: {}.", StringUtils.substring(responseBody, 0, 15));
-		
+
 		if (captcha.getImage() == null) {
 			/* Check if we actually saved the image */
-			log.warn("Image found, but could not be saved to object!");
+			LOG.warn("Image found, but could not be saved to object!");
 			
 			return null;
 		}
@@ -164,7 +168,7 @@ public class CaptchaGetThread implements Callable<Captcha> {
 	 * @see java.util.concurrent.Callable#call()
 	 */
 	@Override
-	public Captcha call() throws Exception {
+	public final Captcha call() throws Exception {
 		Captcha captcha = null;
 		boolean accepted = false;
 		CaptchaReturn cr = null;
@@ -191,20 +195,30 @@ public class CaptchaGetThread implements Callable<Captcha> {
 		 * Step 2:
 		 * Send "Accepting Captcha". 
 		 */
-		log.debug("CaptchaID {} gotten! Now accepting.", cr.getCaptchaID());
+		if (Thread.currentThread().isInterrupted()) {
+			throw new InterruptedException(); 
+		}
+		
+		LOG.debug("CaptchaID {} gotten! Now accepting.", cr.getCaptchaID());
 		
 		accepted = doAccept();
 		
 		if (!accepted) {
-			log.warn("Server didn't leave us Captcha {}.", cr.getCaptchaID());
+			LOG.warn("Server didn't leave us Captcha {}.", cr.getCaptchaID());
+			
+			return null;
 		} else {
-			log.debug("Server assigned Captcha {} to us.", cr.getCaptchaID());
+			LOG.debug("Server assigned Captcha {} to us.", cr.getCaptchaID());
 		}
 		
 		/*
 		 * Step 3:
 		 * Get Captcha Data.
 		 */
+		if (Thread.currentThread().isInterrupted()) {
+			throw new InterruptedException(); 
+		}
+		
 		captcha = getCaptcha(cr);
 		
 		return captcha;

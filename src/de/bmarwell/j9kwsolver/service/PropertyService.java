@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2012, Benjamin Marwell.  This file is
+ * Copyright (c) 2013, Benjamin Marwell.  This file is
  * licensed under the Affero General Public License version 3 or later.  See
  * the COPYRIGHT file.
  */
@@ -16,13 +16,13 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Property Singleton Service. 
- * @author bmarwell
+ * @author Benjamin Marwell
  *
  */
 public class PropertyService {
-	private static final Logger log = LoggerFactory.getLogger(PropertyService.class); 
+	private static final Logger LOG = LoggerFactory.getLogger(PropertyService.class); 
 
-	public static String getProperty(String propName) {
+	public static String getProperty(final String propName) {
 		return PropertySingleton.getProperties().getProperty(propName);
 	}
 	
@@ -30,15 +30,15 @@ public class PropertyService {
 	/**
 	 * Inner singleton class.
 	 * Easy, threadsafe, fast.
-	 * @author bmarwell
+	 * @author Benjamin Marwell
 	 *
 	 */
 	private static class PropertySingleton {
-		private static final Properties props = initializeProperties();
-		private static final String apikeyfilepath = "/.config/j9kwsolver/apikey";
+		private static final Properties PROPS = initializeProperties();
+		private static final String APIKEY_FILE_PATH = "/.config/j9kwsolver/apikey";
 		
 		public static Properties getProperties() {
-			return props;
+			return PROPS;
 		}
 		
 		private static Properties initializeProperties() {
@@ -47,14 +47,14 @@ public class PropertyService {
 			Scanner in = null;
 			
 			String userHome = System.getProperty( "user.home" );
-			log.debug("ApiKeyFile = {}.", userHome + apikeyfilepath);
+			LOG.debug("ApiKeyFile = {}.", userHome + APIKEY_FILE_PATH);
 			
 			try {
-				File apikeyFile = new File(userHome, apikeyfilepath);
+				File apikeyFile = new File(userHome, APIKEY_FILE_PATH);
 				in = new Scanner(apikeyFile);
 				apiKey = in.nextLine();
 			} catch (FileNotFoundException e) {
-				log.warn("Konnte apikey-File nicht lesen!", e);
+				LOG.warn("Konnte apikey-File nicht lesen!", e);
 			} finally {
 				IOUtils.closeQuietly(in);
 			}

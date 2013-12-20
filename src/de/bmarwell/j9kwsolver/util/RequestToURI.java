@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2012, Benjamin Marwell.  This file is
+ * Copyright (c) 2013, Benjamin Marwell.  This file is
  * licensed under the Affero General Public License version 3 or later.  See
  * the COPYRIGHT file.
  */
@@ -8,33 +8,28 @@ package de.bmarwell.j9kwsolver.util;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.http.client.utils.URIBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.bmarwell.j9kwsolver.request.CaptchaGet;
 import de.bmarwell.j9kwsolver.request.CaptchaNewOk;
-import de.bmarwell.j9kwsolver.request.CaptchaReturn;
-import de.bmarwell.j9kwsolver.request.CaptchaReturnExtended;
 import de.bmarwell.j9kwsolver.request.CaptchaShow;
+import de.bmarwell.j9kwsolver.request.CaptchaSolve;
 import de.bmarwell.j9kwsolver.request.ServerCheck;
 import de.bmarwell.j9kwsolver.request.UserBalance;
 
 /**
- * @author Benjamin Marwell
  * This class will build URIs based on the request objects.
+ * @author Benjamin Marwell
  */
 public class RequestToURI {
-	private static final Logger log = LoggerFactory.getLogger(RequestToURI.class); 
+	static final Logger LOG = LoggerFactory.getLogger(RequestToURI.class); 
 
-	public static URI ServerStatusToURI(ServerCheck sc) {
+	public static URI serverStatusToURI(final ServerCheck sc) {
 		URI uri = null;
 		
-		URI apiURI = StringToURI(sc.getUrl());
+		URI apiURI = stringToURI(sc.getUrl());
 		URIBuilder builder = new URIBuilder(apiURI)
 			.addParameter("action", sc.getAction())
 			;
@@ -42,7 +37,7 @@ public class RequestToURI {
 		try {
 			uri = builder.build();
 		} catch (URISyntaxException e) {
-			log.error("Konnte URI nicht erstellen!", e);
+			LOG.error("Konnte URI nicht erstellen!", e);
 		}
 		
 		return uri;
@@ -50,13 +45,13 @@ public class RequestToURI {
 	
 	/**
 	 * The CaptchaGet-Request URI Builder.
-	 * @param cg
-	 * @return
+	 * @param cg The Get request for the new captcha.
+	 * @return the URI for the API request.
 	 */
-	public static URI captchaGetToURI(CaptchaGet cg) {
+	public static URI captchaGetToURI(final CaptchaGet cg) {
 		URI uri = null;
 		
-		URI apiURI = StringToURI(cg.getUrl());
+		URI apiURI = stringToURI(cg.getUrl());
 		
 		URIBuilder builder = new URIBuilder(apiURI)
 			.addParameter("debug", BooleanUtils10.toIntegerString(cg.isDebug()))
@@ -72,7 +67,7 @@ public class RequestToURI {
 		try {
 			uri = builder.build();
 		} catch (URISyntaxException e) {
-			log.error("Konnte URI nicht erstellen!", e);
+			LOG.error("Konnte URI nicht erstellen!", e);
 		}
 		
 		return uri;
@@ -80,13 +75,13 @@ public class RequestToURI {
 	
 	/**
 	 * Sends Accept to the 9kw Captcha Service.
-	 * @param cno
-	 * @return
+	 * @param cno the CaptchaNewOk Object for API request.
+	 * @return the URI for the API request.
 	 */
-	public static URI captchaNewOkToURI(CaptchaNewOk cno) {
+	public static URI captchaNewOkToURI(final CaptchaNewOk cno) {
 		URI uri = null;
 		
-		URI apiURI = StringToURI(cno.getUrl());
+		URI apiURI = stringToURI(cno.getUrl());
 		
 		URIBuilder builder = new URIBuilder(apiURI)
 			.addParameter("action", cno.getAction())
@@ -97,125 +92,10 @@ public class RequestToURI {
 		try {
 			uri = builder.build();
 		} catch (URISyntaxException e) {
-			log.error("Konnte URI nicht erstellen!", e);
+			LOG.error("Konnte URI nicht erstellen!", e);
 		}
 		
 		return uri;
-	}
-
-	/**
-	 * Parses the content from the response, if any.
-	 * @param response
-	 * @return
-	 */
-	public static CaptchaReturn captchaGetResponseToCaptchaReturn(
-			String response) {
-		CaptchaReturn cr = null;
-		
-		if (StringUtils.isEmpty(response)) {
-			log.debug("Content ist leer!");
-			
-			return cr;
-		}
-		
-		/* converting answer to object */
-		if (StringUtils.containsIgnoreCase(response, "NO CAPTCHA")) {
-			/* No captcha available */
-			cr = null;
-			log.debug("No captcha available atm: {}.", response);
-		} else if (StringUtils.contains(response, "phrase")) {
-			/* Extended Answer */
-			CaptchaReturnExtended cre = getExtendedFromResponse(response);
-			log.debug("CRE: {}.", cre);
-			cr = cre;
-		} else {
-			/* 
-			 * simple response contains only digits or few extra information
-			 * INT or INT|mouse or INT|confirm
-			 */
-			log.debug("Simple response: {}.", response);
-			String[] splitresponse = StringUtils.split(response, '|');
-			
-			if (splitresponse.length < 1) {
-				log.warn("Simple response doesn't contain enough items");
-				return cr;
-			}
-			
-			if (!NumberUtils.isDigits(splitresponse[0])) {
-				log.error("Response's first item isn't a captcha id."
-						+ " Found {} instead.", splitresponse[0]);
-				return cr;
-			}
-			
-			cr = new CaptchaReturn();
-			cr.setCaptchaID(splitresponse[0]);
-			// TODO: add items
-		}
-		
-		return cr;
-	}
-	
-	/**
-	 * Parses the response for fields to set.
-	 * @param response
-	 * @return
-	 */
-	private static CaptchaReturnExtended getExtendedFromResponse(String response) {
-		/* 
-		 * Extended response contains phrase keyword
-		 * ID|text|confirm|antwort|mouse=0|phrase=0|numeric=0|math=0|min_len=1|max_len=20|confirm=1|w|h|
-		 * 11837102|text|||mouse=0|phrase=1|numeric=0|math=0|min_len=5|max_len=0|confirm=0|300|57|userstart=1387447122|startdate=1387447119|serverdate=1387447122|maxtimeout=35
-		 */
-		log.debug("Extended response: {}.", response);
-		String[] splitresponse = StringUtils.splitPreserveAllTokens(response, '|');
-		
-		log.debug("Splitresponse: {}.", 
-				ToStringBuilder.reflectionToString(
-						splitresponse, 
-						ToStringStyle.MULTI_LINE_STYLE)
-		);
-		
-		/* Checke item count */
-		if (splitresponse.length < 11) {
-			log.warn("Extended response doesn't contain enough items");
-			return null;
-		}
-		
-		/* check first item is digits */
-		if (!NumberUtils.isDigits(splitresponse[0])) {
-			log.error("Response's first item isn't a captcha id."
-					+ " Found {} instead.", splitresponse[0]);
-			return null;
-		}
-		
-		/* Now create captcha extended item and fill it */
-		CaptchaReturnExtended cre = new CaptchaReturnExtended();
-		cre.setCaptchaID(splitresponse[CaptchaReturn.Field.ID.getPosition()]);
-		
-		/* if text returned, set text */
-		if (StringUtils.equals(splitresponse[CaptchaReturn.Field.TEXT.getPosition()], "text")) {
-			log.debug("Setting text captcha.");
-			cre.setText(true);
-		}
-		
-		/* Just confirm? */
-		if (StringUtils.equals(splitresponse[CaptchaReturn.Field.CONFIRM.getPosition()], "text")) {
-			cre.setConfirm(true);
-		}
-		
-		/* Has solved text */
-		if (StringUtils.isNotEmpty(splitresponse[CaptchaReturn.Field.CONFIRMTEXT.getPosition()])) {
-			cre.setConfirmText(splitresponse[CaptchaReturn.Field.CONFIRMTEXT.getPosition()]);
-		}
-		
-		/* Mouse event? */
-		if (StringUtils.equals(splitresponse[CaptchaReturn.Field.MOUSE.getPosition()], "mouse=1")) {
-			cre.setMouse(true);
-		}
-		
-		// TODO: Add items
-		
-		return cre;
 	}
 
 	/**
@@ -223,30 +103,30 @@ public class RequestToURI {
 	 * @param uristring - a uri in String representation.
 	 * @return null or the String as URI.
 	 */
-	public static URI StringToURI(String uristring) {
+	public static URI stringToURI(final String uristring) {
 		URI uri = null;
 		
 		try {
 			uri = new URI(uristring);
 		} catch (URISyntaxException e) {
-			log.error("Konnte keine URI bilden!", e);
+			LOG.error("Konnte keine URI bilden!", e);
 		}
 		
 		return uri;
 	}
 
 	/**
-	 * @param ub
-	 * @return
+	 * @param ub - User Balance object.
+	 * @return API-URIor null if ub-object is invalid.
 	 */
-	public static URI UserBalanceToURI(UserBalance ub) {
+	public static URI userBalanceToURI(final UserBalance ub) {
 		URI uri = null;
 
 		if (ub == null) {
 			return null;
 		}
 
-		URI apiURI = StringToURI(ub.getUrl());
+		URI apiURI = stringToURI(ub.getUrl());
 
 		URIBuilder builder = new URIBuilder(apiURI)
 		.addParameter("action", ub.getAction())
@@ -256,21 +136,27 @@ public class RequestToURI {
 		try {
 			uri = builder.build();
 		} catch (URISyntaxException e) {
-			log.error("Konnte URI nicht erstellen!", e);
+			LOG.error("Konnte URI nicht erstellen!", e);
 		}
 
 		return uri;
 	}
 
-	public static URI captchaShowToURI(CaptchaShow cs) {
+	/**
+	 * Converts a request object for retrieving the captcha image
+	 * to an URI for 9kw API.
+	 * @param cs the CaptchaShow request.
+	 * @return the URI for the API request.
+	 */
+	public static URI captchaShowToURI(final CaptchaShow cs) {
 		URI uri = null;
 
 		if (cs == null) {
 			return null;
 		}
-		
-		URI apiURI = StringToURI(cs.getUrl());
-		
+
+		URI apiURI = stringToURI(cs.getUrl());
+
 		URIBuilder builder = new URIBuilder(apiURI)
 			.addParameter("id", cs.getId())
 			.addParameter("action", cs.getAction())
@@ -283,7 +169,40 @@ public class RequestToURI {
 		try {
 			uri = builder.build();
 		} catch (URISyntaxException e) {
-			log.error("Konnte URI nicht erstellen!", e);
+			LOG.error("Konnte URI nicht erstellen!", e);
+		}
+
+		return uri;
+	}
+
+	/**
+	 * @param solve the solve request which should be send to the server.
+	 * @return URI object to call for solving, or null if URI could 
+	 * not be built.
+	 */
+	public static URI captchaSolveToURI(final CaptchaSolve solve) {
+		URI uri = null;
+
+		if (solve == null) {
+			return null;
+		}
+		
+		URI apiURI = stringToURI(solve.getUrl());
+		
+		URIBuilder builder = new URIBuilder(apiURI)
+			.addParameter("id", solve.getId())
+			.addParameter("action", solve.getAction())
+			.addParameter("apikey", solve.getApikey())
+			.addParameter("source", solve.getSource())
+			.addParameter("debug", BooleanUtils10.toIntegerString(solve.isDebug()))
+			.addParameter("captcha", solve.getCaptcha())
+			.addParameter("extended", BooleanUtils10.toIntegerString(solve.isExtended()))
+			;
+
+		try {
+			uri = builder.build();
+		} catch (URISyntaxException e) {
+			LOG.error("Konnte URI nicht erstellen!", e);
 		}
 
 		return uri;

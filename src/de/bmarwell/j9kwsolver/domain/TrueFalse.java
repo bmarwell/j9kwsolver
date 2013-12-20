@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2012, Benjamin Marwell.  This file is
+ * Copyright (c) 2013, Benjamin Marwell.  This file is
  * licensed under the Affero General Public License version 3 or later.  See
  * the COPYRIGHT file.
  */
@@ -7,7 +7,7 @@ package de.bmarwell.j9kwsolver.domain;
 
 /**
  * Boolean for true/false with 1/0 output.
- * @author bmarwell
+ * @author Benjamin Marwell
  *
  */
 public enum TrueFalse {
@@ -16,8 +16,8 @@ public enum TrueFalse {
 	
 	private int code;
 	
-	private TrueFalse(int code) {
-		this.code = code;
+	private TrueFalse(final int pCode) {
+		this.code = pCode;
 	}
 	
 	public int getCode() {
