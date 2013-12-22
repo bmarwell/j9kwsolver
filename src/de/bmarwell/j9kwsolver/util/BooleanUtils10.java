@@ -11,7 +11,12 @@ import org.apache.commons.lang3.BooleanUtils;
  * @author Benjamin Marwell
  * Some Boolean Utils.
  */
-public class BooleanUtils10 {
+public final class BooleanUtils10 {
+	/**
+	 * Empty private default constructor for utility class BooleanUtils10.
+	 */
+	private BooleanUtils10() { }
+	
 	/**
 	 * Returns a textual representation of 1 for true or 0 for false.
 	 * @param bool - a boolean.

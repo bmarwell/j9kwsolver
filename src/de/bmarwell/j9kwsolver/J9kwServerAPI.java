@@ -26,13 +26,20 @@ import de.bmarwell.j9kwsolver.util.ResponseUtils;
  *
  */
 public final class J9kwServerAPI {
+	/**
+	 * The Logger of this class.
+	 */
 	private static final Logger LOG = LoggerFactory.getLogger(J9kwServerAPI.class);
+	
+	/**
+	 * Locking instance to ensure only one request is sent at a time.
+	 */
 	private static Lock httpLock = new ReentrantLock();
 	
 	/**
 	 * Empty hidden default constructor.
 	 */
-	private J9kwServerAPI() {}
+	private J9kwServerAPI() { }
 	
 	
 	
@@ -98,6 +105,9 @@ public final class J9kwServerAPI {
 	 *
 	 */
 	private static class SingletonHolder {
+		/**
+		 * Holds the only instance of this API.
+		 */
 		private static J9kwServerAPI instance = new J9kwServerAPI();
 	}
 

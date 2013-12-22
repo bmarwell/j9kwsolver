@@ -19,13 +19,25 @@ import org.slf4j.LoggerFactory;
  * @author Benjamin Marwell
  *
  */
-public class PropertyService {
+public final class PropertyService {
+	/**
+	 * The logger instance for this utility class.
+	 */
 	private static final Logger LOG = LoggerFactory.getLogger(PropertyService.class); 
 
+	/**
+	 * Returns the given named property for this application.
+	 * @param propName the property name.
+	 * @return the value of this property, maybe null if it doesn't exist.
+	 */
 	public static String getProperty(final String propName) {
 		return PropertySingleton.getProperties().getProperty(propName);
 	}
 	
+	/**
+	 * Empty private default constructor - utility class.
+	 */
+	private PropertyService() { }
 	
 	/**
 	 * Inner singleton class.
@@ -34,19 +46,33 @@ public class PropertyService {
 	 *
 	 */
 	private static class PropertySingleton {
+		/**
+		 * The properties singleton.
+		 */
 		private static final Properties PROPS = initializeProperties();
+		/**
+		 * The unix default search path for the API Key.
+		 */
 		private static final String APIKEY_FILE_PATH = "/.config/j9kwsolver/apikey";
 		
+		/**
+		 * Returns the properties instance.
+		 * @return the properties instance.
+		 */
 		public static Properties getProperties() {
 			return PROPS;
 		}
 		
+		/**
+		 * Initializes the property instance.
+		 * @return an instance of Properties.
+		 */
 		private static Properties initializeProperties() {
 			Properties props = new Properties();
 			String apiKey = new String();
 			Scanner in = null;
 			
-			String userHome = System.getProperty( "user.home" );
+			String userHome = System.getProperty("user.home");
 			LOG.debug("ApiKeyFile = {}.", userHome + APIKEY_FILE_PATH);
 			
 			try {

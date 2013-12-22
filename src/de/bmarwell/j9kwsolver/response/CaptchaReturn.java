@@ -3,7 +3,7 @@
  * licensed under the Affero General Public License version 3 or later.  See
  * the COPYRIGHT file.
  */
-package de.bmarwell.j9kwsolver.request;
+package de.bmarwell.j9kwsolver.response;
 
 public class CaptchaReturn {
 

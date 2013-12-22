@@ -17,8 +17,8 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.bmarwell.j9kwsolver.request.CaptchaReturn;
-import de.bmarwell.j9kwsolver.request.CaptchaReturnExtended;
+import de.bmarwell.j9kwsolver.response.CaptchaReturn;
+import de.bmarwell.j9kwsolver.response.CaptchaReturnExtended;
 import de.bmarwell.j9kwsolver.response.CaptchaSolutionResponse;
 
 /**
@@ -88,11 +88,6 @@ public final class ResponseUtils {
 		return result;
 	}
 	
-	public static Map<String, String> stringResponseToStringMap(final String response) {
-		// TODO: mock
-		return null;
-	}
-
 	/**
 	 * @param response the response sent by the server.
 	 * @return the response of the server for solving a captcha.
