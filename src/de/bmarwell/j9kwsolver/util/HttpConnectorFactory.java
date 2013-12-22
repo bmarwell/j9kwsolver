@@ -57,12 +57,21 @@ public class HttpConnectorFactory {
 		return httpClient;
 	}
 	
+	/**
+	 * Shuts down the connector instance, if open.
+	 * @return true if connection could be closed.
+	 */
 	public static boolean shutdownConnector() {
 		IOUtils.closeQuietly(httpClient);
 		
 		return true;
 	}
 	
+	/**
+	 * Returns the Body from the URI via http request.
+	 * @param uri the URI to get the body from.
+	 * @return the Body as String.
+	 */
 	public static String getBodyFromRequest(final URI uri) {
 		CloseableHttpResponse response = null;
 		String responseBody = null;
@@ -77,8 +86,6 @@ public class HttpConnectorFactory {
 			responseBody = writer.toString();
 		} catch (IOException e) {
 			LOG.error("Fehler beim HTTP Request!", e);
-		} finally {
-//			IOUtils.closeQuietly(httpclient);
 		}
 		
 		return responseBody;
