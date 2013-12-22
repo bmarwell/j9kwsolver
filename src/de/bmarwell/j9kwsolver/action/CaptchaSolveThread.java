@@ -25,18 +25,36 @@ import de.bmarwell.j9kwsolver.util.ResponseUtils;
  *
  */
 public class CaptchaSolveThread implements Callable<CaptchaSolutionResponse> {
+	/**
+	 * Logger instance for this class.
+	 */
 	private static final Logger LOG = LoggerFactory.getLogger(CaptchaSolveThread.class);
 
+	/**
+	 * the Solution object to be submitted.
+	 */
 	private CaptchaSolution solution = null;
 
+	/**
+	 * Gets the Solution object to be submitted.
+	 * @return the Solution object to be submitted.
+	 */
 	public CaptchaSolution getSolution() {
 		return solution;
 	}
 
+	/**
+	 * Sets the Solution object to be submitted.
+	 * @param pSolution the Solution object to be submitted. 
+	 */
 	public void setSolution(final CaptchaSolution pSolution) {
 		this.solution = pSolution;
 	}
 	
+	/**
+	 * Solves the captcha given to this thread.
+	 * @return a {@link CaptchaSolutionResponse} containing the server answer.
+	 */
 	private CaptchaSolutionResponse solveCaptcha() {
 		String responseBody = null;
 

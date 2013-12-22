@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
  * @author Benjamin Marwell
  * This class will return various connectors, which might prove useful.
  */
-public class HttpConnectorFactory {
+public final class HttpConnectorFactory {
 	/**
 	 * Default connect timeout.
 	 */
@@ -32,7 +32,13 @@ public class HttpConnectorFactory {
 	 * Default socket timeout.
 	 */
 	private static final int SOCKET_TIMEOUT_MS = 30000;
+	/**
+	 * Logger instance for this class.
+	 */
 	private static final Logger LOG = LoggerFactory.getLogger(HttpConnectorFactory.class);
+	/**
+	 * The httpClient object for this application / API.
+	 */
 	private static CloseableHttpClient httpClient;
 	
 	static {
@@ -48,6 +54,11 @@ public class HttpConnectorFactory {
 				.setConnectionManager(cm)
 				.build();
 	}
+	
+	/**
+	 * Empty private default constructor for utility class HttpConnectorFactory.
+	 */
+	private HttpConnectorFactory() { }
 	
 	/**
 	 * Returns the single httpClient for this application to use.

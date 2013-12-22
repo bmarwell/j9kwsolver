@@ -23,9 +23,22 @@ import de.bmarwell.j9kwsolver.request.UserBalance;
  * This class will build URIs based on the request objects.
  * @author Benjamin Marwell
  */
-public class RequestToURI {
+public final class RequestToURI {
+	/**
+	 * The logger instance for this class.
+	 */
 	static final Logger LOG = LoggerFactory.getLogger(RequestToURI.class); 
+	
+	/**
+	 * Empty private default constructor for utility class RequestToURI.
+	 */
+	private RequestToURI() { }
 
+	/**
+	 * Returns the URI for requesting the server status.
+	 * @param sc the URI for requesting the server status.
+	 * @return the URI for requesting the server status.
+	 */
 	public static URI serverStatusToURI(final ServerCheck sc) {
 		URI uri = null;
 		

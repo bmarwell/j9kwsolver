@@ -88,11 +88,6 @@ public final class ResponseUtils {
 		return result;
 	}
 	
-	public static Map<String, String> stringResponseToStringMap(final String response) {
-		// TODO: mock
-		return null;
-	}
-
 	/**
 	 * @param response the response sent by the server.
 	 * @return the response of the server for solving a captcha.

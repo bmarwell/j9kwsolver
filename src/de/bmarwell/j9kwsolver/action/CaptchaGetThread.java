@@ -89,7 +89,7 @@ public class CaptchaGetThread implements Callable<Captcha> {
 		 * Check if OK came
 		 */
 		LOG.debug("Server accept response: {}.", responseBody);
-		if(StringUtils.isEmpty(responseBody)) {
+		if (StringUtils.isEmpty(responseBody)) {
 			/* Empty answer: probably server error */
 			accepted = false;
 		} else if (StringUtils.containsIgnoreCase(responseBody, "ok")) {
