@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2012, Benjamin Marwell.  This file is
+ * Copyright (c) 2013, Benjamin Marwell.  This file is
  * licensed under the Affero General Public License version 3 or later.  See
  * the COPYRIGHT file.
  */
@@ -17,7 +17,7 @@ public class BooleanUtils10 {
 	 * @param bool - a boolean.
 	 * @return either 0 or 1.
 	 */
-	public static String toIntegerString(boolean bool) {
+	public static String toIntegerString(final boolean bool) {
 		int boolint = BooleanUtils.toInteger(bool);
 		
 		return Integer.toString(boolint);
