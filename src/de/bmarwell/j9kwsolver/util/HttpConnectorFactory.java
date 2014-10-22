@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
  * @author Benjamin Marwell
  * This class will return various connectors, which might prove useful.
  */
-public class HttpConnectorFactory {
+public final class HttpConnectorFactory {
 	/**
 	 * Default connect timeout.
 	 */
@@ -32,7 +32,13 @@ public class HttpConnectorFactory {
 	 * Default socket timeout.
 	 */
 	private static final int SOCKET_TIMEOUT_MS = 30000;
+	/**
+	 * Logger instance for this class.
+	 */
 	private static final Logger LOG = LoggerFactory.getLogger(HttpConnectorFactory.class);
+	/**
+	 * The httpClient object for this application / API.
+	 */
 	private static CloseableHttpClient httpClient;
 	
 	static {
@@ -50,6 +56,11 @@ public class HttpConnectorFactory {
 	}
 	
 	/**
+	 * Empty private default constructor for utility class HttpConnectorFactory.
+	 */
+	private HttpConnectorFactory() { }
+	
+	/**
 	 * Returns the single httpClient for this application to use.
 	 * @return the httpClient to be used for requests.
 	 */
@@ -57,12 +68,21 @@ public class HttpConnectorFactory {
 		return httpClient;
 	}
 	
+	/**
+	 * Shuts down the connector instance, if open.
+	 * @return true if connection could be closed.
+	 */
 	public static boolean shutdownConnector() {
 		IOUtils.closeQuietly(httpClient);
 		
 		return true;
 	}
 	
+	/**
+	 * Returns the Body from the URI via http request.
+	 * @param uri the URI to get the body from.
+	 * @return the Body as String.
+	 */
 	public static String getBodyFromRequest(final URI uri) {
 		CloseableHttpResponse response = null;
 		String responseBody = null;
@@ -77,8 +97,6 @@ public class HttpConnectorFactory {
 			responseBody = writer.toString();
 		} catch (IOException e) {
 			LOG.error("Fehler beim HTTP Request!", e);
-		} finally {
-//			IOUtils.closeQuietly(httpclient);
 		}
 		
 		return responseBody;

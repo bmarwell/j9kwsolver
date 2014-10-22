@@ -21,9 +21,9 @@ import org.slf4j.LoggerFactory;
 import de.bmarwell.j9kwsolver.domain.Captcha;
 import de.bmarwell.j9kwsolver.request.CaptchaGet;
 import de.bmarwell.j9kwsolver.request.CaptchaNewOk;
-import de.bmarwell.j9kwsolver.request.CaptchaReturn;
-import de.bmarwell.j9kwsolver.request.CaptchaReturnExtended;
 import de.bmarwell.j9kwsolver.request.CaptchaShow;
+import de.bmarwell.j9kwsolver.response.CaptchaReturn;
+import de.bmarwell.j9kwsolver.response.CaptchaReturnExtended;
 import de.bmarwell.j9kwsolver.service.PropertyService;
 import de.bmarwell.j9kwsolver.util.HttpConnectorFactory;
 import de.bmarwell.j9kwsolver.util.RequestToURI;
@@ -89,7 +89,7 @@ public class CaptchaGetThread implements Callable<Captcha> {
 		 * Check if OK came
 		 */
 		LOG.debug("Server accept response: {}.", responseBody);
-		if(StringUtils.isEmpty(responseBody)) {
+		if (StringUtils.isEmpty(responseBody)) {
 			/* Empty answer: probably server error */
 			accepted = false;
 		} else if (StringUtils.containsIgnoreCase(responseBody, "ok")) {
