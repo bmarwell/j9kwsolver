@@ -1,6 +1,9 @@
 j9kwsolver
 ==========
 
+## Build Status
+[![Build Status](https://travis-ci.org/bmhm/j9kwsolver.svg?branch=next)](https://travis-ci.org/bmhm/j9kwsolver)
+
 An Open Source solver tool for 9kw.eu captcha service.
 
 ## Goal
