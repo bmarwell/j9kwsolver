@@ -5,18 +5,18 @@
  */
 package de.bmarwell.j9kwsolver;
 
-import java.net.URI;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import de.bmarwell.j9kwsolver.response.UserBalance;
+import de.bmarwell.j9kwsolver.service.PropertyService;
 
-import org.apache.commons.lang3.math.NumberUtils;
+import org.immutables.gson.stream.GsonMessageBodyProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.bmarwell.j9kwsolver.request.UserBalance;
-import de.bmarwell.j9kwsolver.service.PropertyService;
-import de.bmarwell.j9kwsolver.util.HttpConnectorFactory;
-import de.bmarwell.j9kwsolver.util.RequestToURI;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  * An API for retrieving user information.
@@ -24,67 +24,39 @@ import de.bmarwell.j9kwsolver.util.RequestToURI;
  *
  */
 public final class J9kwUserAPI {
-	private static final Logger LOG = LoggerFactory.getLogger(J9kwUserAPI.class);
-	private static Lock httpLock = new ReentrantLock();
-	
-	/**
-	 * Empty hidden default constructor.
-	 */
-	private J9kwUserAPI() {}
-	
-	
-	
-	/**
-	 * Locks the instance.
-	 */
-	private void lock() {
-		httpLock.lock();
-	}
-	
-	/**
-	 * unlocks the instance.
-	 */
-	private void unlock() {
-		httpLock.unlock();
-	}
-	
-	/**
-	 * Gets the apikey users's balance.
-	 * @return - the balance in credits.
-	 */
-	public int getBalance() {
-		int balance = -1;
-		
-		UserBalance ub = new UserBalance();
-		ub.setApikey(PropertyService.getProperty("apikey"));
-		
-		lock();
-		URI scuri = RequestToURI.userBalanceToURI(ub);
-		String userbalanceresponse = HttpConnectorFactory.getBodyFromRequest(scuri);
-		LOG.debug("User credits as String: {}.", userbalanceresponse);
-		unlock();
-		
-		if (NumberUtils.isDigits(userbalanceresponse)) {
-			balance = NumberUtils.toInt(userbalanceresponse);
-			LOG.debug("User credits as int: {}.", balance);
-		}
-		
-		return balance;
-	}
-	
-	/**
-	 * Returns the only instance of this api.
-	 * @return instance of this API.
-	 */
-	public static J9kwUserAPI getInstance() {
-		return SingletonHolder.instance;
-	}
-	
-	/**
-	 * @author Benjamin Marwell
-	 *
-	 */
-	private static class SingletonHolder {
-		private static J9kwUserAPI instance = new J9kwUserAPI();
-	}
+  private static final Logger LOG = LoggerFactory.getLogger(J9kwUserAPI.class);
+
+  private static final String J9KW_SERVER_HOST = "https://www.9kw.eu";
+
+  private static final String J9KW_BALANCE_PATH = "index.cgi";
+
+  /**
+   * Gets the apikey users's balance.
+   *
+   * @return - the balance in credits.
+   */
+  public UserBalance getBalance() {
+    Client client = ClientBuilder.newBuilder()
+        .register(new GsonMessageBodyProvider())
+        .build();
+
+    WebTarget target = client
+        .target(J9KW_SERVER_HOST)
+        .path(J9KW_BALANCE_PATH)
+        .queryParam("action", "usercaptchaguthaben")
+        .queryParam("apikey", PropertyService.getProperty("apikey"))
+        .queryParam("json", "1");
+
+    Response response = target
+        .request(MediaType.APPLICATION_JSON_TYPE)
+        .accept(MediaType.APPLICATION_JSON)
+        .get();
+
+    UserBalance userBalance = response.readEntity(UserBalance.class);
+
+    LOG.debug("UserBalance: [{}].", userBalance);
+
+    return userBalance;
+  }
+
 }

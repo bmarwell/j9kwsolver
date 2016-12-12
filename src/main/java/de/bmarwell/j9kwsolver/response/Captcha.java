@@ -1,5 +1,5 @@
 package de.bmarwell.j9kwsolver.response;
 
-public interface CaptchaSolutionResponse {
+public interface Captcha {
 
 }

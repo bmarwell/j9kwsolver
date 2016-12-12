@@ -5,39 +5,35 @@
  */
 package de.bmarwell.j9kwsolver.response;
 
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import com.google.gson.annotations.SerializedName;
+
+import org.immutables.gson.Gson;
+import org.immutables.value.Value;
 
 /**
  * Server response object for server status.
  * @author Benjamin Marwell
  *
  */
-public class ServerStatus {
-	private int worker;
-	private int inwork;
-	private int queue;
-	
-	public int getWorker() {
-		return worker;
-	}
-	public void setWorker(final int pWorker) {
-		this.worker = pWorker;
-	}
-	public int getInwork() {
-		return inwork;
-	}
-	public void setInwork(final int pInwork) {
-		this.inwork = pInwork;
-	}
-	public int getQueue() {
-		return queue;
-	}
-	public void setQueue(final int pQueue) {
-		this.queue = pQueue;
-	}
-	
-	public String toString() {
-		return ReflectionToStringBuilder.toString(this);
-	}
-	
+@Value.Immutable
+@Gson.TypeAdapters
+public interface ServerStatus {
+
+  @SerializedName("worker")
+  int worker();
+
+  @SerializedName("inwork")
+  int inwork();
+
+  @SerializedName("queue")
+  int queue();
+
+  @SerializedName("queue1")
+  int queue1();
+
+  @SerializedName("queue2")
+  int queue2();
+
+  @SerializedName("useronline")
+  int useronline();
 }

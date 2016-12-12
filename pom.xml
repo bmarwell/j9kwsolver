@@ -4,7 +4,7 @@
 
   <groupId>j9kwsolver</groupId>
   <artifactId>j9kwsolver</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.0.0-SNAPSHOT</version>
   <description>Solver GUI for 9kw captcha service</description>
 
   <build>
@@ -21,21 +21,36 @@
   </build>
 
   <dependencies>
+
+    <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
     <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient</artifactId>
-      <version>4.3.1</version>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>20.0</version>
     </dependency>
+
+
+    <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-client -->
     <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <version>3.1</version>
+      <groupId>org.glassfish.jersey.core</groupId>
+      <artifactId>jersey-client</artifactId>
+      <version>2.25</version>
     </dependency>
+
+
     <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>2.4</version>
+      <groupId>org.immutables</groupId>
+      <artifactId>value</artifactId>
+      <version>2.3.9</version>
+      <scope>provided</scope>
     </dependency>
+    <!-- implies gson -->
+    <dependency>
+      <groupId>org.immutables</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.3.9</version>
+    </dependency>
+
 
     <!-- Logging -->
     <dependency>
@@ -50,13 +65,12 @@
       <version>1.1.8</version>
     </dependency>
 
-
     <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpcore</artifactId>
-      <version>4.3</version>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
     </dependency>
-
   </dependencies>
 
   <properties>
