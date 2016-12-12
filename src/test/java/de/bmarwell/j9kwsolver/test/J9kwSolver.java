@@ -125,7 +125,7 @@ public class J9kwSolver {
   /**
    * Call to J9kwServerAPI.getServerStatus().
    *
-   * @see {@link J9kwServerAPI#getServerStatus()}
+   * @see J9kwServerAPI#getServerStatus()
    * @return the Server status object or null, if unretrievable.
    */
   public static ServerStatus getServerStatus() {
