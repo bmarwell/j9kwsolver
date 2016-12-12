@@ -7,6 +7,7 @@ package de.bmarwell.j9kwsolver;
 
 import de.bmarwell.j9kwsolver.response.UserBalance;
 import de.bmarwell.j9kwsolver.service.PropertyService;
+import de.bmarwell.j9kwsolver.service.ResponseSanitizer;
 
 import org.immutables.gson.stream.GsonMessageBodyProvider;
 import org.slf4j.Logger;
@@ -24,7 +25,7 @@ import javax.ws.rs.core.Response;
  *
  */
 public final class J9kwUserAPI {
-  private static final Logger LOG = LoggerFactory.getLogger(J9kwUserAPI.class);
+  public static final Logger LOG = LoggerFactory.getLogger(J9kwUserAPI.class);
 
   private static final String J9KW_SERVER_HOST = "https://www.9kw.eu";
 
@@ -53,6 +54,8 @@ public final class J9kwUserAPI {
         .request(MediaType.APPLICATION_JSON_TYPE)
         .accept(MediaType.APPLICATION_JSON)
         .get();
+
+    ResponseSanitizer.sanitizeResponse(response);
 
     LOG.debug("Response: [{}].", response);
     LOG.debug("MT: [{}].", response.getMediaType());
