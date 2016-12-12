@@ -25,3 +25,8 @@ local.properties
 # PDT-specific
 .buildpath
 /saved.png
+
+# eclipse
+.classpath
+.settings/
+.surefire-*
