@@ -30,3 +30,4 @@ local.properties
 .classpath
 .settings/
 .surefire-*
+.project
