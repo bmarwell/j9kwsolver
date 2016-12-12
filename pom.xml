@@ -5,76 +5,18 @@
   <groupId>j9kwsolver</groupId>
   <artifactId>j9kwsolver</artifactId>
   <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
   <description>Solver GUI for 9kw captcha service</description>
 
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.1</version>
-        <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
-
-  <dependencies>
-
-    <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>20.0</version>
-    </dependency>
-
-
-    <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-client -->
-    <dependency>
-      <groupId>org.glassfish.jersey.core</groupId>
-      <artifactId>jersey-client</artifactId>
-      <version>2.25</version>
-    </dependency>
-
-
-    <dependency>
-      <groupId>org.immutables</groupId>
-      <artifactId>value</artifactId>
-      <version>2.3.9</version>
-      <scope>provided</scope>
-    </dependency>
-    <!-- implies gson -->
-    <dependency>
-      <groupId>org.immutables</groupId>
-      <artifactId>gson</artifactId>
-      <version>2.3.9</version>
-    </dependency>
-
-
-    <!-- Logging -->
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>${dependency.slf4j.version}</version>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>1.1.8</version>
-    </dependency>
-
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.12</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+  <modules>
+    <module>j9kwsolver-api</module>
+    <module>j9kwsolver-gui</module>
+  </modules>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>1.8</maven.compiler.source>
 
     <dependency.slf4j.version>1.7.21</dependency.slf4j.version>
   </properties>
