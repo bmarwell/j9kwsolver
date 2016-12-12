@@ -10,6 +10,7 @@
 
   <modules>
     <module>j9kwsolver-api</module>
+    <module>j9kwsolver-lib</module>
     <module>j9kwsolver-gui</module>
   </modules>
 

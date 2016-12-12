@@ -1,6 +1,6 @@
 package de.bmarwell.j9kwsolver.test;
 
-import de.bmarwell.j9kwsolver.J9kwServerAPI;
+import de.bmarwell.j9kwsolver.DefaultJ9kwServer;
 import de.bmarwell.j9kwsolver.response.ServerStatus;
 
 import org.junit.Assert;
@@ -10,7 +10,7 @@ public class ServerStatusTest {
 
   @Test
   public void testServerStatus() {
-    J9kwServerAPI j9kwServerAPI = new J9kwServerAPI();
+    DefaultJ9kwServer j9kwServerAPI = new DefaultJ9kwServer();
 
     ServerStatus serverStatus = j9kwServerAPI.getServerStatus();
 

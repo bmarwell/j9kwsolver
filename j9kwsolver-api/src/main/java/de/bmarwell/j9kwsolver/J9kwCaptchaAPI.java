@@ -24,7 +24,7 @@ public interface J9kwCaptchaAPI {
    *
    * @param tryLoop
    *          - set yes to loop until captcha is received.
-   * @return a captcha or null if none received (only possible with <code>tryLoop=false</code>.
+   * @return a captcha.
    */
   CompletableFuture<Captcha> getNewCaptcha(final boolean tryLoop);
 

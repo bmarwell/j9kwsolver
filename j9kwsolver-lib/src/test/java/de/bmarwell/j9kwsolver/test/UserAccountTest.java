@@ -1,6 +1,6 @@
 package de.bmarwell.j9kwsolver.test;
 
-import de.bmarwell.j9kwsolver.J9kwUserAPI;
+import de.bmarwell.j9kwsolver.DefaultJ9kwUser;
 import de.bmarwell.j9kwsolver.response.UserBalance;
 
 import org.junit.Assert;
@@ -17,7 +17,7 @@ public class UserAccountTest {
 
   @Test
   public void getBalanceTest() {
-    J9kwUserAPI j9kwUserAPI = new J9kwUserAPI();
+    DefaultJ9kwUser j9kwUserAPI = new DefaultJ9kwUser();
 
     UserBalance balance = j9kwUserAPI.getBalance();
 

@@ -9,19 +9,27 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>j9kwsolver-api</artifactId>
+  <artifactId>j9kwsolver-lib</artifactId>
   <packaging>jar</packaging>
   <name>j9kwsover-api</name>
-  <description>Solver for 9kw captcha service</description>
+  <description>Solver implementation for 9kw captcha service</description>
 
   <dependencies>
-
     <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
       <version>20.0</version>
     </dependency>
+
+
+    <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-client -->
+    <dependency>
+      <groupId>org.glassfish.jersey.core</groupId>
+      <artifactId>jersey-client</artifactId>
+      <version>2.25</version>
+    </dependency>
+
 
     <dependency>
       <groupId>org.immutables</groupId>
@@ -48,7 +56,6 @@
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
       <version>1.1.8</version>
-      <scope>test</scope>
     </dependency>
 
     <dependency>
@@ -56,6 +63,11 @@
       <artifactId>junit</artifactId>
       <version>4.12</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>j9kwsolver</groupId>
+      <artifactId>j9kwsolver-api</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
     </dependency>
   </dependencies>
 

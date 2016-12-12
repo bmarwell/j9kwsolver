@@ -22,23 +22,17 @@ import javax.ws.rs.core.Response;
  *
  * @author Benjamin Marwell
  */
-public final class J9kwServerAPI {
+public final class DefaultJ9kwServer implements J9kwServerApi {
   /**
    * The Logger of this class.
    */
-  private static final Logger LOG = LoggerFactory.getLogger(J9kwServerAPI.class);
+  private static final Logger LOG = LoggerFactory.getLogger(DefaultJ9kwServer.class);
 
   private static final String J9KW_SERVER_HOST = "https://www.9kw.eu";
   private static final String J9KW_STATUS_PATH = "grafik/servercheck.json";
 
-  public J9kwServerAPI() {
-  }
 
-  /**
-   * Gives the state of the 9kw-Server as an java object.
-   *
-   * @return ServerState Object or null, if State could not be determined.
-   */
+  @Override
   public ServerStatus getServerStatus() {
     Client client = ClientBuilder.newBuilder()
         .register(new GsonMessageBodyProvider())

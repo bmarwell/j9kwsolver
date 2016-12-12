@@ -24,18 +24,14 @@ import javax.ws.rs.core.Response;
  * @author Benjamin Marwell
  *
  */
-public final class J9kwUserAPI {
-  public static final Logger LOG = LoggerFactory.getLogger(J9kwUserAPI.class);
+public final class DefaultJ9kwUser implements J9kwUserApi {
+  public static final Logger LOG = LoggerFactory.getLogger(DefaultJ9kwUser.class);
 
   private static final String J9KW_SERVER_HOST = "https://www.9kw.eu";
 
   private static final String J9KW_BALANCE_PATH = "index.cgi";
 
-  /**
-   * Gets the apikey users's balance.
-   *
-   * @return - the balance in credits.
-   */
+  @Override
   public UserBalance getBalance() {
     Client client = ClientBuilder.newBuilder()
         .register(new GsonMessageBodyProvider())
