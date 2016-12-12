@@ -3,11 +3,12 @@ j9kwsolver
 
 ## Build Status
 [![Build Status](https://travis-ci.org/bmhm/j9kwsolver.svg?branch=next)](https://travis-ci.org/bmhm/j9kwsolver)
+**Broken**, because the json interface of 9kw is just awful at the moment. Return type is often text/html, png is being sent as binary data.
 
 An Open Source solver tool for 9kw.eu captcha service.
 
 ## Goal
-Providing a stable, open source, Java API for 9kw captcha service.  
+Providing a stable, open source, Java API for 9kw captcha service.
 A GUI might be added some time later (v2.0 or so).
 
 ## Features
@@ -19,15 +20,14 @@ A GUI might be added some time later (v2.0 or so).
 ## Usage
 
 ### APIKEY
-To use your `apikey`, use this command:  
-`$ echo "apikey" > ~/.config/j9kwsolver/apikey`  
+To use your `apikey`, use this command:
+`$ echo "apikey" > ~/.config/j9kwsolver/apikey`
 
 ### Startup
-None at the moment, really. You can compile this in eclipse
-and execute `java de.bmarwell.j9kwsolver.test.J9kwSolver.class -Ddebug=true`
-to see if it works for you. It's command line only at the moment.
+GUI was removed for version 1.0.0.
+Transition to multi module project immanent.
 
 ## Sources
-See [9kw API](http://www.9kw.eu/api.html#apisolve-tab "9kw API solve") 
+See [9kw API](http://www.9kw.eu/api.html#apisolve-tab "9kw API solve")
 for more information.
 

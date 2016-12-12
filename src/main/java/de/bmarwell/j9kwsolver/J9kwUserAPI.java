@@ -47,11 +47,15 @@ public final class J9kwUserAPI {
         .queryParam("apikey", PropertyService.getProperty("apikey"))
         .queryParam("json", "1");
 
+    LOG.debug("Target: [{}].", target);
+
     Response response = target
         .request(MediaType.APPLICATION_JSON_TYPE)
         .accept(MediaType.APPLICATION_JSON)
         .get();
 
+    LOG.debug("Response: [{}].", response);
+    LOG.debug("MT: [{}].", response.getMediaType());
     UserBalance userBalance = response.readEntity(UserBalance.class);
 
     LOG.debug("UserBalance: [{}].", userBalance);

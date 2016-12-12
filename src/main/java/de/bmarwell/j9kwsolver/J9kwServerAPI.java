@@ -21,7 +21,6 @@ import javax.ws.rs.core.Response;
  * An API for receiving server information.
  *
  * @author Benjamin Marwell
- *
  */
 public final class J9kwServerAPI {
   /**
@@ -51,6 +50,8 @@ public final class J9kwServerAPI {
         .accept(MediaType.APPLICATION_JSON)
         .get();
 
+    LOG.debug("Response: [{}].", response);
+    LOG.debug("MT: [{}].", response.getMediaType());
     ServerStatus serverStatus = response.readEntity(ServerStatus.class);
 
     LOG.debug("ServerStatus: [{}].", serverStatus);
