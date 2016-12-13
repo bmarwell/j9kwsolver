@@ -3,8 +3,9 @@
  * licensed under the Affero General Public License version 3 or later. See
  * the COPYRIGHT file.
  */
-package de.bmarwell.j9kwsolver;
+package de.bmarwell.j9kwsolver.lib;
 
+import de.bmarwell.j9kwsolver.J9kwServerApi;
 import de.bmarwell.j9kwsolver.response.ServerStatus;
 
 import org.immutables.gson.stream.GsonMessageBodyProvider;

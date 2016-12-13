@@ -1,6 +1,6 @@
-package de.bmarwell.j9kwsolver.service;
+package de.bmarwell.j9kwsolver.lib.service;
 
-import de.bmarwell.j9kwsolver.DefaultJ9kwUser;
+import de.bmarwell.j9kwsolver.lib.DefaultJ9kwUser;
 
 import javax.ws.rs.core.Response;
 

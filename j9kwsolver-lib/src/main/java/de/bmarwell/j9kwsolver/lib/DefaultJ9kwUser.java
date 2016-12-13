@@ -3,11 +3,12 @@
  * licensed under the Affero General Public License version 3 or later.  See
  * the COPYRIGHT file.
  */
-package de.bmarwell.j9kwsolver;
+package de.bmarwell.j9kwsolver.lib;
 
+import de.bmarwell.j9kwsolver.J9kwUserApi;
+import de.bmarwell.j9kwsolver.lib.service.PropertyService;
+import de.bmarwell.j9kwsolver.lib.service.ResponseSanitizer;
 import de.bmarwell.j9kwsolver.response.UserBalance;
-import de.bmarwell.j9kwsolver.service.PropertyService;
-import de.bmarwell.j9kwsolver.service.ResponseSanitizer;
 
 import org.immutables.gson.stream.GsonMessageBodyProvider;
 import org.slf4j.Logger;
@@ -31,6 +32,12 @@ public final class DefaultJ9kwUser implements J9kwUserApi {
 
   private static final String J9KW_BALANCE_PATH = "index.cgi";
 
+  private PropertyService propertyService;
+
+  public DefaultJ9kwUser(final PropertyService propertyService) {
+    this.propertyService = propertyService;
+  }
+
   @Override
   public UserBalance getBalance() {
     Client client = ClientBuilder.newBuilder()
@@ -41,7 +48,7 @@ public final class DefaultJ9kwUser implements J9kwUserApi {
         .target(J9KW_SERVER_HOST)
         .path(J9KW_BALANCE_PATH)
         .queryParam("action", "usercaptchaguthaben")
-        .queryParam("apikey", PropertyService.getProperty("apikey"))
+        .queryParam("apikey", propertyService.getApiKey())
         .queryParam("json", "1");
 
     LOG.debug("Target: [{}].", target);
