@@ -6,8 +6,8 @@
 package de.bmarwell.j9kwsolver;
 
 import de.bmarwell.j9kwsolver.request.CaptchaSolution;
-import de.bmarwell.j9kwsolver.response.RequestCaptchaResponse;
 import de.bmarwell.j9kwsolver.response.CaptchaSolutionResponse;
+import de.bmarwell.j9kwsolver.response.RequestCaptchaResponse;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -29,6 +29,8 @@ public interface J9kwCaptchaAPI {
   CompletableFuture<RequestCaptchaResponse> getNewCaptcha(final boolean tryLoop);
 
   /**
+   * Submit a solved captcha.
+   * 
    * @param solution
    *          the solution object provided by user input.
    * @return the Future object which holds the request.

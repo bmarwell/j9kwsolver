@@ -3,7 +3,6 @@ package de.bmarwell.j9kwsolver.gui;
 import de.bmarwell.j9kwsolver.J9kwCaptchaAPI;
 import de.bmarwell.j9kwsolver.J9kwServerApi;
 import de.bmarwell.j9kwsolver.J9kwUserApi;
-import de.bmarwell.j9kwsolver.api.domain.Captcha;
 import de.bmarwell.j9kwsolver.lib.DefaultJ9kwCaptcha;
 import de.bmarwell.j9kwsolver.lib.DefaultJ9kwServer;
 import de.bmarwell.j9kwsolver.lib.DefaultJ9kwUser;
@@ -59,13 +58,8 @@ public class J9kwSolverGui {
 
     captcha = getCaptcha();
 
-    if (captcha == null) {
-      LOG.debug("No captcha received.");
-      return;
-    }
-
-    LOG.debug("Captcha received!");
-    String solution = getCaptchaSolution(null);
+    LOG.debug("Captcha received! [{}].", captcha);
+    String solution = getCaptchaSolution(captcha);
 
     if (captcha != null) {
       solveCaptcha(captcha, solution);
@@ -88,7 +82,7 @@ public class J9kwSolverGui {
     J9kwCaptchaAPI jca = new DefaultJ9kwCaptcha(propertyService);
 
     try {
-      while (!captcha.isPresent() || "NO CAPTCHA".equals(captcha.get().message())) {
+      while (!captcha.isPresent() || captcha.get().message().isPresent()) {
         LOG.debug("Getting next captcha.");
         captcha = Optional.ofNullable(jca.getNewCaptcha(true).get());
         LOG.debug("Gotten captcha: [{}].", captcha.orElseGet(() -> null));
@@ -148,7 +142,7 @@ public class J9kwSolverGui {
    *          the Captcha object to be solved.
    * @return the user entered solution as String object.
    */
-  private String getCaptchaSolution(final Captcha captcha) {
+  private String getCaptchaSolution(final RequestCaptchaResponse captcha) {
     /* Show image */
     J9kwShowImage display = new J9kwShowImage();
     String solution = display.show(captcha);

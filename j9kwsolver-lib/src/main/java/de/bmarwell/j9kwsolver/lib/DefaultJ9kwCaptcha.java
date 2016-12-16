@@ -53,6 +53,8 @@ public final class DefaultJ9kwCaptcha implements J9kwCaptchaAPI {
         .queryParam("extended", "1")
         // file data integrated in json.
         .queryParam("filedata", "1")
+        .queryParam("base64", "1")
+        .queryParam("debug", "1")
         .queryParam("json", "1");
 
     LOG.debug("Target: [{}].", target);

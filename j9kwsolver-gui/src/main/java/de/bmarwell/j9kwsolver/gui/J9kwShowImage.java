@@ -1,6 +1,6 @@
 package de.bmarwell.j9kwsolver.gui;
 
-import de.bmarwell.j9kwsolver.api.domain.Captcha;
+import de.bmarwell.j9kwsolver.response.RequestCaptchaResponse;
 
 import com.google.common.base.Preconditions;
 
@@ -9,7 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 public class J9kwShowImage {
-  public String show(final Captcha captcha) {
+  public String show(final RequestCaptchaResponse captcha) {
     Preconditions.checkNotNull(captcha, "captcha in show().");
     String solution = null;
 
