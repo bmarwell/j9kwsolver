@@ -1,57 +1,49 @@
 /**
- * Copyright (c) 2013, Benjamin Marwell.  This file is
- * licensed under the Affero General Public License version 3 or later.  See
- * the COPYRIGHT file.
+ * J9KW Solver Library
+ * Copyright (C) 2016, j9kwsolver contributors.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ *
  */
 package de.bmarwell.j9kwsolver.lib.service;
 
-import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
+import com.google.common.base.Preconditions;
 
 import org.immutables.value.Value;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
  * Property Singleton Service.
- *
- * @author Benjamin Marwell
- *
  */
 @Value.Immutable
-public abstract class PropertyService {
-  /**
-   * The logger instance for this utility class.
-   */
-  private static final Logger LOG = LoggerFactory.getLogger(PropertyService.class);
+public interface PropertyService {
+  String getApiKey();
 
-  private Config config;
-
-  public PropertyService() {
-    LOG.debug("Loading config: [{}]", System.getProperty("config.file"));
-    config = ConfigFactory.load();
-  }
-
-  public Config getConfig() {
-    return this.config;
-  }
-
-  public String getApiKey() {
-    return config.getString("apikey");
-  }
-
-  public String getToolName() {
+  default String getToolName() {
     return "j9kwsolver";
   }
 
-  public String getDebug() {
-    return config.getString("debug");
+  boolean getDebug();
+
+  @Value.Derived
+  default int getDebugAsInt() {
+    return getDebug() ? 1 : 0;
   }
 
   @Value.Check
-  public void check() {
-    config.getValue("apikey");
-    config.getValue("debug");
+  default void check() {
+    Preconditions.checkState(!getApiKey().isEmpty());
   }
 }
