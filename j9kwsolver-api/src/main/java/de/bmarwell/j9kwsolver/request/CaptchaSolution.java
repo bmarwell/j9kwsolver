@@ -2,6 +2,8 @@ package de.bmarwell.j9kwsolver.request;
 
 import de.bmarwell.j9kwsolver.Constants;
 
+import com.google.common.base.Preconditions;
+
 import org.immutables.gson.Gson;
 import org.immutables.value.Value;
 
@@ -19,7 +21,7 @@ public interface CaptchaSolution {
     return 1;
   }
 
-  String id();
+  int id();
 
   /**
    * @return the solution.
@@ -40,6 +42,12 @@ public interface CaptchaSolution {
 
   default int extended() {
     return 1;
+  }
+
+  @Value.Check
+  default void check() {
+    Preconditions.checkState(!captcha().isEmpty());
+    Preconditions.checkState(id() != 0);
   }
 
   public static ImmutableCaptchaSolution.Builder builder() {

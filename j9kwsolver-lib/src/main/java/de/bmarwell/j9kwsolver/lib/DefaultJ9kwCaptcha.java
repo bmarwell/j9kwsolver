@@ -7,6 +7,8 @@ import de.bmarwell.j9kwsolver.request.CaptchaSolution;
 import de.bmarwell.j9kwsolver.response.CaptchaSolutionResponse;
 import de.bmarwell.j9kwsolver.response.RequestCaptchaResponse;
 
+import com.google.common.base.Preconditions;
+
 import org.immutables.gson.stream.GsonMessageBodyProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,8 +79,48 @@ public final class DefaultJ9kwCaptcha implements J9kwCaptchaAPI {
 
   @Override
   public CompletableFuture<CaptchaSolutionResponse> solveCaptcha(CaptchaSolution solution) {
-    // TODO Auto-generated method stub
-    return null;
+    Preconditions.checkNotNull(solution);
+    Preconditions.checkNotNull(solution.captcha());
+
+    return CompletableFuture
+        .supplyAsync(() -> submitCaptcha(solution));
+  }
+
+  private CaptchaSolutionResponse submitCaptcha(CaptchaSolution solution) {
+    Client client = ClientBuilder.newBuilder()
+        .register(new GsonMessageBodyProvider())
+        .build();
+
+    WebTarget target = client
+        .target(J9KW_SERVER_HOST)
+        .path(J9KW_CAPTCHA_PATH)
+        .queryParam("action", "usercaptchacorrect")
+        .queryParam("apikey", propertyService.getApiKey())
+        .queryParam("source", propertyService.getToolName())
+        .queryParam("extended", "1")
+        .queryParam("id", solution.id())
+        // this is the answer
+        .queryParam("captcha", solution.captcha())
+        .queryParam("debug", "1")
+        .queryParam("json", "1");
+
+    LOG.debug("Target: [{}].", target);
+
+    Response response = target
+        .request(MediaType.APPLICATION_JSON_TYPE)
+        .accept(MediaType.APPLICATION_JSON)
+        .get();
+
+    ResponseSanitizer.sanitizeResponse(response);
+
+    LOG.debug("Response: [{}].", response);
+    LOG.debug("MT: [{}].", response.getMediaType());
+
+    CaptchaSolutionResponse solutionResponse = response.readEntity(CaptchaSolutionResponse.class);
+
+    LOG.debug("Solution response: [{}].", solutionResponse);
+
+    return solutionResponse;
   }
 
 }

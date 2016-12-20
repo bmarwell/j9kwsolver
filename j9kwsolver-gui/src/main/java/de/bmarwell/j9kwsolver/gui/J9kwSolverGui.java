@@ -6,6 +6,7 @@ import de.bmarwell.j9kwsolver.J9kwUserApi;
 import de.bmarwell.j9kwsolver.lib.DefaultJ9kwCaptcha;
 import de.bmarwell.j9kwsolver.lib.DefaultJ9kwServer;
 import de.bmarwell.j9kwsolver.lib.DefaultJ9kwUser;
+import de.bmarwell.j9kwsolver.lib.service.ImmutablePropertyService;
 import de.bmarwell.j9kwsolver.lib.service.PropertyService;
 import de.bmarwell.j9kwsolver.request.CaptchaSolution;
 import de.bmarwell.j9kwsolver.request.ImmutableCaptchaSolution;
@@ -48,7 +49,7 @@ public class J9kwSolverGui {
   }
 
   public J9kwSolverGui() {
-    this.propertyService = new PropertyService();
+    this.propertyService = ImmutablePropertyService.builder().build();
   }
 
   private void run() {
@@ -56,7 +57,7 @@ public class J9kwSolverGui {
 
     testApiKey();
 
-    captcha = getCaptcha();
+    captcha = receiveCaptcha();
 
     LOG.debug("Captcha received! [{}].", captcha);
     String solution = getCaptchaSolution(captcha);
@@ -76,7 +77,7 @@ public class J9kwSolverGui {
    * API call to J9kwCaptchaAPI.getNewCaptcha().
    * @return the Captcha provided by 9kw.
    */
-  private RequestCaptchaResponse getCaptcha() {
+  private RequestCaptchaResponse receiveCaptcha() {
     LOG.debug("Hole neues Captcha.");
     Optional<RequestCaptchaResponse> captcha = Optional.empty();
     J9kwCaptchaAPI jca = new DefaultJ9kwCaptcha(propertyService);
@@ -114,7 +115,7 @@ public class J9kwSolverGui {
       final RequestCaptchaResponse captcha,
       final String solutionText) {
     CaptchaSolution solution = ImmutableCaptchaSolution.builder()
-        .id("")
+        .id(captcha.captchaid().get())
         .apikey(propertyService.getApiKey())
         .captcha(solutionText)
         .build();

@@ -5,14 +5,12 @@
  */
 package de.bmarwell.j9kwsolver.lib.service;
 
-import de.bmarwell.j9kwsolver.lib.err.PropertyException;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 
+import org.immutables.value.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
 
 
 /**
@@ -21,45 +19,39 @@ import java.util.Scanner;
  * @author Benjamin Marwell
  *
  */
-public final class PropertyService {
+@Value.Immutable
+public abstract class PropertyService {
   /**
    * The logger instance for this utility class.
    */
   private static final Logger LOG = LoggerFactory.getLogger(PropertyService.class);
 
-  /**
-   * Path to API KEY.
-   */
-  private static final String APIKEY_FILE_PATH = "/.config/j9kwsolver/apikey";
-
-  private final String apiKey;
-
-  private final String debug;
-
-  private final String toolname;
+  private Config config;
 
   public PropertyService() {
-    String userHome = System.getProperty("user.home");
-    LOG.debug("ApiKeyFile = {}.", userHome + APIKEY_FILE_PATH);
-    File apikeyFile = new File(userHome, APIKEY_FILE_PATH);
+    LOG.debug("Loading config: [{}]", System.getProperty("config.file"));
+    config = ConfigFactory.load();
+  }
 
-    try (Scanner in = new Scanner(apikeyFile)) {
-      this.apiKey = in.nextLine();
-    } catch (FileNotFoundException e) {
-      LOG.warn("Konnte apikey-File nicht lesen!", e);
-
-      throw new PropertyException("Could not read apikey file!", e);
-    }
-
-    this.toolname = "j9kwsolver";
-    this.debug = "1";
+  public Config getConfig() {
+    return this.config;
   }
 
   public String getApiKey() {
-    return this.apiKey;
+    return config.getString("apikey");
   }
 
   public String getToolName() {
-    return this.toolname;
+    return "j9kwsolver";
+  }
+
+  public String getDebug() {
+    return config.getString("debug");
+  }
+
+  @Value.Check
+  public void check() {
+    config.getValue("apikey");
+    config.getValue("debug");
   }
 }
