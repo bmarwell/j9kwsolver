@@ -1,4 +1,4 @@
-/**
+/*
  * J9KW Solver Library
  * Copyright (C) 2016, j9kwsolver contributors.
  *
@@ -17,7 +17,10 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
  */
+
 package de.bmarwell.j9kwsolver.lib.service;
+
+import de.bmarwell.j9kwsolver.Constants;
 
 import com.google.common.base.Preconditions;
 
@@ -32,7 +35,7 @@ public interface PropertyService {
   String getApiKey();
 
   default String getToolName() {
-    return "j9kwsolver";
+    return Constants.TOOL_NAME;
   }
 
   boolean getDebug();

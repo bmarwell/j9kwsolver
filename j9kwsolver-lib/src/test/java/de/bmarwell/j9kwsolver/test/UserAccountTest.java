@@ -1,4 +1,4 @@
-/**
+/*
  * J9KW Solver Library
  * Copyright (C) 2016, j9kwsolver contributors.
  *
