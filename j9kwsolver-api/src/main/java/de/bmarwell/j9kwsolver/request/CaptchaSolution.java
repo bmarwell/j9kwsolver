@@ -1,6 +1,6 @@
-/**
+/*
  * J9KW Solver Library
- * Copyright (C) 2016, j9kwsolver contributors.
+ * Copyright (C) 2020, j9kwsolver contributors.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,14 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- *
  */
 
 package de.bmarwell.j9kwsolver.request;
 
 import de.bmarwell.j9kwsolver.Constants;
-
-import com.google.common.base.Preconditions;
 
 import org.immutables.gson.Gson;
 import org.immutables.value.Value;
@@ -31,7 +28,7 @@ import org.immutables.value.Value;
 @Gson.TypeAdapters
 public interface CaptchaSolution {
 
-  public static final String ACTION_STRING = "usercaptchacorrect";
+  String ACTION_STRING = "usercaptchacorrect";
 
   default String action() {
     return ACTION_STRING;
@@ -66,11 +63,15 @@ public interface CaptchaSolution {
 
   @Value.Check
   default void check() {
-    Preconditions.checkState(!captcha().isEmpty());
-    Preconditions.checkState(id() != 0);
+    if (captcha().isEmpty()) {
+      throw new IllegalArgumentException("Captcha is empty!");
+    }
+    if (id() == 0) {
+      throw new IllegalArgumentException("ID is 0");
+    }
   }
 
-  public static ImmutableCaptchaSolution.Builder builder() {
+  static ImmutableCaptchaSolution.Builder builder() {
     return ImmutableCaptchaSolution.builder();
   }
 }

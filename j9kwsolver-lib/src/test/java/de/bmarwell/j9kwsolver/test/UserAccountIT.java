@@ -1,6 +1,6 @@
 /*
  * J9KW Solver Library
- * Copyright (C) 2016, j9kwsolver contributors.
+ * Copyright (C) 2020, j9kwsolver contributors.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- *
  */
 
 package de.bmarwell.j9kwsolver.test;
@@ -29,18 +28,22 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class UserAccountTest {
+import java.util.UUID;
+
+public class UserAccountIT {
 
   /**
    * Logger.
    */
-  private static final Logger LOG = LoggerFactory.getLogger(UserAccountTest.class);
+  private static final Logger LOG = LoggerFactory.getLogger(UserAccountIT.class);
 
   @Test
   public void getBalanceTest() {
-    DefaultJ9kwUser j9kwUserAPI = new DefaultJ9kwUser(ImmutablePropertyService.builder().build());
+    final DefaultJ9kwUser j9kwUserAPI = new DefaultJ9kwUser(ImmutablePropertyService.builder()
+        .apiKey(UUID.randomUUID().toString())
+        .build());
 
-    UserBalance balance = j9kwUserAPI.getBalance();
+    final UserBalance balance = j9kwUserAPI.getBalance();
 
     LOG.debug("Balance: [{}].", balance);
 

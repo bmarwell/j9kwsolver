@@ -1,11 +1,30 @@
+<!--
+  ~ J9KW Solver Library
+  ~ Copyright (C) 2020, j9kwsolver contributors.
+  ~
+  ~ This program is free software; you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation; either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program; if not, write to the Free Software Foundation,
+  ~ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+  -->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>j9kwsolver</groupId>
     <artifactId>j9kwsolver</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.1.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
@@ -14,16 +33,12 @@
   <name>j9kwsover-gui</name>
   <description>GUI for 9kw captcha service</description>
 
+  <properties>
+    <app.main.class>de.bmarwell.j9kwsolver.gui.J9kwSolverGui</app.main.class>
+    <dependency.openjfx.version>11.0.2</dependency.openjfx.version>
+  </properties>
+
   <dependencies>
-
-    <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>20.0</version>
-    </dependency>
-
-
     <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-client -->
     <dependency>
       <groupId>org.glassfish.jersey.core</groupId>
@@ -35,8 +50,6 @@
     <dependency>
       <groupId>org.immutables</groupId>
       <artifactId>value</artifactId>
-      <version>2.3.9</version>
-      <scope>provided</scope>
     </dependency>
     <!-- implies gson -->
     <dependency>
@@ -45,18 +58,25 @@
       <version>2.3.9</version>
     </dependency>
 
-
     <!-- Logging -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
       <version>${dependency.slf4j.version}</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.slf4j/log4j-over-slf4j -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>log4j-over-slf4j</artifactId>
+      <version>${dependency.slf4j.version}</version>
+    </dependency>
+
     <!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.1.8</version>
+      <version>1.2.3</version>
+      <scope>runtime</scope>
     </dependency>
 
     <dependency>
@@ -77,7 +97,81 @@
       <artifactId>config</artifactId>
       <version>1.3.1</version>
     </dependency>
-
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>${app.main.class}</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>shade</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-shade-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>shade</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>shade</goal>
+                </goals>
+                <configuration>
+                  <transformers>
+
+                    <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                      <manifestEntries>
+                        <Main-Class>${app.main.class}</Main-Class>
+                        <X-Compile-Source-JDK>${maven.compiler.release}</X-Compile-Source-JDK>
+                        <X-Compile-Target-JDK>${maven.compiler.release}</X-Compile-Target-JDK>
+                      </manifestEntries>
+                    </transformer>
+
+                    <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+
+                    <transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+                      <resource>META-INF/LICENSE</resource>
+                      <file>target/classes/META-INF/LICENSE</file>
+                    </transformer>
+                     
+                    <transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+                      <resource>META-INF/NOTICE</resource>
+                      <file>target/classes/META-INF/NOTICE</file>
+                    </transformer>
+                     
+                     
+                    <transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+                      <resource>META-INF/DEPENDENCIES</resource>
+                      <file>target/classes/META-INF/DEPENDENCIES</file>
+                       
+                    </transformer>
+                     
+                    <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                      <resource>META-INF/cxf/bus-extensions.txt</resource>
+                    </transformer>
+
+                  </transformers>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
 </project>

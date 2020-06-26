@@ -1,6 +1,6 @@
 /*
  * J9KW Solver Library
- * Copyright (C) 2016, j9kwsolver contributors.
+ * Copyright (C) 2020, j9kwsolver contributors.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,12 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- *
  */
 
 package de.bmarwell.j9kwsolver.lib;
 
 import de.bmarwell.j9kwsolver.J9kwUserApi;
+import de.bmarwell.j9kwsolver.lib.service.BodyInterceptor;
 import de.bmarwell.j9kwsolver.lib.service.PropertyService;
 import de.bmarwell.j9kwsolver.lib.service.ResponseSanitizer;
 import de.bmarwell.j9kwsolver.response.UserBalance;
@@ -47,7 +47,7 @@ public final class DefaultJ9kwUser implements J9kwUserApi {
 
   private static final String J9KW_BALANCE_PATH = "index.cgi";
 
-  private PropertyService propertyService;
+  private final PropertyService propertyService;
 
   public DefaultJ9kwUser(final PropertyService propertyService) {
     this.propertyService = propertyService;
@@ -55,20 +55,21 @@ public final class DefaultJ9kwUser implements J9kwUserApi {
 
   @Override
   public UserBalance getBalance() {
-    Client client = ClientBuilder.newBuilder()
+    final Client client = ClientBuilder.newBuilder()
+        .register(new BodyInterceptor())
         .register(new GsonMessageBodyProvider())
         .build();
 
-    WebTarget target = client
+    final WebTarget target = client
         .target(J9KW_SERVER_HOST)
         .path(J9KW_BALANCE_PATH)
         .queryParam("action", "usercaptchaguthaben")
-        .queryParam("apikey", propertyService.getApiKey())
+        .queryParam("apikey", this.propertyService.getApiKey())
         .queryParam("json", "1");
 
     LOG.debug("Target: [{}].", target);
 
-    Response response = target
+    final Response response = target
         .request(MediaType.APPLICATION_JSON_TYPE)
         .accept(MediaType.APPLICATION_JSON)
         .get();
@@ -77,7 +78,7 @@ public final class DefaultJ9kwUser implements J9kwUserApi {
 
     LOG.debug("Response: [{}].", response);
     LOG.debug("MT: [{}].", response.getMediaType());
-    UserBalance userBalance = response.readEntity(UserBalance.class);
+    final UserBalance userBalance = response.readEntity(UserBalance.class);
 
     LOG.debug("UserBalance: [{}].", userBalance);
 

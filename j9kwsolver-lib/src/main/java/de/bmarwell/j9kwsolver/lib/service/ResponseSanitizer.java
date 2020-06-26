@@ -1,6 +1,6 @@
 /*
  * J9KW Solver Library
- * Copyright (C) 2016, j9kwsolver contributors.
+ * Copyright (C) 2020, j9kwsolver contributors.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- *
  */
 
 package de.bmarwell.j9kwsolver.lib.service;
@@ -38,12 +37,11 @@ public final class ResponseSanitizer {
   /**
    * Fixes the content type.
    *
-   * @param response
-   *          the response to sanitize.
+   * @param response the response to sanitize.
    * @return the modified response for method chaining.
    */
-  public static Response sanitizeResponse(Response response) {
-    String contentType = (String) response.getHeaders().getFirst("Content-Type");
+  public static Response sanitizeResponse(final Response response) {
+    final String contentType = (String) response.getHeaders().getFirst("Content-Type");
 
     LOG.debug("Headers: [{}].", response.getHeaders());
 

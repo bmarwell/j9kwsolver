@@ -1,10 +1,29 @@
+<!--
+  ~ J9KW Solver Library
+  ~ Copyright (C) 2020, j9kwsolver contributors.
+  ~
+  ~ This program is free software; you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation; either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program; if not, write to the Free Software Foundation,
+  ~ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+  -->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>j9kwsolver</groupId>
   <artifactId>j9kwsolver</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <description>Solver GUI for 9kw captcha service</description>
 
@@ -16,9 +35,399 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.target>1.8</maven.compiler.target>
-    <maven.compiler.source>1.8</maven.compiler.source>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-    <dependency.slf4j.version>1.7.21</dependency.slf4j.version>
+    <!-- jdk needed to compile sources -->
+    <jdk.version>11</jdk.version>
+    <!-- target bytecode (i.e. will run on) -->
+    <java.version>11</java.version>
+    <maven.compiler.release>${java.version}</maven.compiler.release>
+
+    <!--suppress UnresolvedMavenProperty -->
+    <project.buildasset.dir>${maven.multiModuleProjectDirectory}/build</project.buildasset.dir>
+    <checkstyle.header.file>${project.buildasset.dir}/header.txt</checkstyle.header.file>
+
+    <!-- default fork arguments. -->
+    <argLine>-Xmx1024m</argLine>
+
+    <dependency.slf4j.version>1.7.30</dependency.slf4j.version>
+    <dependency.immutables.version>2.8.2</dependency.immutables.version>
   </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.immutables</groupId>
+        <artifactId>value</artifactId>
+        <version>${dependency.immutables.version}</version>
+        <scope>provided</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <groupId>org.apache.maven.plugins</groupId>
+          <version>3.8.1</version>
+          <configuration>
+            <release>${maven.compiler.release}</release>
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <artifactId>maven-shade-plugin</artifactId>
+          <groupId>org.apache.maven.plugins</groupId>
+          <version>3.2.2</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-enforcer-plugin</artifactId>
+          <version>3.0.0-M3</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.2.0</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.0.0-M3</version>
+          <configuration>
+            <excludes>
+              <exclude>**/*IT.java</exclude>
+            </excludes>
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-failsafe-plugin</artifactId>
+          <version>2.22.2</version>
+          <configuration>
+            <includes>
+              <include>**/*IT.java</include>
+            </includes>
+          </configuration>
+        </plugin>
+
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>3.2.0</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>3.2.1</version>
+        </plugin>
+
+        <!-- creates coverage reports and coverage files. -->
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>0.8.5</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>2.5.2</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>2.8.2</version>
+        </plugin>
+
+        <plugin>
+          <groupId>de.thetaphi</groupId>
+          <artifactId>forbiddenapis</artifactId>
+          <version>2.7</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+
+        <configuration>
+          <showDeprecation>true</showDeprecation>
+          <showWarnings>true</showWarnings>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+      </plugin>
+
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>2.8.2</version>
+        <configuration>
+          <deployAtEnd>true</deployAtEnd>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>jacoco-agent-ut</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+
+          <execution>
+            <id>prepare-agent-it</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>prepare-agent-integration</goal>
+            </goals>
+          </execution>
+
+          <execution>
+            <id>check-coverage</id>
+            <!-- default phase is verify. -->
+            <goals>
+              <goal>check</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <rule>
+                  <element>CLASS</element>
+                  <excludes>
+                    <exclude>*Test</exclude>
+                    <exclude>*IT</exclude>
+                  </excludes>
+                  <limits>
+                    <limit>
+                      <counter>LINE</counter>
+                      <value>COVEREDRATIO</value>
+                      <minimum>5%</minimum>
+                    </limit>
+                  </limits>
+                </rule>
+              </rules>
+            </configuration>
+          </execution>
+
+          <!-- the jacoco report needed for codecov.io. Generated in target/site/jacoco/. -->
+          <execution>
+            <id>report</id>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+
+        <executions>
+          <!-- enforce JDK version. -->
+          <execution>
+            <id>enforce-java</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <!-- it actually means: JDK version. -->
+                <requireJavaVersion>
+                  <version>${jdk.version}</version>
+                </requireJavaVersion>
+              </rules>
+            </configuration>
+          </execution>
+
+          <execution>
+            <id>enforce-maven</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireMavenVersion>
+                  <version>3.5.2</version>
+                </requireMavenVersion>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- check code style -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>3.1.1</version>
+        <configuration>
+          <configLocation>${project.buildasset.dir}/checkstyle.xml</configLocation>
+          <encoding>UTF-8</encoding>
+          <consoleOutput>false</consoleOutput>
+          <linkXRef>false</linkXRef>
+          <propertyExpansion>project.buildasset.dir=${project.buildasset.dir}</propertyExpansion>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>com.puppycrawl.tools</groupId>
+            <artifactId>checkstyle</artifactId>
+            <version>8.31</version>
+          </dependency>
+        </dependencies>
+        <executions>
+          <execution>
+            <id>validate</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>de.thetaphi</groupId>
+        <artifactId>forbiddenapis</artifactId>
+        <configuration>
+          <failOnUnsupportedJava>false</failOnUnsupportedJava>
+          <targetVersion>${java.version}</targetVersion>
+          <bundledSignatures>
+            <bundledSignature>jdk-unsafe</bundledSignature>
+            <bundledSignature>jdk-deprecated</bundledSignature>
+            <bundledSignature>jdk-internal</bundledSignature>
+            <!-- disallow undocumented classes like sun.misc.Unsafe: -->
+            <bundledSignature>jdk-non-portable</bundledSignature>
+            <bundledSignature>jdk-system-out</bundledSignature>
+            <!-- don't allow unsafe reflective access: -->
+            <bundledSignature>jdk-reflection</bundledSignature>
+          </bundledSignatures>
+          <signaturesFiles>
+            <signaturesFile>${project.buildasset.dir}/forbiddenapis/java.util.txt</signaturesFile>
+          </signaturesFiles>
+          <suppressAnnotations>
+            <suppressAnnotation>io.github.alttpj.memeforcehunt.app.cli.internal.SuppressForbidden</suppressAnnotation>
+          </suppressAnnotations>
+        </configuration>
+        <executions>
+          <execution>
+            <id>forbiddenapis-check</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>docs</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <configuration>
+              <maxmemory>1024m</maxmemory>
+              <!-- do not show every java line -->
+              <quiet>true</quiet>
+              <serialwarn>true</serialwarn>
+            </configuration>
+            <executions>
+              <execution>
+                <id>attach-javadoc</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+
+    </profile>
+
+    <profile>
+      <id>integration-tests</id>
+    </profile>
+
+    <profile>
+      <!-- sign the artifacts. -->
+      <id>deploy</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+  <licenses>
+    <license>
+      <name>GNU GPL v3</name>
+    </license>
+  </licenses>
+
+  <inceptionYear>2016</inceptionYear>
+
+  <scm>
+    <connection>scm:git:https://github.com:bmhm/j9kwsolver.git</connection>
+    <developerConnection>scm:git:https://github.com:bmhm/j9kwsolver.git</developerConnection>
+  </scm>
+
+  <ciManagement>
+    <system>Travis-CI.com</system>
+    <url>https://www.travis-ci.com/github/bmhm/j9kwsolver/</url>
+  </ciManagement>
+
+  <issueManagement>
+    <url>https://github.com/bmhm/j9kwsolver/issues</url>
+    <system>GitHub</system>
+  </issueManagement>
+
 </project>

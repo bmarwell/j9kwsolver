@@ -1,6 +1,6 @@
-/**
+/*
  * J9KW Solver Library
- * Copyright (C) 2016, j9kwsolver contributors.
+ * Copyright (C) 2020, j9kwsolver contributors.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,15 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- *
  */
 
 package de.bmarwell.j9kwsolver.response;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.io.Closeables;
 import com.google.gson.annotations.SerializedName;
-
 import org.immutables.gson.Gson;
 import org.immutables.value.Value;
 import org.slf4j.Logger;
@@ -34,7 +30,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.Optional;
-
+import java.util.StringJoiner;
 import javax.imageio.ImageIO;
 
 /**
@@ -103,44 +99,43 @@ public abstract class RequestCaptchaResponse {
       return Optional.empty();
     }
 
-    ByteArrayInputStream bais = null;
-
     try {
       LOG.debug("Getting bytes.");
 
-      String[] split = file1().get().split(",");
+      final String[] split = file1().get().split(",");
       if (split.length != 2) {
         LOG.debug("Split hat nicht länge 2 sondern: [{}].", split.length);
 
         return Optional.empty();
       }
 
-      byte[] decodecBytes = Base64.getDecoder().decode(split[1]);
-      bais = new ByteArrayInputStream(decodecBytes);
+      final byte[] decodecBytes = Base64.getDecoder().decode(split[1]);
 
-      BufferedImage bi = ImageIO.read(bais);
-      bais.close();
+      final BufferedImage bi = readBufferedImage(decodecBytes);
 
       LOG.debug("Habe Bild gelesen: [{}].", bi);
 
       return Optional.ofNullable(bi);
-    } catch (IOException e) {
-      LOG.error("Error reading.", e);
-    } finally {
-      Closeables.closeQuietly(bais);
+    } catch (final IOException ioException) {
+      LOG.error("Error reading.", ioException);
     }
     LOG.debug("returning empty.");
     return Optional.empty();
   }
 
+  private BufferedImage readBufferedImage(final byte[] decodecBytes) throws IOException {
+    try (final ByteArrayInputStream bais = new ByteArrayInputStream(decodecBytes)) {
+      return ImageIO.read(bais);
+    }
+  }
+
   @Override
   public String toString() {
-    return MoreObjects.toStringHelper(this)
-        .add("message", message())
-        .add("captchaid", captchaid())
-        .add("serverdate", serverdate())
-        .add("hasImage", image().isPresent())
-        .add("hasFile", file1() == null ? false : true)
+    return new StringJoiner(", ", RequestCaptchaResponse.class.getSimpleName() + "[", "]")
+        .add("message='" + message() + "'")
+        .add("captchaid='" + captchaid() + "'")
+        .add("serverdate='" + serverdate() + "'")
+        .add("file1='" + file1() + "'")
         .toString();
   }
 }

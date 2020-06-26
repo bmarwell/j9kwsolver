@@ -1,6 +1,6 @@
-/**
+/*
  * J9KW Solver Library
- * Copyright (C) 2016, j9kwsolver contributors.
+ * Copyright (C) 2020, j9kwsolver contributors.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- *
  */
 
 package de.bmarwell.j9kwsolver.gui;
@@ -35,95 +34,84 @@ import de.bmarwell.j9kwsolver.response.RequestCaptchaResponse;
 import de.bmarwell.j9kwsolver.response.ServerStatus;
 import de.bmarwell.j9kwsolver.response.UserBalance;
 
-import com.google.common.base.Preconditions;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Optional;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 public class J9kwSolverGui {
+
+  private static final Logger LOG = LoggerFactory.getLogger(J9kwSolverGui.class);
+
   /**
    * Minimal length for API key.
    */
   private static final int APIKEY_MIN_LENGTH = 8;
-  /**
-   * Thread sleep time for testing purposes.
-   */
-  private static final int THEAD_SLEEP_TIME_MS = 2500;
-  private static final Logger LOG = LoggerFactory.getLogger(J9kwSolverGui.class);
 
-  private PropertyService propertyService;
-
-  /**
-   * @param args
-   *          command line arguments.
-   */
-  public static void main(final String[] args) {
-    J9kwSolverGui j9kwSolverGui = new J9kwSolverGui();
-
-    j9kwSolverGui.run();
-  }
+  private final PropertyService propertyService;
 
   public J9kwSolverGui() {
-    Config config = ConfigFactory.load();
+    final Config config = ConfigFactory.load();
     this.propertyService = ImmutablePropertyService.builder()
         .apiKey(config.getString("apikey"))
         .debug(config.getBoolean("debug"))
         .build();
   }
 
+  /**
+   * @param args command line arguments.
+   */
+  public static void main(final String[] args) {
+    final J9kwSolverGui j9kwSolverGui = new J9kwSolverGui();
+
+    j9kwSolverGui.run();
+  }
+
   private void run() {
-    RequestCaptchaResponse captcha = null;
-
     testApiKey();
-
-    captcha = receiveCaptcha();
-
-    LOG.debug("Captcha received! [{}].", captcha);
-    String solution = getCaptchaSolution(captcha);
-
-    if (captcha != null) {
-      solveCaptcha(captcha, solution);
-    }
+    receiveCaptcha();
 
     getServerStatus();
     getBalance();
 
-    Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+    final Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
     LOG.debug("Threads running: {}.", threadSet);
   }
 
   /**
    * API call to J9kwCaptchaAPI.getNewCaptcha().
-   * @return the Captcha provided by 9kw.
    */
-  private RequestCaptchaResponse receiveCaptcha() {
+  private void receiveCaptcha() {
     LOG.debug("Hole neues Captcha.");
-    Optional<RequestCaptchaResponse> captcha = Optional.empty();
-    J9kwCaptchaAPI jca = new DefaultJ9kwCaptcha(propertyService);
+    final J9kwCaptchaAPI jca = new DefaultJ9kwCaptcha(this.propertyService);
 
     try {
-      while (!captcha.isPresent() || captcha.get().message().isPresent()) {
-        LOG.debug("Getting next captcha.");
-        captcha = Optional.ofNullable(jca.getNewCaptcha(true).get());
-        LOG.debug("Gotten captcha: [{}].", captcha.orElseGet(() -> null));
+      LOG.debug("Getting next captcha.");
+      final CompletableFuture<RequestCaptchaResponse> newCaptcha = jca.getNewCaptcha(true);
+      newCaptcha.whenComplete((RequestCaptchaResponse result, Throwable error) -> {
+        if (error != null) {
+          LOG.error("Problem receiving captcha", error);
+          return;
+        }
 
-        Thread.sleep(1000);
-      }
-      LOG.debug("Captcha: {}.", captcha);
-    } catch (InterruptedException e) {
-      LOG.error("Interrupted?!", e);
-    } catch (ExecutionException e) {
-      LOG.error("Could not execute?!", e);
+        if (LOG.isTraceEnabled()) {
+          LOG.trace("Gotten captcha: [{}].", result);
+        }
+        final String solution = getCaptchaSolution(result);
+
+        solveCaptcha(result, solution);
+      });
+
+      TimeUnit.MILLISECONDS.sleep(1000);
+    } catch (final InterruptedException interruptedException) {
+      LOG.error("Interrupted?!", interruptedException);
     }
-
-    return captcha.get();
   }
 
   /**
@@ -140,25 +128,25 @@ public class J9kwSolverGui {
   private boolean solveCaptcha(
       final RequestCaptchaResponse captcha,
       final String solutionText) {
-    CaptchaSolution solution = ImmutableCaptchaSolution.builder()
+    final CaptchaSolution solution = ImmutableCaptchaSolution.builder()
         .id(captcha.captchaid().get())
-        .apikey(propertyService.getApiKey())
+        .apikey(this.propertyService.getApiKey())
         .captcha(solutionText)
         .build();
 
-    J9kwCaptchaAPI jca = new DefaultJ9kwCaptcha(propertyService);
-    CompletableFuture<CaptchaSolutionResponse> solveCaptcha = jca.solveCaptcha(solution);
+    final J9kwCaptchaAPI jca = new DefaultJ9kwCaptcha(this.propertyService);
+    final CompletableFuture<CaptchaSolutionResponse> solveCaptcha = jca.solveCaptcha(solution);
 
     boolean accepted = false;
 
     try {
-      CaptchaSolutionResponse acceptedSolution = solveCaptcha.get();
+      final CaptchaSolutionResponse acceptedSolution = solveCaptcha.get();
       LOG.debug(": {}.", acceptedSolution);
       accepted = acceptedSolution.accepted();
-    } catch (InterruptedException e) {
-      LOG.error("Interrupted?!", e);
-    } catch (ExecutionException e) {
-      LOG.error("Could not execute?!", e);
+    } catch (final InterruptedException interruptedException) {
+      LOG.error("Interrupted?!", interruptedException);
+    } catch (final ExecutionException executionException) {
+      LOG.error("Could not execute?!", executionException);
     }
 
     return accepted;
@@ -171,20 +159,8 @@ public class J9kwSolverGui {
    */
   private String getCaptchaSolution(final RequestCaptchaResponse captcha) {
     /* Show image */
-    J9kwShowImage display = new J9kwShowImage();
-    String solution = display.show(captcha);
-
-    return solution;
-  }
-
-  /**
-   * Easy pause for testing.
-   */
-  public static void dosleep() {
-    try {
-      Thread.sleep(THEAD_SLEEP_TIME_MS);
-    } catch (InterruptedException e) {
-    }
+    final J9kwShowImage display = new J9kwShowImage();
+    return display.show(captcha);
   }
 
   /**
@@ -193,8 +169,8 @@ public class J9kwSolverGui {
    * @return the Server status object or null, if unretrievable.
    */
   public static ServerStatus getServerStatus() {
-    J9kwServerApi sa = new DefaultJ9kwServer();
-    ServerStatus ss = sa.getServerStatus();
+    final J9kwServerApi sa = new DefaultJ9kwServer();
+    final ServerStatus ss = sa.getServerStatus();
 
     LOG.debug("ServerStatus: {}.", ss);
 
@@ -207,9 +183,9 @@ public class J9kwSolverGui {
    * @return balance as int or -1 if unretrievable.
    */
   public UserBalance getBalance() {
-    J9kwUserApi ua = new DefaultJ9kwUser(propertyService);
+    final J9kwUserApi ua = new DefaultJ9kwUser(this.propertyService);
 
-    UserBalance balance = ua.getBalance();
+    final UserBalance balance = ua.getBalance();
     LOG.debug("Balance: {} credits.", balance);
 
     return balance;
@@ -222,9 +198,13 @@ public class J9kwSolverGui {
    *           probleme mit dem ApiKey.
    */
   private void testApiKey() {
-    String apiKey = propertyService.getApiKey();
-    Preconditions.checkState(apiKey != null, "apiKey is null.");
-    Preconditions.checkState(!apiKey.isEmpty(), "apiKey is empty.");
-    Preconditions.checkState(apiKey.length() > APIKEY_MIN_LENGTH, "apiKey ist zu kurz.");
+    final String apiKey = this.propertyService.getApiKey();
+    Objects.requireNonNull(apiKey, "apiKey is null.");
+    if (apiKey.isEmpty()) {
+      throw new IllegalStateException("apiKey is empty");
+    }
+    if (apiKey.length() < APIKEY_MIN_LENGTH) {
+      throw new IllegalArgumentException("apiKey ist zu kurz");
+    }
   }
 }
