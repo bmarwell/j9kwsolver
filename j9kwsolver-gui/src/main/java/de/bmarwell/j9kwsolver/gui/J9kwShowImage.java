@@ -36,11 +36,11 @@ public class J9kwShowImage {
   public String show(final RequestCaptchaResponse captcha) {
     Objects.requireNonNull(captcha, "captcha in show().");
 
-    if (!captcha.image().isPresent()) {
+    if (captcha.image().isEmpty()) {
       return "";
     }
 
-    final ImageIcon icon = new ImageIcon(captcha.image().get());
+    final ImageIcon icon = new ImageIcon(captcha.image().orElseThrow());
     final JLabel iconLabel = new JLabel(icon);
 
     final String solution = JOptionPane.showInputDialog(iconLabel);

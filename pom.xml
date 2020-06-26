@@ -201,13 +201,15 @@
             </goals>
           </execution>
 
+          <!--
           <execution>
             <id>check-coverage</id>
-            <!-- default phase is verify. -->
+            <!- - default phase is verify. - ->
             <goals>
               <goal>check</goal>
             </goals>
             <configuration>
+
               <rules>
                 <rule>
                   <element>CLASS</element>
@@ -215,6 +217,7 @@
                     <exclude>*Test</exclude>
                     <exclude>*IT</exclude>
                   </excludes>
+
                   <limits>
                     <limit>
                       <counter>LINE</counter>
@@ -222,10 +225,13 @@
                       <minimum>5%</minimum>
                     </limit>
                   </limits>
+
                 </rule>
               </rules>
+
             </configuration>
           </execution>
+          -->
 
           <!-- the jacoco report needed for codecov.io. Generated in target/site/jacoco/. -->
           <execution>
@@ -324,7 +330,8 @@
             <signaturesFile>${project.buildasset.dir}/forbiddenapis/java.util.txt</signaturesFile>
           </signaturesFiles>
           <suppressAnnotations>
-            <suppressAnnotation>io.github.alttpj.memeforcehunt.app.cli.internal.SuppressForbidden</suppressAnnotation>
+            <suppressAnnotation>javax.annotation.processing.Generated</suppressAnnotation>
+            <suppressAnnotation>org.immutables.value.Generated</suppressAnnotation>
           </suppressAnnotations>
         </configuration>
         <executions>

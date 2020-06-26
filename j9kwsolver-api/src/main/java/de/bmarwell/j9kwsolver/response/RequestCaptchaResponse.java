@@ -94,7 +94,7 @@ public abstract class RequestCaptchaResponse {
 
   @Value.Auxiliary
   public Optional<BufferedImage> image() {
-    if (!file1().isPresent()) {
+    if (file1().isEmpty()) {
       LOG.debug("No file present.");
       return Optional.empty();
     }
@@ -102,7 +102,7 @@ public abstract class RequestCaptchaResponse {
     try {
       LOG.debug("Getting bytes.");
 
-      final String[] split = file1().get().split(",");
+      final String[] split = file1().orElseThrow().split(",");
       if (split.length != 2) {
         LOG.debug("Split hat nicht länge 2 sondern: [{}].", split.length);
 

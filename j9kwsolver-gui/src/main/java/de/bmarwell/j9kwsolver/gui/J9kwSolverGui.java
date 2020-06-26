@@ -129,7 +129,7 @@ public class J9kwSolverGui {
       final RequestCaptchaResponse captcha,
       final String solutionText) {
     final CaptchaSolution solution = ImmutableCaptchaSolution.builder()
-        .id(captcha.captchaid().get())
+        .id(captcha.captchaid().orElseThrow())
         .apikey(this.propertyService.getApiKey())
         .captcha(solutionText)
         .build();
