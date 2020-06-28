@@ -1,5 +1,3 @@
-<?xml version="1.0"?>
-
 <!--
   ~ J9kw solver library
   ~ Copyright 2013-2020 the j9kwsolver team
@@ -16,12 +14,22 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
+<configuration>
 
-<!DOCTYPE suppressions PUBLIC
-        "-//Puppy Crawl//DTD Suppressions 1.1//EN" "https://checkstyle.github.io/dtds/suppressions_1_1.dtd">
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <!-- <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern> -->
+      <pattern>%d{HH:mm:ss.SSS} [%-5level] %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
 
-<suppressions>
-    <suppress files="module-info\.java" checks="[a-zA-Z0-9]*"/>
-    <suppress files="module\-info\.java" checks="[a-zA-Z0-9]*"/>
-    <suppress files="module\-info\.java$" checks="[a-zA-Z0-9]*"/>
-</suppressions>
+  <logger name="io.github.bmhm.j9kwsolver" level="debug"/>
+
+  <logger name="org.eclipse.jetty" level="warn"/>
+  <logger name="org.eclipse.jetty.util.thread.QueuedThreadPool" level="error"/>
+  <logger name="ru.lanwen.wiremock" level="warn"/>
+
+  <root level="debug">
+    <appender-ref ref="STDOUT"/>
+  </root>
+</configuration>

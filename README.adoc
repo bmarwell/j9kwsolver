@@ -1,0 +1,49 @@
+= j9kwsolver
+
+An Open Source solver library for 9kw.eu captcha service.
+
+== Build Status
+
+image:https://travis-ci.org/bmhm/j9kwsolver.svg?branch=v2.0.0[Build Status,link=https://travis-ci.org/bmhm/j9kwsolver]
+
+== Goal
+
+* Providing a stable, open source, Java API for 9kw captcha service.
+* The actual implementation can be exchanged easily, depending on user's needs.
+
+== Features
+
+* Technology-agnostic library. +
+You can choose between various implementation which suits your needs best!
+* Easy to use. +
+The API is straight-forward, self-explanatory and well documented-
+* Coded with threading in mind.
+* The API project does not pull any dependencies (zero-dependency). +
+The implementations (you only need to choose one) only pull in a very basic set of dependencies.
+
+== Building
+
+[source,bash]
+----
+mvn clean verify -Pshade,docs
+----
+
+== Usage
+
+=== APIKEY
+
+[source,properties]
+.$HOME/.config/j9kwsolver.conf
+----
+apikey = <APIKEY>
+debug = 0 # or true/false
+----
+
+=== Startup
+
+Start the gui: `java -Dconfig.file=$HOME/.config/j9kwsolver.conf -jar j9kwsolver-gui.jar`
+
+== Sources
+
+See http://www.9kw.eu/api.html#apisolve-tab[9kw API]
+for more information.

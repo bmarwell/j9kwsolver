@@ -14,3 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package io.github.bmhm.j9kwsolver.impl.json.jaxrs.jsonb.json.adapters;
+
+import io.github.bmhm.j9kwsolver.api.value.CaptchaId;
+
+import javax.json.Json;
+import javax.json.JsonString;
+import javax.json.bind.adapter.JsonbAdapter;
+
+
+public class CaptchaIdAdapter implements JsonbAdapter<CaptchaId, JsonString> {
+  @Override
+  public JsonString adaptToJson(final CaptchaId captchaId) {
+    return Json.createValue(captchaId.getValue());
+  }
+
+  @Override
+  public CaptchaId adaptFromJson(final JsonString captchaIdString) {
+    return captchaIdString::getString;
+  }
+}

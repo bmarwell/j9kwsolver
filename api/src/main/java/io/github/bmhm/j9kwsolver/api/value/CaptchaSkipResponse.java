@@ -14,3 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package io.github.bmhm.j9kwsolver.api.value;
+
+public interface CaptchaSkipResponse {
+  /**
+   * Either OK or Not OK.
+   *
+   * @return the message (OK).
+   */
+  String getMessage();
+}

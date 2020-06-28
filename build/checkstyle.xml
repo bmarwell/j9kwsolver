@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  ~ J9KW Solver Library
-  ~ Copyright (C) 2020, j9kwsolver contributors.
+  ~ J9kw solver library
+  ~ Copyright 2013-2020 the j9kwsolver team
   ~
-  ~ This program is free software; you can redistribute it and/or modify
-  ~ it under the terms of the GNU General Public License as published by
-  ~ the Free Software Foundation; either version 3 of the License, or
-  ~ (at your option) any later version.
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
   ~
-  ~ This program is distributed in the hope that it will be useful,
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-  ~ GNU General Public License for more details.
+  ~          http://www.apache.org/licenses/LICENSE-2.0
   ~
-  ~ You should have received a copy of the GNU General Public License
-  ~ along with this program; if not, write to the Free Software Foundation,
-  ~ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
   -->
 
 <!DOCTYPE module PUBLIC
@@ -406,10 +404,10 @@
       <property name="excludes" value="org.hamcrest.CoreMatchers.*"/>
       <property name="excludes" value="org.hamcrest.Matchers.*"/>
       <property name="excludes" value="org.junit.Assert.*"/>
+      <property name="excludes" value="com.github.tomakehurst.wiremock.client.WireMock.*"/>
+      <property name="excludes" value="com.jayway.restassured.RestAssured.*"/>
 
       <!-- own exclusions -->
-      <property name="excludes" value="io.github.alttpj.memeforcehunt.app.gui.SwingAppConstants.*"/>
-      <property name="excludes" value="io.github.alttpj.memeforcehunt.common.value.ItemPalette.*"/>
     </module>
 
     <module name="CustomImportOrder">
@@ -417,7 +415,7 @@
       <property name="separateLineBetweenGroups" value="true"/>
       <property name="customImportOrderRules"
                 value="STATIC###SPECIAL_IMPORTS###THIRD_PARTY_PACKAGE###STANDARD_JAVA_PACKAGE"/>
-      <property name="specialImportsRegExp" value="^(de\.bmarwell\.j9kwsolver)"/>
+      <property name="specialImportsRegExp" value="^(io\.github\.bmhm\.j9kwsolver)"/>
     </module>
 
     <!-- phase out some import statements -->

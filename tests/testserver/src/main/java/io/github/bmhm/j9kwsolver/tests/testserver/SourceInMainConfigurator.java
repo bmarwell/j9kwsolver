@@ -14,3 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package io.github.bmhm.j9kwsolver.tests.testserver;
+
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import ru.lanwen.wiremock.config.WiremockConfigFactory;
+
+public class SourceInMainConfigurator implements WiremockConfigFactory {
+
+  @Override
+  public WireMockConfiguration create() {
+    return WireMockConfiguration.options()
+        .usingFilesUnderClasspath("wiremock");
+  }
+}

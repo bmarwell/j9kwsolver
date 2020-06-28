@@ -14,3 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package io.github.bmhm.j9kwsolver.api.value;
+
+public enum CaptchaSource {
+  /**
+   * Solve captchas by other users only (default).
+   */
+  OTHERS,
+  /**
+   * Solve captches of you and of others.
+   */
+  ALL,
+  /**
+   * Only solve your own captchas.
+   */
+  SELF_ONLY
+
+}

@@ -14,3 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+@Value.Style(stagedBuilder = true, jdkOnly = true, visibility = Value.Style.ImplementationVisibility.PUBLIC)
+package io.github.bmhm.j9kwsolver.api.request;
+
+import org.immutables.value.Value;

@@ -14,3 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package io.github.bmhm.j9kwsolver.api.value;
+
+import java.time.Instant;
+
+/**
+ * User balance object. Container for credit balance.
+ */
+public interface UserBalance {
+
+  /**
+   * The amount of credits on your account.
+   *
+   * @return the amount of credits on your account.
+   */
+  long getCredits();
+
+  /**
+   * When the account balance was received.
+   *
+   * @return the time when the account balance was received.
+   */
+  Instant getCreditsAt();
+
+}

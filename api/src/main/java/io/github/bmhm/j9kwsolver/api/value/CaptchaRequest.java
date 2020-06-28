@@ -14,3 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package io.github.bmhm.j9kwsolver.api.value;
+
+import java.time.Duration;
+
+/**
+ * A captcha solving request sent by the server for solving.
+ */
+public interface CaptchaRequest {
+
+  CaptchaId getCaptchaId();
+
+  CaptchaType getCaptchaType();
+
+  long getTimeoutSeconds();
+
+  default Duration getTimeout() {
+    return Duration.ofSeconds(getTimeoutSeconds());
+  }
+
+}

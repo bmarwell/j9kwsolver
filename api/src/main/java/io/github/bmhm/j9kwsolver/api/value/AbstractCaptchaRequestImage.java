@@ -14,3 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package io.github.bmhm.j9kwsolver.api.value;
+
+import org.immutables.value.Value;
+
+import java.awt.image.BufferedImage;
+import java.time.Duration;
+
+@Value.Immutable
+public abstract class AbstractCaptchaRequestImage implements CaptchaRequestImage {
+
+  @Override
+  public abstract CaptchaId getCaptchaId();
+
+  @Override
+  public abstract CaptchaType getCaptchaType();
+
+  @Override
+  public abstract long getTimeoutSeconds();
+
+  @Override
+  @Value.Default
+  public Duration getTimeout() {
+    return CaptchaRequestImage.super.getTimeout();
+  }
+
+  @Override
+  public abstract BufferedImage getImage();
+}

@@ -14,3 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package io.github.bmhm.j9kwsolver.api.value;
+
+import org.immutables.value.Value;
+
+@Value.Immutable
+abstract class AbstractCaptchaSolution implements CaptchaSolution {
+
+  @Override
+  public abstract CaptchaId getCaptchaId();
+
+  @Override
+  public abstract boolean isConfirmCaptcha();
+
+  @Override
+  public abstract String getAnswer();
+
+}

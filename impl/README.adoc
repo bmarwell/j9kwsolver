@@ -1,0 +1,29 @@
+= Implementations
+
+This module contains various implementations, hierarchically sorted by the implementation type.
+
+* *JSON* +
+*contains json-based implementations.* +
+Please note that mostly only the responses have been implemented using json by the 9kw team.
+Post requests are still not implemented, all your data (even your secret API key) will be transferred in the URL.
+
+* *CSV* +
+*contains csv implementations* +
+None atm.
+
+== Selection of implementations
+
+The application using this API needs to exactly select one of these implementations as a runtime dependency.
+It will be discovered by the class path.
+
+If multiple implementations are in the class path, only the first one will be selected.
+First one is referring to the first imlementation loaded by the class loader.
+
+== Contribution an implementation
+
+If an implementation you need is missing (e.g. apache http components + gson), you are welcome to create a PR.
+
+=== Testing your implementation
+
+There is a testserver project containing wiremock data.
+Please make sure all your APIs are called at least twice in different fashions.

@@ -14,3 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package io.github.bmhm.j9kwsolver.impl.json.jaxrs.jsonb.json;
+
+import javax.json.bind.annotation.JsonbProperty;
+
+public interface J9kwResponse {
+
+  @JsonbProperty("message")
+  String getMessage();
+}

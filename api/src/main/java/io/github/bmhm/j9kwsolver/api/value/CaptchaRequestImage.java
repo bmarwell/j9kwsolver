@@ -14,3 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package io.github.bmhm.j9kwsolver.api.value;
+
+import java.awt.image.BufferedImage;
+import java.time.Duration;
+
+public interface CaptchaRequestImage extends CaptchaRequest {
+
+  @Override
+  CaptchaId getCaptchaId();
+
+  @Override
+  CaptchaType getCaptchaType();
+
+  @Override
+  long getTimeoutSeconds();
+
+  @Override
+  default Duration getTimeout() {
+    return CaptchaRequest.super.getTimeout();
+  }
+
+  BufferedImage getImage();
+}

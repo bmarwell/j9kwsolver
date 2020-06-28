@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ J9kw solver library
   ~ Copyright 2013-2020 the j9kwsolver team
@@ -17,11 +16,22 @@
   ~ limitations under the License.
   -->
 
-<!DOCTYPE suppressions PUBLIC
-        "-//Puppy Crawl//DTD Suppressions 1.1//EN" "https://checkstyle.github.io/dtds/suppressions_1_1.dtd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>j9kwsolver</artifactId>
+    <groupId>io.github.bmhm.j9kwsolver</groupId>
+    <version>2.0.0-SNAPSHOT</version>
+  </parent>
 
-<suppressions>
-    <suppress files="module-info\.java" checks="[a-zA-Z0-9]*"/>
-    <suppress files="module\-info\.java" checks="[a-zA-Z0-9]*"/>
-    <suppress files="module\-info\.java$" checks="[a-zA-Z0-9]*"/>
-</suppressions>
+  <artifactId>j9kwsolver-tests</artifactId>
+  <packaging>pom</packaging>
+  <name>tests</name>
+
+  <modules>
+    <module>testserver</module>
+  </modules>
+
+</project>

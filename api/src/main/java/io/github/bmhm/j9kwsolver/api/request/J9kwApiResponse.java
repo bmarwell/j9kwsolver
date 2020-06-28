@@ -14,3 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package io.github.bmhm.j9kwsolver.api.request;
+
+import java.util.Optional;
+
+public interface J9kwApiResponse<T> {
+
+  Optional<T> getResult();
+
+  Optional<Throwable> getException();
+
+  Optional<Integer> getResponseCode();
+
+  default boolean isSuccessful() {
+    return getException().isEmpty() && getResponseCode().filter(code -> code >= 400).isEmpty();
+  }
+}

@@ -1,0 +1,90 @@
+= Project conventions
+
+This project contains a lot of features which are expected to be mastered from a skilled coder.
+
+== Maven
+
+Some maven related tools and patterns, which are not too common.
+
+=== Two compile executions
+
+One execution is processing annotations to generate the folder `target/generated-sources/annotations`.
+The other (default-) execution is set to `proc:only`.
+
+=== Modules
+
+The project is divided into a few modules which might make a best practice, depending on your workflows.
+
+* *`parent`* +
+All the definitions are in one place, without cluttering the root pom.xml.
+It is part of the reactor as a dependency and at the same time it is the parent of the reactor.
+* *`api`* +
+A single `api` project which holds all the API classes *without any addition dependencies*.
+This is possible by using a `ServiceLoader` mechanism, which acts like dependency injection if used in the correct manner.
+* *`tests/testserver`* +
+All the tests are using the same wiremock configuration.
+DRY.
+* *`impl/**`* +
+All runtime implementations are sorted out into their own modules.
+They can all be used seperately.
+Thanks to the java modules system (JPMS), they can be packaged into the same app at the same time from different dependencies!
+* *`impl/json`* +
+Contains all the json-based implementation modules.
+
+=== Plugin usage
+
+This project uses a few plugins which will take care of maintaining a readable, homogenous code.
+A few examples are:
+
+* `de.thetaphi:forbiddenapis` +
+The link:https://github.com/policeman-tools/forbidden-apis[forbidden apis] plugin can be configured to forbid certain API usage.
+All the forbidden calls are defined in the `build/forbiddenapis/` directory.
+An example is the usage of the `Optional.get()` method, which was not named in a proper way and raises wrong expectations, according to java maintainer Brian Goetz.
+You can look at the file link:build/forbiddenapis/java.util.txt[`build/forbiddenapis/java.util.txt`].
+
+* `maven-enforcer-plugin` +
+While the enforcer plugin is commonly used in projects, this one is configured with various checks.
+For example, a check will ban any non-jakarta dependencies.
+This makes it easy to spot legacy artifacts which were replaced by the Eclipse Jakarta project.
+
+* `jacoco-maven-plugin` +
+Enforces coverage checks.
+
+=== Profiles
+
+This project uses maven profiles.
+Each profile must have a unique and distinct goal.
+Not adding every goal to the main reactor will speed up the development process.
+
+A specialty is the profile of the gui application.
+The developer can select between various JAX-RS implementations (jersey, CXF^\*^) and Jsonb implementations (yasson^*^).
+
+== Java
+
+=== Code Style
+
+As there is no definitive java code style, this project's code style is based on https://google.github.io/styleguide/javaguide.html[Google‘s code style].
+Its advantage is that a two-space-indentation lines up statements nicely.
+Also, it has much more rules defined than most other code styles, like the import order.
+
+A few additional code styles are:
+
+* Keeping lambda returns to a minimum (1 or 2 depending on the lambda return type).
+* The import order has been modified that the `specialImportsRegExp` points to classes of this project.
+* It is forbidden to import `*Error` classes.
+* It is forbidden to import some legacy packages and classes, like `javax.annotation.Nullable`.
+
+=== Patterns
+
+A few noteworthy patterns.
+
+* The usage of ServiceLoaders helps to divide the API from the actual implementation.
+
+=== Nulls
+
+It is forbidden to use `null` in any place unless a 3rd party API requires it.
+
+=== Optionals
+
+Optionals may not be used as a parameter or field.
+They are only allowed as return types.

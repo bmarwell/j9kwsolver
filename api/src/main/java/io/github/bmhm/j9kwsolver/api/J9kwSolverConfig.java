@@ -14,3 +14,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package io.github.bmhm.j9kwsolver.api;
+
+import java.io.Serializable;
+import java.net.URI;
+
+public interface J9kwSolverConfig extends Serializable {
+
+  /**
+   * Returns an API key.
+   *
+   * @return the API key.
+   */
+  String getApiKey();
+
+  /**
+   * Returns the API uri.
+   *
+   * <p>Implementations should have a sane default.</p>
+   *
+   * @return the API URL.
+   */
+  default URI getApiURI() {
+    return URI.create("https://www.9kw.eu");
+  }
+
+  /**
+   * Debug flag.
+   *
+   * @return is debug.
+   */
+  default boolean isDebug() {
+    return false;
+  }
+
+}

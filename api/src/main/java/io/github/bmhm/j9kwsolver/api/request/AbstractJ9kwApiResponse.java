@@ -14,3 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package io.github.bmhm.j9kwsolver.api.request;
+
+import org.immutables.value.Value;
+
+import java.util.Optional;
+
+@Value.Immutable
+abstract class AbstractJ9kwApiResponse<T> implements J9kwApiResponse<T> {
+
+  @Override
+  public abstract Optional<T> getResult();
+
+  @Override
+  public abstract Optional<Throwable> getException();
+
+  @Override
+  public abstract Optional<Integer> getResponseCode();
+
+  @Override
+  @Value.Derived
+  public boolean isSuccessful() {
+    return J9kwApiResponse.super.isSuccessful();
+  }
+}
