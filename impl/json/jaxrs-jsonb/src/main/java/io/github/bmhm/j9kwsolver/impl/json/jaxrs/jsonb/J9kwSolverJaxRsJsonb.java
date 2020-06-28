@@ -54,6 +54,8 @@ public class J9kwSolverJaxRsJsonb implements J9kwSolverApi {
   private static final Logger LOG = Logger.getLogger(J9kwSolverJaxRsJsonb.class.getCanonicalName());
 
   private static final String DEFAULT_PATH = "index.cgi";
+  private static final String PARAMVALUE_ONE_TRUE = "1";
+  private static final String PARAMVALUE_NOUGHT_FALSE = "0";
 
   private J9kwSolverConfig config;
 
@@ -70,29 +72,29 @@ public class J9kwSolverJaxRsJsonb implements J9kwSolverApi {
   public J9kwApiResponse<CaptchaRequest> requestNewCaptcha(final CaptchaSelector captchaSelector) {
     final WebTargetUtils webTargetUtils = new WebTargetUtils(this.config);
     final WebTarget webTarget = webTargetUtils.createWebTarget(DEFAULT_PATH)
-        .queryParam("withok", "1")
+        .queryParam("withok", PARAMVALUE_ONE_TRUE)
         // returns the image / text / etc.
-        .queryParam("filedata", "1")
+        .queryParam("filedata", PARAMVALUE_ONE_TRUE)
         .queryParam("action", "usercaptchanew");
 
     final Set<CaptchaType> wantedTypes = captchaSelector.getCaptchaTypes();
     // set "1" for each given type
     wantedTypes.iterator()
-        .forEachRemaining(type -> webTarget.queryParam(type.getFieldName(), "1"));
+        .forEachRemaining(type -> webTarget.queryParam(type.getFieldName(), PARAMVALUE_ONE_TRUE));
     // set all other explicitely to 0.
     Arrays.stream(CaptchaType.values())
         .filter(type -> !wantedTypes.contains(type))
-        .forEach(type -> webTarget.queryParam(type.getFieldName(), "0"));
+        .forEach(type -> webTarget.queryParam(type.getFieldName(), PARAMVALUE_NOUGHT_FALSE));
 
     switch (captchaSelector.getCaptchaSource()) {
       case ALL:
-        webTarget.queryParam("selfsolve", "1");
+        webTarget.queryParam("selfsolve", PARAMVALUE_ONE_TRUE);
         break;
       case OTHERS:
-        webTarget.queryParam("selfsolve", "0");
+        webTarget.queryParam("selfsolve", PARAMVALUE_NOUGHT_FALSE);
         break;
       case SELF_ONLY:
-        webTarget.queryParam("selfonly", "1");
+        webTarget.queryParam("selfonly", PARAMVALUE_ONE_TRUE);
         break;
       default:
         final IllegalStateException illegalStateException = new IllegalStateException("Cannot determine captcha source.");
@@ -144,10 +146,40 @@ public class J9kwSolverJaxRsJsonb implements J9kwSolverApi {
   }
 
   @Override
-  public CaptchaReceiptResponse confirmReception(final CaptchaId captchaId) {
-    // TODO: implement
-    throw new UnsupportedOperationException(
-        "not yet implemented: [io.github.bmhm.j9kwsolver.impl.json.jaxrs.jsonb.J9kwSolverJaxRsJsonb::confirmReception].");
+  public J9kwApiResponse<CaptchaReceiptResponse> confirmReception(final CaptchaId captchaId) {
+    final WebTargetUtils webTargetUtils = new WebTargetUtils(this.config);
+    final WebTarget webTarget = webTargetUtils.createWebTarget(DEFAULT_PATH)
+        // no captcha ID required. Dont ask why.
+        .queryParam("action", "usercaptchanewok");
+
+    final Response response = webTarget.request().get();
+
+    if (response.getStatus() != 200) {
+      if (response.hasEntity()) {
+        final String responseContent = response.readEntity(String.class);
+        return ImmutableJ9kwApiResponse.<CaptchaReceiptResponse>builder()
+            .responseCode(response.getStatus())
+            .exception(new WebApplicationException(responseContent, response))
+            .build();
+      }
+      return ImmutableJ9kwApiResponse.<CaptchaReceiptResponse>builder()
+          .responseCode(response.getStatus())
+          .build();
+    }
+
+    final JsonValue responseJson = response.readEntity(JsonValue.class);
+
+    final JsonObject responseObject = responseJson.asJsonObject();
+    if (!"OK".equals(responseObject.getString("message", ""))) {
+      return ImmutableJ9kwApiResponse.<CaptchaReceiptResponse>builder()
+          .responseCode(response.getStatus())
+          .build();
+    }
+
+    return ImmutableJ9kwApiResponse.<CaptchaReceiptResponse>builder()
+        .responseCode(response.getStatus())
+        .result(() -> "OK")
+        .build();
   }
 
   @Override

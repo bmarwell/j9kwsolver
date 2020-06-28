@@ -42,7 +42,7 @@ public class DummyImpl implements J9kwSolverApi {
   }
 
   @Override
-  public CaptchaReceiptResponse confirmReception(final CaptchaId captchaId) {
+  public J9kwApiResponse<CaptchaReceiptResponse> confirmReception(final CaptchaId captchaId) {
     throw new UnsupportedOperationException("not yet implemented: [io.github.bmhm.j9kwsolver.api.test.DummyImpl::confirmReception].");
 
   }

@@ -54,7 +54,7 @@ public interface J9kwSolverApi {
    */
   J9kwApiResponse<CaptchaRequest> requestNewCaptcha(CaptchaSelector captchaSelector);
 
-  CaptchaReceiptResponse confirmReception(CaptchaId captchaId);
+  J9kwApiResponse<CaptchaReceiptResponse> confirmReception(CaptchaId captchaId);
 
   CaptchaSkipResponse skipCaptcha(CaptchaId captchaId);
 

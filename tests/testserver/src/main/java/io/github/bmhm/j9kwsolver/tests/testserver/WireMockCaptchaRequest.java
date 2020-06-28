@@ -47,4 +47,16 @@ public class WireMockCaptchaRequest {
                 .withHeader("Content-Type", "text/plain"))
     );
   }
+
+  public void stubValidConfirmation() {
+    this.wireMockServer.stubFor(
+        get(urlPathEqualTo("/index.cgi"))
+            .withQueryParam("action", equalTo("usercaptchanewok"))
+            .withQueryParam("json", equalTo("1"))
+            .withQueryParam("apikey", equalTo("valid"))
+            .willReturn(aResponse()
+                .withBody("{\"message\":\"OK\",\"status\":{\"success\":true,\"https\":1}}")
+                .withHeader("Content-Type", "application/json"))
+    );
+  }
 }

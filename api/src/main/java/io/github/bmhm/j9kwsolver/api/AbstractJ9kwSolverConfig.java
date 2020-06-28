@@ -20,6 +20,7 @@ package io.github.bmhm.j9kwsolver.api;
 import org.immutables.value.Value;
 
 import java.net.URI;
+import java.time.Duration;
 
 @Value.Immutable
 @Value.Style(stagedBuilder = true, jdkOnly = true, visibility = Value.Style.ImplementationVisibility.PUBLIC)
@@ -39,5 +40,17 @@ abstract class AbstractJ9kwSolverConfig implements J9kwSolverConfig {
   @Value.Default
   public boolean isDebug() {
     return J9kwSolverConfig.super.isDebug();
+  }
+
+  @Override
+  @Value.Default
+  public Duration getConnectionTimeout() {
+    return Duration.ofMillis(100);
+  }
+
+  @Override
+  @Value.Default
+  public Duration getReadTimeout() {
+    return Duration.ofMillis(500);
   }
 }

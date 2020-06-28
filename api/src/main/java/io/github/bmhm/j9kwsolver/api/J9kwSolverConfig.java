@@ -19,6 +19,7 @@ package io.github.bmhm.j9kwsolver.api;
 
 import java.io.Serializable;
 import java.net.URI;
+import java.time.Duration;
 
 public interface J9kwSolverConfig extends Serializable {
 
@@ -49,4 +50,7 @@ public interface J9kwSolverConfig extends Serializable {
     return false;
   }
 
+  Duration getConnectionTimeout();
+
+  Duration getReadTimeout();
 }

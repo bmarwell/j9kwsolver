@@ -21,6 +21,7 @@ import io.github.bmhm.j9kwsolver.api.J9kwSolver;
 import io.github.bmhm.j9kwsolver.api.J9kwSolverConfig;
 
 import java.net.URI;
+import java.util.concurrent.TimeUnit;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
@@ -49,7 +50,10 @@ public class WebTargetUtils {
    * @return a WebTarget which can be used to build queries upon.
    */
   public WebTarget createWebTarget(final String path) {
-    final Client client = LazyClientBuilderHolder.CLIENT_BUILDER.build();
+    final Client client = LazyClientBuilderHolder.CLIENT_BUILDER
+        .connectTimeout(this.config.getConnectionTimeout().toMillis(), TimeUnit.MILLISECONDS)
+        .readTimeout(this.config.getReadTimeout().toMillis(), TimeUnit.MILLISECONDS)
+        .build();
 
     final URI targetUri = UriBuilder.fromUri(this.config.getApiURI())
         .path(path)
@@ -64,14 +68,19 @@ public class WebTargetUtils {
   }
 
   static class LazyClientBuilderHolder {
-    public static final ClientBuilder CLIENT_BUILDER = ClientBuilder.newBuilder()
-        // fixes the response to contain the correct content-type header.
-        .register(new ResponseContentTypeChanger())
-        // can log the body on-the-fly, e.g. before exceptions destroy the input stream.
-        .register(new InputStreamLogger())
-        // register jsonb implementation.
-        .register(new JsonbMessageBodyReader())
-        // end
-        ;
+
+    public static final ClientBuilder CLIENT_BUILDER = createClient();
+
+    private static ClientBuilder createClient() {
+      return ClientBuilder.newBuilder()
+          // fixes the response to contain the correct content-type header.
+          .register(new ResponseContentTypeChanger())
+          // can log the body on-the-fly, e.g. before exceptions destroy the input stream.
+          .register(new InputStreamLogger())
+          // register jsonb implementation.
+          .register(new JsonbMessageBodyReader())
+          // end
+          ;
+    }
   }
 }

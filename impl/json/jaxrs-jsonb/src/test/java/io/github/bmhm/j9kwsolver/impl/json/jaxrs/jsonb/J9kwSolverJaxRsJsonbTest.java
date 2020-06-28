@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import io.github.bmhm.j9kwsolver.api.ImmutableJ9kwSolverConfig;
 import io.github.bmhm.j9kwsolver.api.J9kwSolverConfig;
 import io.github.bmhm.j9kwsolver.api.request.J9kwApiResponse;
+import io.github.bmhm.j9kwsolver.api.value.CaptchaReceiptResponse;
 import io.github.bmhm.j9kwsolver.api.value.CaptchaRequest;
 import io.github.bmhm.j9kwsolver.api.value.CaptchaRequestImage;
 import io.github.bmhm.j9kwsolver.api.value.CaptchaType;
@@ -47,8 +48,8 @@ import java.net.URI;
 public class J9kwSolverJaxRsJsonbTest {
 
   @Test
-  public void testApiResponse(@WiremockResolver.Wiremock(factory = SourceInMainConfigurator.class) final WireMockServer server,
-                              @WiremockUriResolver.WiremockUri final String uri) {
+  public void testNewCaptcha(@WiremockResolver.Wiremock(factory = SourceInMainConfigurator.class) final WireMockServer server,
+                             @WiremockUriResolver.WiremockUri final String uri) {
     // given
     // … valid request stubbed
     final WireMockCaptchaRequest wireMockCaptchaRequest = new WireMockCaptchaRequest(server);
@@ -72,6 +73,32 @@ public class J9kwSolverJaxRsJsonbTest {
         () -> assertEquals(300, captchaRequest.getTimeoutSeconds()),
         () -> assertEquals("130904348", captchaRequest.getCaptchaId().getValue()),
         () -> assertTrue(captchaRequest instanceof CaptchaRequestImage)
+    );
+  }
+
+  @Test
+  public void testConfirmation(@WiremockResolver.Wiremock(factory = SourceInMainConfigurator.class) final WireMockServer server,
+                               @WiremockUriResolver.WiremockUri final String uri) {
+    // given
+    // … valid request stubbed
+    final WireMockCaptchaRequest wireMockCaptchaRequest = new WireMockCaptchaRequest(server);
+    wireMockCaptchaRequest.stubValidConfirmation();
+    // … implementation
+    final J9kwSolverConfig config = ImmutableJ9kwSolverConfig.builder()
+        .apiKey("valid")
+        .apiURI(URI.create(uri))
+        .build();
+    final J9kwSolverJaxRsJsonb jaxRsJsonb = new J9kwSolverJaxRsJsonb();
+    jaxRsJsonb.setConfig(config);
+
+    // when
+    final J9kwApiResponse<CaptchaReceiptResponse> confirmReception = jaxRsJsonb.confirmReception(() -> "1234");
+
+    // then
+    assertTrue(confirmReception.isSuccessful());
+    final CaptchaReceiptResponse result = confirmReception.getResult().orElseThrow();
+    assertAll(
+        () -> assertEquals("OK", result.getMessage())
     );
   }
 }
