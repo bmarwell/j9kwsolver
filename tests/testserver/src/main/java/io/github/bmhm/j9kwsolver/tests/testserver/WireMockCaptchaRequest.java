@@ -26,6 +26,7 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 
 public class WireMockCaptchaRequest {
 
+  public static final String DEFAULT_PATH = "/index.cgi";
   private final WireMockServer wireMockServer;
 
   public WireMockCaptchaRequest(final WireMockServer server) {
@@ -34,7 +35,7 @@ public class WireMockCaptchaRequest {
 
   public void stubValidRequest() {
     this.wireMockServer.stubFor(
-        get(urlPathEqualTo("/index.cgi"))
+        get(urlPathEqualTo(DEFAULT_PATH))
             .withQueryParam("action", equalTo("usercaptchanew"))
             .withQueryParam("extended", equalTo("1"))
             .withQueryParam("json", equalTo("1"))
@@ -50,12 +51,28 @@ public class WireMockCaptchaRequest {
 
   public void stubValidConfirmation() {
     this.wireMockServer.stubFor(
-        get(urlPathEqualTo("/index.cgi"))
+        get(urlPathEqualTo(DEFAULT_PATH))
             .withQueryParam("action", equalTo("usercaptchanewok"))
             .withQueryParam("json", equalTo("1"))
             .withQueryParam("apikey", equalTo("valid"))
+            // no id, that odd from 9kw.
             .willReturn(aResponse()
                 .withBody("{\"message\":\"OK\",\"status\":{\"success\":true,\"https\":1}}")
+                .withHeader("Content-Type", "application/json"))
+    );
+  }
+
+  public void stubSolveRequest() {
+    this.wireMockServer.stubFor(
+        get(urlPathEqualTo(DEFAULT_PATH))
+            .withQueryParam("action", equalTo("usercaptchacorrect"))
+            .withQueryParam("json", equalTo("1"))
+            .withQueryParam("apikey", equalTo("valid"))
+            .withQueryParam("extended", equalTo("1"))
+            .withQueryParam("captcha", equalTo("2C888V"))
+            .withQueryParam("id", equalTo("9269003"))
+            .willReturn(aResponse()
+                .withBody("{\"message\":\"OK\",\"status\":{\"success\":true,\"https\":1},\"captchakey\":\"2C888V\",\"newcredits\":7}\n")
                 .withHeader("Content-Type", "application/json"))
     );
   }

@@ -54,7 +54,7 @@ public class DummyImpl implements J9kwSolverApi {
   }
 
   @Override
-  public CaptchaSolutionResponse solveCaptcha(final CaptchaSolution captchaSolution) {
+  public J9kwApiResponse<CaptchaSolutionResponse> solveCaptcha(final CaptchaSolution captchaSolution) {
     throw new UnsupportedOperationException("not yet implemented: [io.github.bmhm.j9kwsolver.api.test.DummyImpl::solveCaptcha].");
 
   }

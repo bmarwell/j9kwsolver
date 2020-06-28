@@ -61,10 +61,11 @@ public interface J9kwSolverApi {
   /**
    * Submits a solution request which will grant you points if the solution was accepted.
    *
-   * @param captchaSolution the solution created by a user.
+   * @param captchaSolution
+   *     the solution created by a user.
    * @return a reponse from the server whether solution was okay and the new credit balance of the user.
    */
-  CaptchaSolutionResponse solveCaptcha(CaptchaSolution captchaSolution);
+  J9kwApiResponse<CaptchaSolutionResponse> solveCaptcha(CaptchaSolution captchaSolution);
 
   J9kwServerStatus getServerStatus();
 

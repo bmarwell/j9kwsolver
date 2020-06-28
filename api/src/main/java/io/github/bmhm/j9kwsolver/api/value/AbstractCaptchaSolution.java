@@ -29,6 +29,6 @@ abstract class AbstractCaptchaSolution implements CaptchaSolution {
   public abstract boolean isConfirmCaptcha();
 
   @Override
-  public abstract String getAnswer();
+  public abstract String getSolution();
 
 }

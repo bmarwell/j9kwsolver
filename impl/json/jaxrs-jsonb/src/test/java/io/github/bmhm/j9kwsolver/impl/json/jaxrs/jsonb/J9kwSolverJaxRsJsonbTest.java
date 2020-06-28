@@ -24,10 +24,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import io.github.bmhm.j9kwsolver.api.ImmutableJ9kwSolverConfig;
 import io.github.bmhm.j9kwsolver.api.J9kwSolverConfig;
 import io.github.bmhm.j9kwsolver.api.request.J9kwApiResponse;
+import io.github.bmhm.j9kwsolver.api.value.CaptchaId;
 import io.github.bmhm.j9kwsolver.api.value.CaptchaReceiptResponse;
 import io.github.bmhm.j9kwsolver.api.value.CaptchaRequest;
 import io.github.bmhm.j9kwsolver.api.value.CaptchaRequestImage;
+import io.github.bmhm.j9kwsolver.api.value.CaptchaSolution;
+import io.github.bmhm.j9kwsolver.api.value.CaptchaSolutionResponse;
 import io.github.bmhm.j9kwsolver.api.value.CaptchaType;
+import io.github.bmhm.j9kwsolver.api.value.ImmutableCaptchaSolution;
 import io.github.bmhm.j9kwsolver.tests.testserver.SourceInMainConfigurator;
 import io.github.bmhm.j9kwsolver.tests.testserver.WireMockCaptchaRequest;
 
@@ -46,6 +50,8 @@ import java.net.URI;
     }
 )
 public class J9kwSolverJaxRsJsonbTest {
+
+  private static final CaptchaId CAPTCHA_ID = () -> "9269003";
 
   @Test
   public void testNewCaptcha(@WiremockResolver.Wiremock(factory = SourceInMainConfigurator.class) final WireMockServer server,
@@ -92,7 +98,7 @@ public class J9kwSolverJaxRsJsonbTest {
     jaxRsJsonb.setConfig(config);
 
     // when
-    final J9kwApiResponse<CaptchaReceiptResponse> confirmReception = jaxRsJsonb.confirmReception(() -> "1234");
+    final J9kwApiResponse<CaptchaReceiptResponse> confirmReception = jaxRsJsonb.confirmReception(CAPTCHA_ID);
 
     // then
     assertTrue(confirmReception.isSuccessful());
@@ -100,5 +106,43 @@ public class J9kwSolverJaxRsJsonbTest {
     assertAll(
         () -> assertEquals("OK", result.getMessage())
     );
+  }
+
+  // TODO: test skip
+
+  @Test
+  public void testSolve(@WiremockResolver.Wiremock(factory = SourceInMainConfigurator.class) final WireMockServer server,
+                        @WiremockUriResolver.WiremockUri final String uri) {
+    // given
+    // … valid request stubbed
+    final WireMockCaptchaRequest wireMockCaptchaRequest = new WireMockCaptchaRequest(server);
+    wireMockCaptchaRequest.stubSolveRequest();
+    // … implementation
+    final J9kwSolverConfig config = ImmutableJ9kwSolverConfig.builder()
+        .apiKey("valid")
+        .apiURI(URI.create(uri))
+        .build();
+    final J9kwSolverJaxRsJsonb jaxRsJsonb = new J9kwSolverJaxRsJsonb();
+    jaxRsJsonb.setConfig(config);
+    // solved captcha
+    final String solution = "2C888V";
+    final CaptchaSolution captchaSolution = ImmutableCaptchaSolution.builder()
+        .captchaId(CAPTCHA_ID)
+        .isConfirmCaptcha(false)
+        .solution(solution)
+        .build();
+
+    // when
+    final J9kwApiResponse<CaptchaSolutionResponse> confirmReception = jaxRsJsonb.solveCaptcha(captchaSolution);
+
+    // then
+    assertTrue(confirmReception.isSuccessful());
+    final CaptchaSolutionResponse result = confirmReception.getResult().orElseThrow();
+    assertAll(
+        () -> assertEquals("OK", result.getMessage()),
+        () -> assertEquals(7, result.getNewCredits()),
+        () -> assertEquals(solution, result.getCaptchaKey())
+    );
+
   }
 }

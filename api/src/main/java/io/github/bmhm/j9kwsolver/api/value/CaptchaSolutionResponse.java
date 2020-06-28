@@ -30,11 +30,11 @@ public interface CaptchaSolutionResponse {
   String getMessage();
 
   /**
-   * The ID of the captcha which was solved.
+   * The solution of the captcha which was solved.
    *
-   * @return the ID of the captcha which was solved.
+   * @return the solution of the captcha which was solved.
    */
-  CaptchaId getCaptchaKey();
+  String getCaptchaKey();
 
   /**
    * The new credit amount of the user.
@@ -42,7 +42,6 @@ public interface CaptchaSolutionResponse {
    * @return the new credit amount of the user.
    */
   long getNewCredits();
-
 
   default boolean accepted() {
     return "OK".equals(getMessage());

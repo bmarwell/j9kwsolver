@@ -19,27 +19,20 @@ package io.github.bmhm.j9kwsolver.api.value;
 
 import org.immutables.value.Value;
 
-import java.awt.image.BufferedImage;
-import java.time.Duration;
-
 @Value.Immutable
-abstract class AbstractCaptchaRequestImage implements CaptchaRequestImage {
+abstract class AbstractCaptchaSolutionResponse implements CaptchaSolutionResponse {
 
   @Override
-  public abstract CaptchaId getCaptchaId();
+  public abstract String getMessage();
 
   @Override
-  public abstract CaptchaType getCaptchaType();
+  public abstract String getCaptchaKey();
 
   @Override
-  public abstract long getTimeoutSeconds();
+  public abstract long getNewCredits();
 
   @Override
-  @Value.Default
-  public Duration getTimeout() {
-    return CaptchaRequestImage.super.getTimeout();
+  public boolean accepted() {
+    return CaptchaSolutionResponse.super.accepted();
   }
-
-  @Override
-  public abstract BufferedImage getImage();
 }

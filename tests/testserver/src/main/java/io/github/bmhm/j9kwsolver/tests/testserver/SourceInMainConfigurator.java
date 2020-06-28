@@ -25,6 +25,8 @@ public class SourceInMainConfigurator implements WiremockConfigFactory {
   @Override
   public WireMockConfiguration create() {
     return WireMockConfiguration.options()
+        .bindAddress("localhost")
+        .dynamicPort()
         .usingFilesUnderClasspath("wiremock");
   }
 }

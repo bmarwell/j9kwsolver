@@ -18,8 +18,10 @@
 package io.github.bmhm.j9kwsolver.impl.json.jaxrs.jsonb.json;
 
 import io.github.bmhm.j9kwsolver.api.value.CaptchaRequest;
+import io.github.bmhm.j9kwsolver.api.value.CaptchaSolutionResponse;
 import io.github.bmhm.j9kwsolver.api.value.CaptchaType;
 import io.github.bmhm.j9kwsolver.api.value.ImmutableCaptchaRequestImage;
+import io.github.bmhm.j9kwsolver.api.value.ImmutableCaptchaSolutionResponse;
 
 public final class JsonResponseMapper {
 
@@ -53,5 +55,13 @@ public final class JsonResponseMapper {
     }
 
     throw new IllegalArgumentException("Unable to find correct captcha type");
+  }
+
+  public static CaptchaSolutionResponse fromResonse(final CaptchaSolutionJsonResponse captchaSolution) {
+    return ImmutableCaptchaSolutionResponse.builder()
+        .message(captchaSolution.getMessage())
+        .captchaKey(captchaSolution.getCaptchaSolution())
+        .newCredits(captchaSolution.getNewCredits())
+        .build();
   }
 }
