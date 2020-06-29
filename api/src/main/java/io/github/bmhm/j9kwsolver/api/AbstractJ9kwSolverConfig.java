@@ -45,12 +45,12 @@ abstract class AbstractJ9kwSolverConfig implements J9kwSolverConfig {
   @Override
   @Value.Default
   public Duration getConnectionTimeout() {
-    return Duration.ofMillis(100);
+    return Duration.ofMillis(500);
   }
 
   @Override
   @Value.Default
   public Duration getReadTimeout() {
-    return Duration.ofMillis(500);
+    return Duration.ofMillis(1000);
   }
 }
