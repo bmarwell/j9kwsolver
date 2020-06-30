@@ -20,7 +20,7 @@ package io.github.bmhm.j9kwsolver.impl.json.jaxrs.jsonb.json.adapters;
 import io.github.bmhm.j9kwsolver.api.value.CaptchaType;
 import io.github.bmhm.j9kwsolver.impl.json.jaxrs.jsonb.json.AbstractCaptchaJsonResponse;
 import io.github.bmhm.j9kwsolver.impl.json.jaxrs.jsonb.json.CaptchaJsonResponseImage;
-import io.github.bmhm.j9kwsolver.impl.json.jaxrs.jsonb.util.JsonbMapper;
+import io.github.bmhm.j9kwsolver.impl.json.jaxrs.jsonb.util.JsonbProvider;
 
 import java.lang.reflect.Type;
 import javax.json.JsonObject;
@@ -55,7 +55,7 @@ public class CaptchaJsonResponseTypeAdapter implements JsonbDeserializer<Abstrac
   }
 
   private AbstractCaptchaJsonResponse deserialize(final JsonObject jsonObject, final CaptchaType type) {
-    final Jsonb instance = JsonbMapper.getInstance();
+    final Jsonb instance = JsonbProvider.getInstance();
     switch (type) {
       case IMAGE:
         // the parser is forward-only, hence we cannot use context here.

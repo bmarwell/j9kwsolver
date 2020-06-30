@@ -15,20 +15,22 @@
  * limitations under the License.
  */
 
-package io.github.bmhm.j9kwsolver.api.request;
+package io.github.bmhm.j9kwsolver.impl.json.jaxrs.jsonb.processors;
+
+import io.github.bmhm.j9kwsolver.api.request.J9kwApiResponse;
 
 import java.util.Optional;
 import java.util.OptionalInt;
 
-public interface J9kwApiResponse<T> {
+public interface J9kwResponseProcessor<T> {
 
-  Optional<T> getResult();
-
-  Optional<Throwable> getException();
+  void process();
 
   OptionalInt getResponseCode();
 
-  default boolean isSuccessful() {
-    return getException().isEmpty() && getResponseCode().isPresent() && getResponseCode().getAsInt() < 400;
-  }
+  Optional<Throwable> getException();
+
+  Optional<T> getResult();
+
+  J9kwApiResponse<T> getApiResponse();
 }

@@ -49,6 +49,21 @@ public class WireMockCaptchaRequest {
     );
   }
 
+  public void stubNoNewCaptchaRequest() {
+    this.wireMockServer.stubFor(
+        get(urlPathEqualTo(DEFAULT_PATH))
+            .withQueryParam("action", equalTo("usercaptchanew"))
+            .withQueryParam("extended", equalTo("1"))
+            .withQueryParam("json", equalTo("1"))
+            .withQueryParam("filedata", equalTo("1"))
+            .withQueryParam("apikey", equalTo("valid"))
+            .withQueryParam("withok", equalTo("1"))
+            .willReturn(aResponse()
+                .withBody("{\"status\":{\"https\":1,\"success\":true},\"message\":\"NO CAPTCHA\"}")
+                .withHeader("Content-Type", "application/json"))
+    );
+  }
+
   public void stubValidConfirmation() {
     this.wireMockServer.stubFor(
         get(urlPathEqualTo(DEFAULT_PATH))

@@ -39,7 +39,7 @@ public class JsonbMessageBodyReader implements MessageBodyReader<Object> {
   private final Jsonb jsonb;
 
   public JsonbMessageBodyReader() {
-    this.jsonb = JsonbMapper.getInstance();
+    this.jsonb = JsonbProvider.getInstance();
   }
 
   @Override

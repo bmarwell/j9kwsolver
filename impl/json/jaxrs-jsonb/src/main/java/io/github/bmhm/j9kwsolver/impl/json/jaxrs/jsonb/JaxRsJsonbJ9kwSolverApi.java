@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-package io.github.bmhm.j9kwsolver.api.test;
+package io.github.bmhm.j9kwsolver.impl.json.jaxrs.jsonb;
 
+import io.github.bmhm.j9kwsolver.api.CaptchaSelectorFactory;
 import io.github.bmhm.j9kwsolver.api.J9kwSolverApi;
-import io.github.bmhm.j9kwsolver.api.J9kwSolverConfig;
 import io.github.bmhm.j9kwsolver.api.request.J9kwApiResponse;
 import io.github.bmhm.j9kwsolver.api.value.CaptchaId;
 import io.github.bmhm.j9kwsolver.api.value.CaptchaReceiptResponse;
@@ -29,50 +29,65 @@ import io.github.bmhm.j9kwsolver.api.value.CaptchaSolution;
 import io.github.bmhm.j9kwsolver.api.value.CaptchaSolutionResponse;
 import io.github.bmhm.j9kwsolver.api.value.J9kwServerStatus;
 import io.github.bmhm.j9kwsolver.api.value.UserBalance;
+import io.github.bmhm.j9kwsolver.impl.json.jaxrs.jsonb.processors.J9kwResponseProcessor;
 
-public class DummyImpl implements J9kwSolverApi {
-  public DummyImpl() {
-    // nothing to see here!
+public class JaxRsJsonbJ9kwSolverApi extends AbstractProcessingJ9kwJaxRsJsonbApi implements J9kwSolverApi {
+
+  public JaxRsJsonbJ9kwSolverApi() {
+    // default constructor for services.
+  }
+
+  @Override
+  public J9kwApiResponse<CaptchaRequest> requestNewCaptcha() {
+    return requestNewCaptcha(CaptchaSelectorFactory.defaultSelector());
   }
 
   @Override
   public J9kwApiResponse<CaptchaRequest> requestNewCaptcha(final CaptchaSelector captchaSelector) {
-    throw new UnsupportedOperationException("not yet implemented: [io.github.bmhm.j9kwsolver.api.test.DummyImpl::requestNewCaptcha].");
+    final J9kwResponseProcessor<CaptchaRequest> requestProcessor = getRequestProcessor(captchaSelector);
+    requestProcessor.process();
 
+    return requestProcessor.getApiResponse();
   }
 
   @Override
   public J9kwApiResponse<CaptchaReceiptResponse> confirmReception(final CaptchaId captchaId) {
-    throw new UnsupportedOperationException("not yet implemented: [io.github.bmhm.j9kwsolver.api.test.DummyImpl::confirmReception].");
+    final J9kwResponseProcessor<CaptchaReceiptResponse> confirmationProcessor = getConfirmationProcessor(captchaId);
+    confirmationProcessor.process();
 
+    return confirmationProcessor.getApiResponse();
   }
 
   @Override
   public J9kwApiResponse<CaptchaSkipResponse> skipCaptcha(final CaptchaId captchaId) {
-    throw new UnsupportedOperationException("not yet implemented: [io.github.bmhm.j9kwsolver.api.test.DummyImpl::skipCaptcha].");
+    final J9kwResponseProcessor<CaptchaSkipResponse> skipProcessor = getSkipProcessor(captchaId);
+    skipProcessor.process();
 
+    return skipProcessor.getApiResponse();
   }
 
   @Override
   public J9kwApiResponse<CaptchaSolutionResponse> solveCaptcha(final CaptchaSolution captchaSolution) {
-    throw new UnsupportedOperationException("not yet implemented: [io.github.bmhm.j9kwsolver.api.test.DummyImpl::solveCaptcha].");
+    final J9kwResponseProcessor<CaptchaSolutionResponse> solveProcessor = getSolveProcessor(captchaSolution);
+    solveProcessor.process();
 
+    return solveProcessor.getApiResponse();
   }
 
   @Override
   public J9kwApiResponse<J9kwServerStatus> getServerStatus() {
-    throw new UnsupportedOperationException("not yet implemented: [io.github.bmhm.j9kwsolver.api.test.DummyImpl::getServerStatus].");
+    final J9kwResponseProcessor<J9kwServerStatus> statusProcessor = getServerStatusProcessor();
+    statusProcessor.process();
 
+    return statusProcessor.getApiResponse();
   }
 
   @Override
   public J9kwApiResponse<UserBalance> getBalance() {
-    throw new UnsupportedOperationException("not yet implemented: [io.github.bmhm.j9kwsolver.api.test.DummyImpl::getBalance].");
+    final J9kwResponseProcessor<UserBalance> balanceProcessor = getBalanceProcessor();
+    balanceProcessor.process();
 
+    return balanceProcessor.getApiResponse();
   }
 
-  @Override
-  public void setConfig(final J9kwSolverConfig config) {
-    // nothing to see here.
-  }
 }

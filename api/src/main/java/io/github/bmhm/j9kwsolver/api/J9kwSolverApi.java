@@ -67,9 +67,9 @@ public interface J9kwSolverApi {
    */
   J9kwApiResponse<CaptchaSolutionResponse> solveCaptcha(CaptchaSolution captchaSolution);
 
-  J9kwServerStatus getServerStatus();
+  J9kwApiResponse<J9kwServerStatus> getServerStatus();
 
-  UserBalance getBalance();
+  J9kwApiResponse<UserBalance> getBalance();
 
   /**
    * Sets a config to be used.

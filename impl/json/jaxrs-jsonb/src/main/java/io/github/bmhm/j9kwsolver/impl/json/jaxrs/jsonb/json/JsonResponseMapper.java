@@ -22,6 +22,12 @@ import io.github.bmhm.j9kwsolver.api.value.CaptchaSolutionResponse;
 import io.github.bmhm.j9kwsolver.api.value.CaptchaType;
 import io.github.bmhm.j9kwsolver.api.value.ImmutableCaptchaRequestImage;
 import io.github.bmhm.j9kwsolver.api.value.ImmutableCaptchaSolutionResponse;
+import io.github.bmhm.j9kwsolver.api.value.ImmutableJ9kwServerStatus;
+import io.github.bmhm.j9kwsolver.api.value.ImmutableUserBalance;
+import io.github.bmhm.j9kwsolver.api.value.J9kwServerStatus;
+import io.github.bmhm.j9kwsolver.api.value.UserBalance;
+
+import java.time.Instant;
 
 public final class JsonResponseMapper {
 
@@ -65,4 +71,19 @@ public final class JsonResponseMapper {
         .build();
   }
 
+  public static J9kwServerStatus fromResonse(final JsonServerStatus jsonServerStatus) {
+    return ImmutableJ9kwServerStatus.builder()
+        .userOnline(jsonServerStatus.getUserOnline())
+        .workerCount(jsonServerStatus.getWorker())
+        .queueLength(jsonServerStatus.getQueue())
+        .inWorkCount(jsonServerStatus.getInWork())
+        .build();
+  }
+
+  public static UserBalance fromResonse(final JsonUserBalance jsonServerStatus) {
+    return ImmutableUserBalance.builder()
+        .credits(jsonServerStatus.getCredits())
+        .creditsAt(Instant.now())
+        .build();
+  }
 }

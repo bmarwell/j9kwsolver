@@ -15,20 +15,22 @@
  * limitations under the License.
  */
 
-package io.github.bmhm.j9kwsolver.api.request;
+package io.github.bmhm.j9kwsolver.api.value;
 
-import java.util.Optional;
-import java.util.OptionalInt;
+import org.immutables.value.Value;
 
-public interface J9kwApiResponse<T> {
+@Value.Immutable
+abstract class AbstractJ9kwServerStatus implements J9kwServerStatus {
 
-  Optional<T> getResult();
+  @Override
+  public abstract long getUserOnline();
 
-  Optional<Throwable> getException();
+  @Override
+  public abstract long getWorkerCount();
 
-  OptionalInt getResponseCode();
+  @Override
+  public abstract long getQueueLength();
 
-  default boolean isSuccessful() {
-    return getException().isEmpty() && getResponseCode().isPresent() && getResponseCode().getAsInt() < 400;
-  }
+  @Override
+  public abstract long getInWorkCount();
 }

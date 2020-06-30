@@ -15,20 +15,18 @@
  * limitations under the License.
  */
 
-package io.github.bmhm.j9kwsolver.api.request;
+package io.github.bmhm.j9kwsolver.api.value;
 
-import java.util.Optional;
-import java.util.OptionalInt;
+import org.immutables.value.Value;
 
-public interface J9kwApiResponse<T> {
+import java.time.Instant;
 
-  Optional<T> getResult();
+@Value.Immutable
+abstract class AbstractUserBalance implements UserBalance {
 
-  Optional<Throwable> getException();
+  @Override
+  public abstract long getCredits();
 
-  OptionalInt getResponseCode();
-
-  default boolean isSuccessful() {
-    return getException().isEmpty() && getResponseCode().isPresent() && getResponseCode().getAsInt() < 400;
-  }
+  @Override
+  public abstract Instant getCreditsAt();
 }

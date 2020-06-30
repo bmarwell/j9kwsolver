@@ -34,4 +34,4 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 #
 
-io.github.bmhm.j9kwsolver.impl.json.jaxrs.jsonb.J9kwSolverJaxRsJsonb
+io.github.bmhm.j9kwsolver.impl.json.jaxrs.jsonb.JaxRsJsonbJ9kwSolverApi

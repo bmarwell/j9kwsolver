@@ -20,6 +20,7 @@ package io.github.bmhm.j9kwsolver.api.request;
 import org.immutables.value.Value;
 
 import java.util.Optional;
+import java.util.OptionalInt;
 
 @Value.Immutable
 abstract class AbstractJ9kwApiResponse<T> implements J9kwApiResponse<T> {
@@ -31,7 +32,7 @@ abstract class AbstractJ9kwApiResponse<T> implements J9kwApiResponse<T> {
   public abstract Optional<Throwable> getException();
 
   @Override
-  public abstract Optional<Integer> getResponseCode();
+  public abstract OptionalInt getResponseCode();
 
   @Override
   @Value.Derived

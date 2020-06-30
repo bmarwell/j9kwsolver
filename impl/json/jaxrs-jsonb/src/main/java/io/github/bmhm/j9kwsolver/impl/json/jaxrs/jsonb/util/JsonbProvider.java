@@ -24,11 +24,11 @@ import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import javax.json.bind.JsonbConfig;
 
-public final class JsonbMapper {
+public final class JsonbProvider {
 
-  private static final AtomicReference<JsonbMapper> INSTANCE = new AtomicReference<>();
+  private static final AtomicReference<JsonbProvider> INSTANCE = new AtomicReference<>();
 
-  private JsonbMapper() {
+  private JsonbProvider() {
     // util.
   }
 
@@ -41,15 +41,15 @@ public final class JsonbMapper {
   }
 
   private static void ensureInstance() {
-    INSTANCE.getAndUpdate(JsonbMapper::getOrCreateJsonbMapper);
+    INSTANCE.getAndUpdate(JsonbProvider::getOrCreateJsonbMapper);
   }
 
-  private static JsonbMapper getOrCreateJsonbMapper(final JsonbMapper old) {
+  private static JsonbProvider getOrCreateJsonbMapper(final JsonbProvider old) {
     if (old != null) {
       return old;
     }
 
-    return new JsonbMapper();
+    return new JsonbProvider();
   }
 
   public Jsonb getInstanceInternal() {
