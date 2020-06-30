@@ -308,7 +308,7 @@
       <property name="id" value="return_count_ctor"/>
       <property name="tokens" value="LAMBDA"/>
 
-      <property name="max" value="1"/>
+      <property name="max" value="2"/>
       <property name="maxForVoid" value="1"/>
 
       <message key="return.count"

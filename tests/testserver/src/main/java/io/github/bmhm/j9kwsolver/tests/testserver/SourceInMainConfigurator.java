@@ -17,7 +17,9 @@
 
 package io.github.bmhm.j9kwsolver.tests.testserver;
 
+import com.github.tomakehurst.wiremock.common.Slf4jNotifier;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
 import ru.lanwen.wiremock.config.WiremockConfigFactory;
 
 public class SourceInMainConfigurator implements WiremockConfigFactory {
@@ -25,8 +27,12 @@ public class SourceInMainConfigurator implements WiremockConfigFactory {
   @Override
   public WireMockConfiguration create() {
     return WireMockConfiguration.options()
-        .bindAddress("localhost")
+        .bindAddress("127.0.0.1")
         .dynamicPort()
-        .usingFilesUnderClasspath("wiremock");
+        .usingFilesUnderClasspath("wiremock")
+        // enable Templating Response!
+        // @see : http://wiremock.org/docs/response-templating/
+        .extensions(new ResponseTemplateTransformer(true))
+        .notifier(new Slf4jNotifier(true));
   }
 }

@@ -56,7 +56,7 @@ public interface J9kwSolverApi {
 
   J9kwApiResponse<CaptchaReceiptResponse> confirmReception(CaptchaId captchaId);
 
-  CaptchaSkipResponse skipCaptcha(CaptchaId captchaId);
+  J9kwApiResponse<CaptchaSkipResponse> skipCaptcha(CaptchaId captchaId);
 
   /**
    * Submits a solution request which will grant you points if the solution was accepted.

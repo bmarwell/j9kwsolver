@@ -48,7 +48,7 @@ public class DummyImpl implements J9kwSolverApi {
   }
 
   @Override
-  public CaptchaSkipResponse skipCaptcha(final CaptchaId captchaId) {
+  public J9kwApiResponse<CaptchaSkipResponse> skipCaptcha(final CaptchaId captchaId) {
     throw new UnsupportedOperationException("not yet implemented: [io.github.bmhm.j9kwsolver.api.test.DummyImpl::skipCaptcha].");
 
   }

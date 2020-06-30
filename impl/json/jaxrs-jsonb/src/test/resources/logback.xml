@@ -29,7 +29,10 @@
   <logger name="org.apache.cxf" level="warn"/>
   <logger name="org.eclipse.jetty" level="warn"/>
   <logger name="org.eclipse.jetty.util.thread.QueuedThreadPool" level="error"/>
+  <logger name="com.github.jknack.handlebars" level="warn"/>
   <logger name="ru.lanwen.wiremock" level="warn"/>
+  <logger name="Wiremock" level="warn"/>
+  <logger name="WireMock" level="warn"/>
 
   <root level="debug">
     <appender-ref ref="STDOUT"/>

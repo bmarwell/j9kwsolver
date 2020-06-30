@@ -35,8 +35,10 @@ import io.github.bmhm.j9kwsolver.api.value.CaptchaType;
 import io.github.bmhm.j9kwsolver.api.value.J9kwServerStatus;
 import io.github.bmhm.j9kwsolver.api.value.UserBalance;
 import io.github.bmhm.j9kwsolver.impl.json.jaxrs.jsonb.json.AbstractCaptchaJsonResponse;
+import io.github.bmhm.j9kwsolver.impl.json.jaxrs.jsonb.json.CaptchaSkipJsonResponse;
 import io.github.bmhm.j9kwsolver.impl.json.jaxrs.jsonb.json.CaptchaSolutionJsonResponse;
 import io.github.bmhm.j9kwsolver.impl.json.jaxrs.jsonb.json.JsonResponseMapper;
+import io.github.bmhm.j9kwsolver.impl.json.jaxrs.jsonb.lang.Either;
 import io.github.bmhm.j9kwsolver.impl.json.jaxrs.jsonb.util.JsonbMapper;
 import io.github.bmhm.j9kwsolver.impl.json.jaxrs.jsonb.util.WebTargetUtils;
 
@@ -187,10 +189,29 @@ public class J9kwSolverJaxRsJsonb implements J9kwSolverApi {
   }
 
   @Override
-  public CaptchaSkipResponse skipCaptcha(final CaptchaId captchaId) {
-    // TODO: implement
-    throw new UnsupportedOperationException(
-        "not yet implemented: [io.github.bmhm.j9kwsolver.impl.json.jaxrs.jsonb.J9kwSolverJaxRsJsonb::skipCaptcha].");
+  public J9kwApiResponse<CaptchaSkipResponse> skipCaptcha(final CaptchaId captchaId) {
+    final WebTargetUtils webTargetUtils = new WebTargetUtils(this.config);
+    final WebTarget webTarget = webTargetUtils.createWebTarget(DEFAULT_PATH)
+        // returns the image / text / etc.
+        .queryParam("action", "usercaptchaskip")
+        .queryParam("id", captchaId.getValue())
+        .queryParam("extended", "1");
+
+    final Response response = webTarget.request().get();
+
+    return this.<CaptchaSkipResponse>responseIsInvalid(response).handle(
+        (left, right) -> {
+          if (right != null) {
+            return right;
+          }
+
+          final CaptchaSkipJsonResponse skipResponse = JSONB.fromJson(left.toString(), CaptchaSkipJsonResponse.class);
+          return ImmutableJ9kwApiResponse.<CaptchaSkipResponse>builder()
+              .responseCode(response.getStatus())
+              .result(skipResponse::getMessage)
+              .build();
+        }
+    );
   }
 
   @Override
@@ -206,36 +227,46 @@ public class J9kwSolverJaxRsJsonb implements J9kwSolverApi {
 
     final Response response = webTarget.request().get();
 
+    return this.<CaptchaSolutionResponse>responseIsInvalid(response).handle(
+        (left, right) -> {
+          if (right != null) {
+            return right;
+          }
+
+          final CaptchaSolutionJsonResponse leftStr = JSONB.fromJson(left.toString(), CaptchaSolutionJsonResponse.class);
+          return ImmutableJ9kwApiResponse.<CaptchaSolutionResponse>builder()
+              .responseCode(response.getStatus())
+              .result(JsonResponseMapper.fromResonse(leftStr))
+              .build();
+        }
+    );
+  }
+
+
+  private <T> Either<JsonValue, J9kwApiResponse<T>> responseIsInvalid(final Response response) {
     if (response.getStatus() != Response.Status.OK.getStatusCode()) {
       if (response.hasEntity()) {
         final String responseContent = response.readEntity(String.class);
-        return ImmutableJ9kwApiResponse.<CaptchaSolutionResponse>builder()
+        return Either.mapRight(ImmutableJ9kwApiResponse.<T>builder()
             .responseCode(response.getStatus())
             .exception(new WebApplicationException(responseContent, response))
-            .build();
+            .build());
       }
-      return ImmutableJ9kwApiResponse.<CaptchaSolutionResponse>builder()
+      return Either.mapRight(ImmutableJ9kwApiResponse.<T>builder()
           .responseCode(response.getStatus())
-          .build();
+          .build());
     }
 
     final JsonValue jsonValue = response.readEntity(JsonValue.class);
     if (jsonValue.getValueType() != JsonValue.ValueType.OBJECT
         || !((JsonObject) jsonValue).getString("message", "").equals("OK")) {
-      return ImmutableJ9kwApiResponse.<CaptchaSolutionResponse>builder()
+      return Either.mapRight(ImmutableJ9kwApiResponse.<T>builder()
           .responseCode(response.getStatus())
           .exception(new IllegalStateException("message is not ok. Response was: [" + jsonValue.toString() + "]."))
-          .build();
+          .build());
     }
 
-    final CaptchaSolutionJsonResponse solutionResponse =
-        JSONB.fromJson(jsonValue.toString(), CaptchaSolutionJsonResponse.class);
-
-    return ImmutableJ9kwApiResponse.<CaptchaSolutionResponse>builder()
-        .responseCode(response.getStatus())
-        .result(JsonResponseMapper.fromResonse(solutionResponse))
-        .build();
-
+    return Either.mapLeft(jsonValue);
   }
 
   @Override
@@ -256,5 +287,12 @@ public class J9kwSolverJaxRsJsonb implements J9kwSolverApi {
   @Override
   public void setConfig(final J9kwSolverConfig config) {
     this.config = requireNonNull(config, "config in J9kwSolverJaxRsJsonb.setConfig(J9kwSolverConfig).");
+  }
+
+  protected static <T> J9kwApiResponse<T> createWrappedResponse(final Response response, final T content) {
+    return ImmutableJ9kwApiResponse.<T>builder()
+        .responseCode(response.getStatus())
+        .result(content)
+        .build();
   }
 }

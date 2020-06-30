@@ -64,4 +64,5 @@ public final class JsonResponseMapper {
         .newCredits(captchaSolution.getNewCredits())
         .build();
   }
+
 }
